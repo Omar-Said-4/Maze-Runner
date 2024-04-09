@@ -43,7 +43,7 @@ bool our::ShaderProgram::attach(const std::string &filename, GLenum type) const 
     }
 
     // If compilation was successful, attach the shader to the program
-    glAttachShader(program, shader);
+    glAttachShader(this->program, shader);
     // Delete the shader as it's not needed anymore after being attached to the program
     glDeleteShader(shader);
 
@@ -59,10 +59,10 @@ bool our::ShaderProgram::link() const {
     // an error in the given program. You should use it to check if there is a
     // linking error and print it so that you can know what is wrong with the
     // program. The returned string will be empty if there is no errors.
-    glLinkProgram(program);
+    glLinkProgram(this->program);
 
     // Check for linking errors
-    std::string error = checkForLinkingErrors(program);
+    std::string error = checkForLinkingErrors(this->program);
     if (!error.empty()) {
         std::cerr << "ERROR: Program linking failed with error: " << error << std::endl;
         return false;

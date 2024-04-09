@@ -21,12 +21,12 @@ namespace our
         ShaderProgram()
         {
             // TODO: (Req 1) Create A shader program
-            program = glCreateProgram();
+            this->program = glCreateProgram();
         }
         ~ShaderProgram()
         {
             // TODO: (Req 1) Delete a shader program
-            glDeleteProgram(program);
+            glDeleteProgram(this->program);
         }
 
         bool attach(const std::string &filename, GLenum type) const;
@@ -35,13 +35,13 @@ namespace our
 
         void use()
         {
-            glUseProgram(program);
+            glUseProgram(this->program);
         }
 
         GLuint getUniformLocation(const std::string &name)
         {
             // TODO: (Req 1) Return the location of the uniform with the given name
-            return glGetUniformLocation(program, name.c_str());
+            return glGetUniformLocation(this->program, name.c_str());
         }
 
         void set(const std::string &uniform, GLfloat value)

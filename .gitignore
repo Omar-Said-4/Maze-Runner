@@ -2,6 +2,7 @@
 # build directories
 cmake-build-*/
 build/
+errors/
 out/
 bin/
 
