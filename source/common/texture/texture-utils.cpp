@@ -27,8 +27,8 @@ our::Texture2D* our::texture_utils::empty(GLenum format, glm::ivec2 size){
     // height => size.y
     glTexStorage2D(GL_TEXTURE_2D, levels, format, size.r, size.y);
 
-   // unbind the texture
-    texture->unbind();
+   
+   // texture->unbind();
     
     return texture;
 }
