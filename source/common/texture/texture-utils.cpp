@@ -27,8 +27,8 @@ our::Texture2D* our::texture_utils::empty(GLenum format, glm::ivec2 size){
     // height => size.y
     glTexStorage2D(GL_TEXTURE_2D, levels, format, size.r, size.y);
 
-   
-   // texture->unbind();
+    // unbind the texture
+    texture->unbind();
     
     return texture;
 }
@@ -78,7 +78,7 @@ our::Texture2D* our::texture_utils::loadImage(const std::string& filename, bool 
     }
 
     // unbind the texture
-   // texture->unbind();
+    texture->unbind();
     
     stbi_image_free(pixels); //Free image data after uploading to GPU
     return texture;

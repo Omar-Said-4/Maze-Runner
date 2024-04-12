@@ -11,7 +11,7 @@
 #include <filesystem>
 
 #include <flags/flags.h>
-
+#include<texture/texture2d.hpp>
 // Include the Dear ImGui implementation headers
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD2
 #include <imgui_impl/imgui_impl_glfw.h>
@@ -235,7 +235,6 @@ int our::Application::run(int run_for_frames) {
     }
     // Call onInitialize if the scene needs to do some custom initialization (such as file loading, object creation, etc).
     if(currentState) currentState->onInitialize();
-
     // The time at which the last frame started. But there was no frames yet, so we'll just pick the current time.
     double last_frame_time = glfwGetTime();
     int current_frame = 0;
@@ -271,13 +270,13 @@ int our::Application::run(int run_for_frames) {
         // Call onDraw, in which we will draw the current frame, and send to it the time difference between the last and current frame
         if(currentState) currentState->onDraw(current_frame_time - last_frame_time);
         last_frame_time = current_frame_time; // Then update the last frame start time (this frame is now the last frame)
-
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)
         // Since ImGui causes many messages to be thrown, we are temporarily disabling the debug messages till we render the ImGui
         glDisable(GL_DEBUG_OUTPUT);
         glDisable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
 #endif
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData()); // Render the ImGui to the framebuffer
+
 #if defined(ENABLE_OPENGL_DEBUG_MESSAGES)
         // Re-enable the debug messages
         glEnable(GL_DEBUG_OUTPUT);

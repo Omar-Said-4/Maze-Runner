@@ -52,10 +52,12 @@ namespace our {
         shader->set("alphaThreshold", alphaThreshold);
         // bind the texture and sampler to a texture unit and send the unit number to the uniform variable "tex"
         //? what if I wanna use a different texture unit?
-        if(texture  && sampler){
+        if(texture){
           glActiveTexture(GL_TEXTURE1);
           texture->bind();
+          if(sampler){
           sampler->bind(1);
+          }
           shader->set("tex", 1);
         }
     }

@@ -59,7 +59,6 @@ class Menustate: public our::State {
         menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
         // Initially, the menu material will be black, then it will fade in
         menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
-
         // Second, we create a material to highlight the hovered buttons
         highlightMaterial = new our::TintedMaterial();
         // Since the highlight is not textured, we used the tinted material shaders
@@ -106,10 +105,12 @@ class Menustate: public our::State {
         buttons[1].position = {830.0f, 644.0f};
         buttons[1].size = {400.0f, 33.0f};
         buttons[1].action = [this](){this->getApp()->close();};
+
     }
 
     void onDraw(double deltaTime) override {
         // Get a reference to the keyboard object
+
         auto& keyboard = getApp()->getKeyboard();
 
         if(keyboard.justPressed(GLFW_KEY_SPACE)){
@@ -154,6 +155,7 @@ class Menustate: public our::State {
         // Then we render the menu background
         // Notice that I don't clear the screen first, since I assume that the menu rectangle will draw over the whole
         // window anyway.
+
         menuMaterial->setup();
         menuMaterial->shader->set("transform", VP*M);
         rectangle->draw();
