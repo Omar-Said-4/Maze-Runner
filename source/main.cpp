@@ -16,12 +16,19 @@
 #include "states/material-test-state.hpp"
 #include "states/entity-test-state.hpp"
 #include "states/renderer-test-state.hpp"
+#include <filesystem>
 
 int main(int argc, char** argv) {
     
     flags::args args(argc, argv); // Parse the command line arguments
     // config_path is the path to the json file containing the application configuration
     // Default: "config/app.json"
+    /* setting file paths  to work regardless of th relative path or true path */
+    std::filesystem::path workspace_dir = std::filesystem::current_path();
+    workspace_dir = workspace_dir.parent_path();
+    std::cout<<"Current path: "<<workspace_dir<<std::endl;
+    std::filesystem::current_path(workspace_dir);
+    /* setting file paths  to work regardless of th relative path or true path */
     std::string config_path = args.get<std::string>("c", "config/app.jsonc");
     // run_for_frames is how many frames to run the application before automatically closing
     // This is useful for testing multiple configurations in a batch
@@ -59,6 +66,6 @@ int main(int argc, char** argv) {
     }
 
     // Finally run the application
-    // Here, the application loop will run till the terminatio condition is statisfied
+    // Here, the application loop will run till the termination condition is statisfied
     return app.run(run_for_frames);
 }
