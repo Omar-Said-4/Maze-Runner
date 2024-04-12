@@ -23,12 +23,18 @@ int main(int argc, char** argv) {
     flags::args args(argc, argv); // Parse the command line arguments
     // config_path is the path to the json file containing the application configuration
     // Default: "config/app.json"
-    /* setting file paths  to work regardless of th relative path or true path */
+    // /* setting file paths  to work regardless of th relative path or true path */
     std::filesystem::path workspace_dir = std::filesystem::current_path();
-    workspace_dir = workspace_dir.parent_path();
-    std::cout<<"Current path: "<<workspace_dir<<std::endl;
-    std::filesystem::current_path(workspace_dir);
-    /* setting file paths  to work regardless of th relative path or true path */
+    std::filesystem::path trimmed_path;
+    for (const auto& part : workspace_dir) {
+        trimmed_path /= part;
+        if (part == "Maze-Runner")
+            break;
+    }
+
+    std::filesystem::current_path(trimmed_path);
+    std::cout<<"Current path: "<<trimmed_path<<std::endl;
+    // /* setting file paths  to work regardless of th relative path or true path */
     std::string config_path = args.get<std::string>("c", "config/app.jsonc");
     // run_for_frames is how many frames to run the application before automatically closing
     // This is useful for testing multiple configurations in a batch
