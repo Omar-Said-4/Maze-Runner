@@ -25,7 +25,7 @@ our::Texture2D* our::texture_utils::empty(GLenum format, glm::ivec2 size){
     // internalformat on gpu => GL_RGBA8
     // width => size.r
     // height => size.y
-    glTexStorage2D(GL_TEXTURE_2D, levels, GL_RGBA8, size.r, size.y);
+    glTexStorage2D(GL_TEXTURE_2D, levels, format, size.r, size.y);
 
    // unbind the texture
     texture->unbind();
@@ -70,7 +70,7 @@ our::Texture2D* our::texture_utils::loadImage(const std::string& filename, bool 
     // format of the pixel data => GL_RGBA
     // type of the pixel data => GL_UNSIGNED_BYTE
     // data => pixels
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.r, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA8, size.r, size.y, 0, GL_RGBA, GL_UNSIGNED_BYTE, (void*)pixels);
 
     // generate mipmap if needed
     if(generate_mipmap){
@@ -78,7 +78,7 @@ our::Texture2D* our::texture_utils::loadImage(const std::string& filename, bool 
     }
 
     // unbind the texture
-    texture->unbind();
+   // texture->unbind();
     
     stbi_image_free(pixels); //Free image data after uploading to GPU
     return texture;
