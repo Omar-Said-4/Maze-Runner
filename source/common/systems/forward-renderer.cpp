@@ -2,6 +2,8 @@
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 
+#include <iostream>
+using namespace std;
 namespace our {
 
     void ForwardRenderer::initialize(glm::ivec2 windowSize, const nlohmann::json& config){
@@ -184,11 +186,12 @@ namespace our {
         // If there is a sky material, draw the sky
         if(this->skyMaterial){
             //TODO: (Req 10) setup the sky material
-            
+            this->skyMaterial->setup();
             //TODO: (Req 10) Get the camera position
-            
+             glm::vec3 cameraPosition = camera->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, 0, 0, 1);
             //TODO: (Req 10) Create a model matrix for the sy such that it always follows the camera (sky sphere center = camera position)
-            
+            glm::mat4 trans = glm::mat4(1.0f);
+            trans = glm::translate(trans, cameraPosition);
             //TODO: (Req 10) We want the sky to be drawn behind everything (in NDC space, z=1)
             // We can acheive the is by multiplying by an extra matrix after the projection but what values should we put in it?
             glm::mat4 alwaysBehindTransform = glm::mat4(
@@ -198,9 +201,9 @@ namespace our {
                 0.0f, 0.0f, 0.0f, 1.0f
             );
             //TODO: (Req 10) set the "transform" uniform
-            
+            this->skyMaterial->shader->set("transform", alwaysBehindTransform * VP * trans);
             //TODO: (Req 10) draw the sky sphere
-            
+            this->skySphere->draw();
         }
         //TODO: (Req 9) Draw all the transparent commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
