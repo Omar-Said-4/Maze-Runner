@@ -53,9 +53,10 @@ namespace our
             //  Return the component you found, or return null of nothing was found.
             for (auto component : components)
             {
-                T *comp = dynamic_cast<T *>(component);
-                if (comp)
-                    return comp;
+                if (T *t = dynamic_cast<T *>(component))
+                {
+                    return t;
+                }
             }
             return nullptr;
         }
@@ -72,7 +73,7 @@ namespace our
             return nullptr;
         }
 
-        // This template method searhes for a component of type T and deletes it
+        // This template method searches for a component of type T and deletes it
         template <typename T>
         void deleteComponent()
         {
@@ -80,11 +81,11 @@ namespace our
             //  If found, delete the found component and remove it from the components list
             for (auto component : components)
             {
-                T *comp = dynamic_cast<T *>(*component);
-                if (comp)
+
+                if (dynamic_cast<T *>(component))
                 {
-                    components.erase(component);
                     delete component;
+                    components.erase(component);
                     return;
                 }
             }
@@ -102,7 +103,7 @@ namespace our
             }
         }
 
-        // This template method searhes for the given component and deletes it
+        // This template method searches for the given component and deletes it
         template <typename T>
         void deleteComponent(T const *c)
         {
@@ -110,12 +111,11 @@ namespace our
             //  If found, delete the found component and remove it from the components list
             for (auto component : components)
             {
-                T *comp = dynamic_cast<T *>(*component);
-                if (c == comp)
+                if (c == dynamic_cast<T *>(component))
                 {
-                    components.erase(component);
                     delete component;
-                    return; // TODO: check if needed
+                    components.erase(component);
+                    return;
                 }
             }
         }
@@ -126,7 +126,7 @@ namespace our
             // TODO: (Req 8) Delete all the components in "components".
             for (auto component : components)
             {
-                delete component; // TODO: Needs to be pointer?
+                delete component;
             }
             components.clear();
         }
@@ -135,5 +135,4 @@ namespace our
         Entity(const Entity &) = delete;
         Entity &operator=(Entity const &) = delete;
     };
-
 }

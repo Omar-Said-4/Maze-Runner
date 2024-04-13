@@ -46,9 +46,7 @@ namespace our
         glm::vec4 eye = M * glm::vec4(0, 0, 0, 1);
         glm::vec4 center = M * glm::vec4(0, 0, -1, 1);
         glm::vec4 up = M * glm::vec4(0, 1, 0, 0);
-        return glm::lookAt(glm::vec3(eye[0], eye[1], eye[2]),
-                           glm::vec3(center[0], center[1], center[2]),
-                           glm::vec3(up[0], up[1], up[2]));
+        return glm::lookAt(glm::vec3(eye), glm::vec3(center), glm::vec3(up));
     }
 
     // Creates and returns the camera projection matrix
@@ -69,7 +67,7 @@ namespace our
             float bottom = -1 * top;
             float left = bottom * aspectRatio;
             float right = top * aspectRatio;
-            projectionMatrix = glm::ortho(left, right, bottom, top, near, far);
+            projectionMatrix = glm::ortho(left, right, bottom, top);
         }
         else
         {

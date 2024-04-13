@@ -69,7 +69,6 @@ namespace our
             deleteMarkedEntities();
             for (auto entity : entities)
             {
-                entities.erase(entity);
                 delete entity;
             }
             entities.clear();
