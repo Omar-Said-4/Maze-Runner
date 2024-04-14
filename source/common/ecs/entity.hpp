@@ -79,13 +79,12 @@ namespace our
         {
             // TODO: (Req 8) Go through the components list and find the first component that can be dynamically cast to "T*".
             //  If found, delete the found component and remove it from the components list
-            for (auto component : components)
+           for (auto it = components.begin(); it != components.end(); ++it)
             {
-
-                if (dynamic_cast<T *>(component))
+                if (dynamic_cast<T*>(*it))
                 {
-                    delete component;
-                    components.erase(component);
+                    delete *it;
+                    components.erase(it);
                     return;
                 }
             }
@@ -109,12 +108,12 @@ namespace our
         {
             // TODO: (Req 8) Go through the components list and find the given component "component".
             //  If found, delete the found component and remove it from the components list
-            for (auto component : components)
+           for (auto it = components.begin(); it != components.end(); it++ )
             {
-                if (c == dynamic_cast<T *>(component))
+                if (c == dynamic_cast<T *>(*it))
                 {
-                    delete component;
-                    components.erase(component);
+                    delete *it;
+                    it = components.erase(it);
                     return;
                 }
             }
