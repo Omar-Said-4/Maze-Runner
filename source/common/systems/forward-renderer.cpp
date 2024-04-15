@@ -232,9 +232,11 @@ while ((err = glGetError()) != GL_NO_ERROR)
         if(postprocessMaterial){
             //TODO: (Req 11) Return to the default framebuffer
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
-            glBindVertexArray(postProcessVertexArray);
             // TODO: (Req 11) Setup the postprocess material and draw the fullscreen triangle
+           
             postprocessMaterial->setup();
+            glBindVertexArray(postProcessVertexArray);
+           
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
         }
