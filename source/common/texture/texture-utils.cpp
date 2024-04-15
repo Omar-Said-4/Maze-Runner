@@ -8,9 +8,9 @@
 // added to get the glm functions
 #include<glm/glm.hpp>
 our::Texture2D* our::texture_utils::empty(GLenum format, glm::ivec2 size){
-    our::Texture2D* texture = new our::Texture2D();
+    //our::Texture2D* texture = new our::Texture2D();
     //TODO: (Req 11) Finish this function to create an empty texture with the given size and format
-
+    our::Texture2D *texture = new our::Texture2D();
     // bind the texture to set its parameters
     texture->bind();
     
