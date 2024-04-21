@@ -196,20 +196,8 @@
                 ]
             },
             {
-                "position": [20, -1, 0],
-                "rotation": [0, 0, 0],
-                "scale": [0.1, 0.15, 0.1],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "wall",
-                        "material": "wall"
-                    }
-                ]
-            },
-            {
-                "position": [20, -1, -20],
-                "rotation": [0, 0, 0],
+                "position": [0, -1, 0],
+                "rotation": [0, 90, 0],
                 "scale": [0.1, 0.15, 0.1],
                 "components": [
                     {
@@ -221,6 +209,30 @@
             },
             {
                 "position": [0, -1, -20],
+                "rotation": [0, 90, 0],
+                "scale": [0.1, 0.15, 0.1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "wall",
+                        "material": "wall"
+                    }
+                ]
+            },
+            {
+                "position": [0, -1, -40],
+                "rotation": [0, 90, 0],
+                "scale": [0.1, 0.15, 0.1],
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "wall",
+                        "material": "wall"
+                    }
+                ]
+            },
+            {
+                "position": [0, -1, -40],
                 "rotation": [0, 0, 0],
                 "scale": [0.1, 0.15, 0.1],
                 "components": [
@@ -232,20 +244,8 @@
                 ]
             },
             {
-                "position": [0, -1, -10],
-                "rotation": [0, 90, 0],
-                "scale": [0.1, 0.15, 0.1],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "wall",
-                        "material": "wall"
-                    }
-                ]
-            },
-            {
-                "position": [20, -1, -10],
-                "rotation": [0, 90, 0],
+                "position": [20, -1, -40],
+                "rotation": [0, 0, 0],
                 "scale": [0.1, 0.15, 0.1],
                 "components": [
                     {
