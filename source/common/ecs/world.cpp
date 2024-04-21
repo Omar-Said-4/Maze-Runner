@@ -49,6 +49,8 @@ namespace our
             {
                 if (maze[r][c] == '.')
                     continue;
+                if (maze[r][c] != '|' && maze[r][c] != 'T' && maze[r][c] != '-')
+                    continue;
 
                 Entity *entity = add();
                 entity->parent = nullptr;
@@ -56,7 +58,8 @@ namespace our
                     rotationY = 0;
                 else if (maze[r][c] == '|' || maze[r][c] == 'T')
                     rotationY = 90;
-                position = initialPosition + glm::vec3(20 * c, 0, 20 * r);
+                position = initialPosition + glm::vec3(20 * c, 0, (-20) * ((int)maze.size() - r - 1));
+                std::cout << "position " << position.x << " ," << position.y << "," << position.z << std::endl;
                 rotation = initialRotation + glm::vec3(0, rotationY, 0);
                 entity->deserialize(wallData, position, rotation, scale);
                 if (maze[r][c] == 'T')

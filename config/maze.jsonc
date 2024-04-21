@@ -146,7 +146,7 @@
         },
         "world":[
             {
-                "position": [0, 2, 10],
+                "position": [0, 2, 30],
                 "components": [
                     {
                         "type": "Camera"
