@@ -175,7 +175,11 @@
             },
            
             {
-                "position": [0, -1, 0],
+                "isGround":true,
+                "rows": 8,
+                "columns": 8,
+                "cellSize": 20,
+                "position": [-20, -1, 20],
                 "rotation": [-90, 0, 0],
                 "scale": [10, 10, 1],
                 "components": [

@@ -15,7 +15,12 @@ namespace our
         {
             if (entityData.contains("isWall") && entityData["isWall"] == true)
             {
-                deseralizeWalls(entityData);
+                deserializeMazeWalls(entityData);
+                continue;
+            }
+            if (entityData.contains("isGround") && entityData["isGround"] == true)
+            {
+                deserializeGround(entityData);
                 continue;
             }
             // TODO: (Req 8) Create an entity, make its parent "parent" and call its deserialize with "entityData".
@@ -30,7 +35,28 @@ namespace our
             }
         }
     }
-    void World::deseralizeWalls(const nlohmann::json &wallData)
+    void World::deserializeGround(const nlohmann::json &groundData)
+    {
+        int rows = groundData.value("rows", 10);
+        int columns = groundData.value("columns", 10);
+        int cellSize = groundData.value("cellSize", 20);
+        glm::vec3 initialPosition = groundData.value("position", glm::vec3(0, 0, 0));
+        glm::vec3 rotation = groundData.value("rotation", glm::vec3(0, 0, 0));
+        glm::vec3 scale = groundData.value("scale", glm::vec3(1, 1, 1));
+        glm::vec3 position;
+        for (int r = 0; r < rows; r++)
+        {
+            for (int c = 0; c < columns; c++)
+            {
+                Entity *entity = add();
+                entity->parent = nullptr;
+                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * (rows - r - 1));
+                entity->deserialize(groundData, position, rotation, scale);
+            }
+        }
+    }
+
+    void World::deserializeMazeWalls(const nlohmann::json &wallData)
     {
         Maze *maze = AssetLoader<Maze>::get("maze");
         std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
@@ -48,8 +74,6 @@ namespace our
         {
             for (int c = 0; c < mazeMatrix[r].size(); c++)
             {
-                if (mazeMatrix[r][c] == '.')
-                    continue;
                 if (mazeMatrix[r][c] != '|' && mazeMatrix[r][c] != 'T' && mazeMatrix[r][c] != '-')
                     continue;
 
