@@ -6,7 +6,6 @@
 #include <iterator>
 #include <string>
 #include <glm/glm.hpp>
-
 namespace our
 {
 
@@ -53,8 +52,10 @@ namespace our
             //  Return the component you found, or return null of nothing was found.
             for (auto component : components)
             {
+                
                 if (T *t = dynamic_cast<T *>(component))
                 {
+                
                     return t;
                 }
             }

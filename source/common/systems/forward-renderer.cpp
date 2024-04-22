@@ -210,10 +210,12 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 for (int i = 0; i < lights.size(); i++)
                 {
                   // light source is at the origin in the local space can be added to light component later
-                  glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
+                  glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(lights[i]->position,1);
                   // light source points i negative y direction in the local space can be added to light component later
-                  glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0);
+                  glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(lights[i]->direction, 0);
 
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].position",lightPosition);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].direction",direction);
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].color",lights[i]->color);
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].type", (int)lights[i]->lightType);
                   if(lights[i]->lightType!=LightType::DIRECTIONAL)
@@ -222,7 +224,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
                   }
                   if(lights[i]->lightType==LightType::SPOT)
                   {
-                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].coneAngles", *lights[i]->coneAngles);
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].cone_angles", *lights[i]->coneAngles);
                   }
                 }
             }
@@ -268,10 +270,9 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 lightMaterial->shader->set("M", transparentCommand.localToWorld);
                 lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(transparentCommand.localToWorld)));
                 lightMaterial->shader->set("light_count", (int)lights.size());
-                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.2f, 0.5f));
-                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.1f, 0.1f));
-                lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
-                lightMaterial->shader->set("cameraPosition", eye);
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.0f, 0.0f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.0f, 0.0f));
+                lightMaterial->shader->set("sky.horizon",glm::vec3(0.0f, 0.0f, 0.0f));
                 for (int i = 0; i < lights.size(); i++)
                 {
                   // light source is at the origin in the local space can be added to light component later
@@ -279,6 +280,9 @@ while ((err = glGetError()) != GL_NO_ERROR)
                   // light source points i negative y direction in the local space can be added to light component later
                   glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0);
 
+
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].position",lightPosition);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].direction",direction);
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].color",lights[i]->color);
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].type", (int)lights[i]->lightType);
                   if(lights[i]->lightType!=LightType::DIRECTIONAL)
@@ -287,7 +291,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
                   }
                   if(lights[i]->lightType==LightType::SPOT)
                   {
-                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].coneAngles", *lights[i]->coneAngles);
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].cone_angles", *lights[i]->coneAngles);
                   }
                 }
             }

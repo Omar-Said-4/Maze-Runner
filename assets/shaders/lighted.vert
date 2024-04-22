@@ -32,7 +32,7 @@ void main()
     // to get world vector
     vec3 world_position = (M * vec4(position, 1.0)).xyz;
     // position on window
-    gl_Position = VP * vec4(world, 1.0);
+    gl_Position = VP * vec4(world_position, 1.0);
     
     // attributes to be passed as it is
     vs_out.color = color;
@@ -42,6 +42,6 @@ void main()
     // passing world position
     vs_out.world = world_position;
     // vector used in frag shader to compute specular
-    vs_out.view = camera_position - world;
+    vs_out.view = camera_position - world_position;
 
 }

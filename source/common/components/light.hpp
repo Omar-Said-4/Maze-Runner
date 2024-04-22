@@ -12,15 +12,14 @@ namespace our {
         POINT,
         SPOT,
     };
-    struct AmbientDir {
-        glm::vec3 top,bottom,horizon;
-    };
     class LightComponent : public Component {
     public:
         LightType lightType; // The type of the light
         glm::vec3  color; // The color of the light
         glm::vec3 * attenuation=nullptr; // The attenuation of the light (d^2,d,1.0).
         glm::vec2 * coneAngles=nullptr; // The cone angles of the light (inner, outer) for spot light.
+        glm::vec3 direction;
+        glm::vec3 position;
         // The ID of this component type is "Light"
         static std::string getID() { return "Light"; }
 

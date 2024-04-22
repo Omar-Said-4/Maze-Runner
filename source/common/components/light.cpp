@@ -27,13 +27,14 @@ namespace our
         }
        
        
-        glm::vec3 a = glm::vec3(1.0f);
         color = glm::vec3(data.value("color", glm::vec3(1.0f, 0.9f, 0.8f)));
-        
+        position = glm::vec3(data.value("position", glm::vec3(0.0f, 0.0f, 0.0f)));
+        direction = glm::vec3(data.value("direction", glm::vec3(0.0f, -1.0f, 0.0f)));
+
         if (lightType == LightType::POINT || lightType == LightType::SPOT)
         {
             // Read attenuation of the light
-            attenuation = new glm::vec3(data.value("attenuation", glm::vec3(1.0f, 0.0f, 0.0f)));
+            attenuation = new glm::vec3(data.value("attenuation", glm::vec3(0.0f, 1.0f, 0.0f)));
         }
         if (lightType == LightType::SPOT)
         {
