@@ -23,8 +23,14 @@ namespace our
         // If parent pointer is not null, the new entities will be have their parent set to that given pointer
         // If any of the entities has children, this function will be called recursively for these children
         void deserialize(const nlohmann::json &data, Entity *parent = nullptr);
-        void deserializeMazeWalls(const nlohmann::json &wallData);
         void deserializeGround(const nlohmann::json &data);
+        void deserializeMaze(const nlohmann::json &data);
+        void deserializeMazeWalls(const nlohmann::json &wallData, glm::vec3 &initialPosition,
+                                  glm::vec3 &initialRotation, glm::vec3 &scale, int &cellSize,
+                                  std::vector<std::vector<char>> &mazeMatrix);
+        void deserializeMazeObjects(const nlohmann::json &objectData, glm::vec3 &initialPosition,
+                                           glm::vec3 &initialRotation, glm::vec3 &scale, int &cellSize,
+                                           std::vector<std::vector<char>> &mazeMatrix, char objectSymbol);
 
         // This adds an entity to the entities set and returns a pointer to that entity
         // WARNING The entity is owned by this world so don't use "delete" to delete it, instead, call "markForRemoval"

@@ -13,9 +13,9 @@ namespace our
             return;
         for (const auto &entityData : data)
         {
-            if (entityData.contains("isWall") && entityData["isWall"] == true)
+            if (entityData.contains("isMaze") && entityData["isMaze"] == true)
             {
-                deserializeMazeWalls(entityData);
+                deserializeMaze(entityData);
                 continue;
             }
             if (entityData.contains("isGround") && entityData["isGround"] == true)
@@ -55,20 +55,48 @@ namespace our
             }
         }
     }
-
-    void World::deserializeMazeWalls(const nlohmann::json &wallData)
+    void World::deserializeMaze(const nlohmann::json &data)
     {
         Maze *maze = AssetLoader<Maze>::get("maze");
         std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
 
-        int cellSize = wallData.value("cellSize", 20);
-        glm::vec3 initialPosition = wallData.value("position", glm::vec3(0, 0, 0));
-        glm::vec3 initialRotation = wallData.value("rotation", glm::vec3(0, 0, 0));
-        glm::vec3 scale = wallData.value("scale", glm::vec3(1, 1, 1));
+        int cellSize = data.value("cellSize", 20);
+        glm::vec3 initialPosition = data.value("position", glm::vec3(0, 0, 0));
+        glm::vec3 initialRotation = data.value("rotation", glm::vec3(0, 0, 0));
+        glm::vec3 scale = data.value("scale", glm::vec3(1, 1, 1));
 
+        if (data.contains("isWall") && data["isWall"] == true)
+            deserializeMazeWalls(data, initialPosition, initialRotation, scale, cellSize, mazeMatrix);
+        else
+            deserializeMazeObjects(data, initialPosition, initialRotation, scale, cellSize, mazeMatrix, 'o');
+    }
+
+    void World::deserializeMazeObjects(const nlohmann::json &objectData, glm::vec3 &initialPosition,
+                                       glm::vec3 &rotation, glm::vec3 &scale, int &cellSize,
+                                       std::vector<std::vector<char>> &mazeMatrix, char objectSymbol)
+    {
+        glm::vec3 position;
+        for (int r = 0; r < mazeMatrix.size(); r++)
+        {
+            for (int c = 0; c < mazeMatrix[r].size(); c++)
+            {
+                if (mazeMatrix[r][c] != objectSymbol)
+                    continue;
+
+                Entity *entity = add();
+                entity->parent = nullptr;
+                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * ((int)mazeMatrix.size() - r - 1));
+                entity->deserialize(objectData, position, rotation, scale);
+            }
+        }
+    }
+
+    void World::deserializeMazeWalls(const nlohmann::json &wallData, glm::vec3 &initialPosition,
+                                     glm::vec3 &initialRotation, glm::vec3 &scale, int &cellSize,
+                                     std::vector<std::vector<char>> &mazeMatrix)
+    {
         glm::vec3 position;
         glm::vec3 rotation;
-
         int rotationY;
         for (int r = 0; r < mazeMatrix.size(); r++)
         {
