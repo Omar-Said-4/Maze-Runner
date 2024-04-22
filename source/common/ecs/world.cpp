@@ -55,33 +55,50 @@ namespace our
             }
         }
     }
-    void World::deserializeMaze(const nlohmann::json &data)
+    void World::loadMazeObjects(const nlohmann::json &data)
     {
         Maze *maze = AssetLoader<Maze>::get("maze");
         std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
+        numOfMazeRows = mazeMatrix.size();
+        numOfMazeColumns = mazeMatrix[0].size();
+        for (int r = 0; r < mazeMatrix.size(); r++)
+        {
+            for (int c = 0; c < mazeMatrix[r].size(); c++)
+            {
+                mazeObjects[mazeMatrix[r][c]].push_back({r, c});
+            }
+        }
+    }
+
+    void World::deserializeMaze(const nlohmann::json &data)
+    {
+        if (mazeObjects.size() == 0)
+        {
+            loadMazeObjects(data);
+        }
 
         int cellSize = data.value("cellSize", 20);
-        std::unordered_set<char> objectSymbol;
+        std::unordered_set<char> objectSymbols;
         if (data.contains("objectSymbol"))
         {
             for (const auto &cell : data["objectSymbol"])
-                objectSymbol.insert(cell.get<std::string>()[0]);
+                objectSymbols.insert(cell.get<std::string>()[0]);
         }
         glm::vec3 initialPosition = data.value("position", glm::vec3(0, 0, 0));
         glm::vec3 rotation = data.value("rotation", glm::vec3(0, 0, 0));
         glm::vec3 scale = data.value("scale", glm::vec3(1, 1, 1));
 
         glm::vec3 position;
-        for (int r = 0; r < mazeMatrix.size(); r++)
+        int r, c;
+        for (const auto &symbol : objectSymbols)
         {
-            for (int c = 0; c < mazeMatrix[r].size(); c++)
+            for (int i = 0; i < mazeObjects[symbol].size(); i++)
             {
-                if (objectSymbol.find(mazeMatrix[r][c]) == objectSymbol.end())
-                    continue;
-
+                r = mazeObjects[symbol][i].first;
+                c = mazeObjects[symbol][i].second;
                 Entity *entity = add();
                 entity->parent = nullptr;
-                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * ((int)mazeMatrix.size() - r - 1));
+                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * (numOfMazeRows - r - 1));
                 entity->deserialize(data, position, rotation, scale);
             }
         }

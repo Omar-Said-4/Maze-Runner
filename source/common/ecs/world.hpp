@@ -16,6 +16,9 @@ namespace our
         std::unordered_set<Entity *> entities;         // These are the entities held by this world
         std::unordered_set<Entity *> markedForRemoval; // These are the entities that are awaiting to be deleted
                                                        // when deleteMarkedEntities is called
+        std::unordered_map<char, std::vector<std::pair<int, int>>> mazeObjects;
+        int numOfMazeRows, numOfMazeColumns;
+
     public:
         World() = default;
 
@@ -25,6 +28,8 @@ namespace our
         void deserialize(const nlohmann::json &data, Entity *parent = nullptr);
         void deserializeGround(const nlohmann::json &data);
         void deserializeMaze(const nlohmann::json &data);
+
+        void loadMazeObjects(const nlohmann::json &data);
 
         // This adds an entity to the entities set and returns a pointer to that entity
         // WARNING The entity is owned by this world so don't use "delete" to delete it, instead, call "markForRemoval"
