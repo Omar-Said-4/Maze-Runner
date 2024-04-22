@@ -21,11 +21,13 @@ namespace our
         ShaderProgram()
         {
             // TODO: (Req 1) Create A shader program
+            //Create A shader program
             this->program = glCreateProgram();
         }
         ~ShaderProgram()
         {
             // TODO: (Req 1) Delete a shader program
+            // Delete A shader program
             glDeleteProgram(this->program);
         }
 
@@ -87,7 +89,10 @@ namespace our
         }
 
         // TODO: (Req 1) Delete the copy constructor and assignment operator.
+        // Delete the copy constructor
         ShaderProgram(const ShaderProgram &) = delete;
+
+        //Delete the assignment operator
         ShaderProgram &operator=(const ShaderProgram &) = delete;
         // Question: Why do we delete the copy constructor and assignment operator?
         
