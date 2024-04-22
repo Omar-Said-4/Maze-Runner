@@ -3,7 +3,8 @@
 #include <unordered_set>
 #include "entity.hpp"
 #include <iostream>
-
+#include "../asset-loader.hpp"
+#include "../maze/maze.hpp"
 namespace our
 {
 

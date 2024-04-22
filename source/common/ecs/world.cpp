@@ -31,9 +31,8 @@ namespace our
     }
     void World::deseralizeWalls(const nlohmann::json &wallData)
     {
-        std::vector<std::vector<int>> maze = {{'|', '.', '-'},
-                                              {'T', '-', 'T'},
-                                              {'|', '.', '|'}};
+        Maze *maze = AssetLoader<Maze>::get("maze");
+        std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
 
         glm::vec3 initialPosition = glm::vec3(0, -1, 0);
         glm::vec3 initialRotation = glm::vec3(0, 0, 0);
@@ -43,26 +42,25 @@ namespace our
         glm::vec3 rotation;
 
         int rotationY;
-        for (int r = 0; r < maze.size(); r++)
+        for (int r = 0; r < mazeMatrix.size(); r++)
         {
-            for (int c = 0; c < maze[r].size(); c++)
+            for (int c = 0; c < mazeMatrix[r].size(); c++)
             {
-                if (maze[r][c] == '.')
+                if (mazeMatrix[r][c] == '.')
                     continue;
-                if (maze[r][c] != '|' && maze[r][c] != 'T' && maze[r][c] != '-')
+                if (mazeMatrix[r][c] != '|' && mazeMatrix[r][c] != 'T' && mazeMatrix[r][c] != '-')
                     continue;
 
                 Entity *entity = add();
                 entity->parent = nullptr;
-                if (maze[r][c] == '-')
+                if (mazeMatrix[r][c] == '-')
                     rotationY = 0;
-                else if (maze[r][c] == '|' || maze[r][c] == 'T')
+                else if (mazeMatrix[r][c] == '|' || mazeMatrix[r][c] == 'T')
                     rotationY = 90;
-                position = initialPosition + glm::vec3(20 * c, 0, (-20) * ((int)maze.size() - r - 1));
-                std::cout << "position " << position.x << " ," << position.y << "," << position.z << std::endl;
+                position = initialPosition + glm::vec3(20 * c, 0, (-20) * ((int)mazeMatrix.size() - r - 1));
                 rotation = initialRotation + glm::vec3(0, rotationY, 0);
                 entity->deserialize(wallData, position, rotation, scale);
-                if (maze[r][c] == 'T')
+                if (mazeMatrix[r][c] == 'T')
                 {
                     Entity *entity = add();
                     entity->parent = nullptr;

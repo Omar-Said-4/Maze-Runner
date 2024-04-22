@@ -46,6 +46,9 @@
                     "MAG_FILTER": "GL_NEAREST"
                 }
             },
+            "maze": {
+                "path":"assets/mazes/maze1.jsonc"
+            },
             "materials":{
                 "metal":{
                     "type": "tinted",

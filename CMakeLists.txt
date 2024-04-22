@@ -48,6 +48,11 @@ set(COMMON_SOURCES
         source/common/mesh/mesh-utils.hpp
         source/common/mesh/mesh-utils.cpp
 
+        source/common/maze/maze.hpp
+        source/common/maze/maze.cpp
+        source/common/maze/maze_utils.hpp
+        source/common/maze/maze_utils.cpp
+
         source/common/texture/sampler.hpp
         source/common/texture/sampler.cpp
         source/common/texture/texture2d.hpp
