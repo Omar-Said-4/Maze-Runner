@@ -149,6 +149,10 @@ while ((err = glGetError()) != GL_NO_ERROR)
                     opaqueCommands.push_back(command);
                 }
             }
+            if (auto lightComponent = entity->getComponent<LightComponent>(); lightComponent)
+            {
+                lights.push_back(lightComponent);
+            }
         }
 
         // If there is no camera, we return (we cannot render without a camera)
@@ -190,8 +194,41 @@ while ((err = glGetError()) != GL_NO_ERROR)
         for(auto opaqueCommand:opaqueCommands ){
             glm::mat4 Mat = opaqueCommand.localToWorld;
             glm::mat4 mpv = VP * Mat;
-             opaqueCommand.material->setup();
-             opaqueCommand.material->shader->set("transform", mpv);
+            opaqueCommand.material->setup();
+            // if it's a light material edit it in shader            
+            if (auto lightMaterial = dynamic_cast<litMaterial *>(opaqueCommand.material); lightMaterial)
+            {
+                lightMaterial->shader->set("VP", VP);
+                lightMaterial->shader->set("camera_position", eye);
+                lightMaterial->shader->set("M", opaqueCommand.localToWorld);
+                lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(opaqueCommand.localToWorld)));
+                lightMaterial->shader->set("light_count", (int)lights.size());
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.2f, 0.5f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.1f, 0.1f));
+                lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
+                lightMaterial->shader->set("cameraPosition", eye);
+                for (int i = 0; i < lights.size(); i++)
+                {
+                  // light source is at the origin in the local space can be added to light component later
+                  glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
+                  // light source points i negative y direction in the local space can be added to light component later
+                  glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0);
+
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].color",lights[i]->color);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].type", (int)lights[i]->lightType);
+                  if(lights[i]->lightType!=LightType::DIRECTIONAL)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].attenuation", *lights[i]->attenuation);
+                  }
+                  if(lights[i]->lightType==LightType::SPOT)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].coneAngles", *lights[i]->coneAngles);
+                  }
+                }
+            }
+            else{
+                opaqueCommand.material->shader->set("transform", mpv);
+            }
             opaqueCommand.mesh->draw();
         }
         // If there is a sky material, draw the sky
@@ -224,7 +261,39 @@ while ((err = glGetError()) != GL_NO_ERROR)
             glm::mat4 Mat = transparentCommand.localToWorld;
             glm::mat4 mpv = VP * Mat;
             transparentCommand.material->setup();
-            transparentCommand.material->shader->set("transform", mpv);
+            if (auto lightMaterial = dynamic_cast<litMaterial *>(transparentCommand.material); lightMaterial)
+            {
+                lightMaterial->shader->set("VP", VP);
+                lightMaterial->shader->set("camera_position", eye);
+                lightMaterial->shader->set("M", transparentCommand.localToWorld);
+                lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(transparentCommand.localToWorld)));
+                lightMaterial->shader->set("light_count", (int)lights.size());
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.2f, 0.5f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.1f, 0.1f));
+                lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
+                lightMaterial->shader->set("cameraPosition", eye);
+                for (int i = 0; i < lights.size(); i++)
+                {
+                  // light source is at the origin in the local space can be added to light component later
+                  glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
+                  // light source points i negative y direction in the local space can be added to light component later
+                  glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0);
+
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].color",lights[i]->color);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].type", (int)lights[i]->lightType);
+                  if(lights[i]->lightType!=LightType::DIRECTIONAL)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].attenuation", *lights[i]->attenuation);
+                  }
+                  if(lights[i]->lightType==LightType::SPOT)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].coneAngles", *lights[i]->coneAngles);
+                  }
+                }
+            }
+            else{
+                transparentCommand.material->shader->set("transform", mpv);
+            }
             transparentCommand.mesh->draw();
         }
 

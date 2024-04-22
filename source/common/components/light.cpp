@@ -25,27 +25,11 @@ namespace our
         {
             lightType = LightType::SPOT;
         }
-        else if (lightTypeStr == "EMISSIVE")
-        {
-            lightType = LightType::EMISSIVE;
-        }
-        else if (lightTypeStr == "AMBIENT")
-        {
-            lightType = LightType::AMBIENT;
-        }
-        if (lightType != LightType::AMBIENT)
-        {
-            // Read the color of the light
-            glm::vec3 a = glm::vec3(1.0f);
-            color = new glm::vec3(data.value("color", glm::vec3(1.0f, 0.9f, 0.8f)));
-        }
-        else
-        {
-            skyLight = new AmbientDir();
-            skyLight->top = data.value("top", glm::vec3(0.0f,0.2f,0.5f));
-            skyLight->bottom = data.value("bottom", glm::vec3(0.0f,0.0f,0.0f));
-            skyLight->horizon = data.value("horizon", glm::vec3(0.2f,0.2f,0.2f));
-        }
+       
+       
+        glm::vec3 a = glm::vec3(1.0f);
+        color = glm::vec3(data.value("color", glm::vec3(1.0f, 0.9f, 0.8f)));
+        
         if (lightType == LightType::POINT || lightType == LightType::SPOT)
         {
             // Read attenuation of the light
