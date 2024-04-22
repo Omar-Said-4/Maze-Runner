@@ -61,10 +61,11 @@ namespace our
         std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
 
         int cellSize = data.value("cellSize", 20);
-        char objectSymbol;
+        std::unordered_set<char> objectSymbol;
         if (data.contains("objectSymbol"))
         {
-            objectSymbol = data.value("objectSymbol", ".")[0];
+            for (const auto &cell : data["objectSymbol"])
+                objectSymbol.insert(cell.get<std::string>()[0]);
         }
         glm::vec3 initialPosition = data.value("position", glm::vec3(0, 0, 0));
         glm::vec3 rotation = data.value("rotation", glm::vec3(0, 0, 0));
@@ -75,20 +76,13 @@ namespace our
         {
             for (int c = 0; c < mazeMatrix[r].size(); c++)
             {
-                if (mazeMatrix[r][c] != objectSymbol)
+                if (objectSymbol.find(mazeMatrix[r][c]) == objectSymbol.end())
                     continue;
 
                 Entity *entity = add();
                 entity->parent = nullptr;
                 position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * ((int)mazeMatrix.size() - r - 1));
                 entity->deserialize(data, position, rotation, scale);
-                if (objectSymbol == 'T')
-                {
-                    Entity *entity = add();
-                    entity->parent = nullptr;
-                    position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * ((int)mazeMatrix.size() - r - 1));
-                    entity->deserialize(data, position, glm::vec3(0, 90, 0), scale);
-                }
             }
         }
     }

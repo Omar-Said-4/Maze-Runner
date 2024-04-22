@@ -6,8 +6,6 @@ void our::Maze::deserialize(const nlohmann::json &data)
         return;
     rows = data.value("rows", rows);
     columns = data.value("columns", columns);
-    std::cout << "xxxx" << std::endl;
-    std::cout << rows << " " << data << " " << std::endl;
     if (data.find("matrix") != data.end())
     {
         mazeMatrix.clear();

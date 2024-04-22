@@ -195,7 +195,7 @@
             },
             {
                 "isMaze": true,
-                "objectSymbol":"|",
+                "objectSymbol":["|","T"],
                 "position": [0, -0.8, 0],
                 "rotation": [0, 90, 0],
                 "scale": [0.1, 0.15, 0.1],
@@ -210,7 +210,7 @@
             },
             {
                 "isMaze": true,
-                "objectSymbol":"-",
+                "objectSymbol":["-","T"],
                 "position": [0, -0.8, 0],
                 "rotation": [0, 0, 0],
                 "scale": [0.1, 0.15, 0.1],
@@ -225,22 +225,7 @@
             },
             {
                 "isMaze": true,
-                "objectSymbol":"T",
-                "position": [0, -0.8, 0],
-                "rotation": [0, 0, 0],
-                "scale": [0.1, 0.15, 0.1],
-                "cellSize": 20,
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "wall",
-                        "material": "wall"
-                    }
-                ]
-            },
-            {
-                "isMaze": true,
-                "objectSymbol":"o",
+                "objectSymbol":["o"],
                 "position": [0, 4, 0],
                 "rotation": [45, 45, 0],
                 "scale": [4, 4, 4],
