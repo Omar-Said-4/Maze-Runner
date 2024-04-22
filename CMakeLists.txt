@@ -55,7 +55,6 @@ set(COMMON_SOURCES
         source/common/texture/texture-utils.cpp
         source/common/texture/screenshot.hpp
         source/common/texture/screenshot.cpp
-
         source/common/material/pipeline-state.hpp
         source/common/material/pipeline-state.cpp
         source/common/material/material.hpp
@@ -83,6 +82,10 @@ set(COMMON_SOURCES
         source/common/systems/forward-renderer.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
+
+        # adding light
+        source/common/components/light.cpp
+        source/common/components/light.hpp
 )
 
 # Define the directories in which to search for the included headers
