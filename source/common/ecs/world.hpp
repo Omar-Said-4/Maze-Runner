@@ -5,6 +5,8 @@
 #include <iostream>
 #include "../asset-loader.hpp"
 #include "../maze/maze.hpp"
+#include <json/json.hpp>
+
 namespace our
 {
 

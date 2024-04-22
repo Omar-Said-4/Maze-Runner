@@ -187,8 +187,11 @@
                 ]
             },
             {
-                "is_wall": true,
+                "isWall": true,
+                "position": [0, -0.8, 0],
+                "rotation": [0, 0, 0],
                 "scale": [0.1, 0.15, 0.1],
+                "cellSize": 20,
                 "components": [
                     {
                         "type": "Mesh Renderer",

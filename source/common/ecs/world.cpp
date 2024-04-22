@@ -1,4 +1,5 @@
 #include "world.hpp"
+#include "../deserialize-utils.hpp"
 
 namespace our
 {
@@ -12,7 +13,7 @@ namespace our
             return;
         for (const auto &entityData : data)
         {
-            if (entityData.contains("is_wall") && entityData["is_wall"] == true)
+            if (entityData.contains("isWall") && entityData["isWall"] == true)
             {
                 deseralizeWalls(entityData);
                 continue;
@@ -34,9 +35,10 @@ namespace our
         Maze *maze = AssetLoader<Maze>::get("maze");
         std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
 
-        glm::vec3 initialPosition = glm::vec3(0, -1, 0);
-        glm::vec3 initialRotation = glm::vec3(0, 0, 0);
-        glm::vec3 scale = glm::vec3(0.1, 0.15, 0.1);
+        int cellSize = wallData.value("cellSize", 20);
+        glm::vec3 initialPosition = wallData.value("position", glm::vec3(0, 0, 0));
+        glm::vec3 initialRotation = wallData.value("rotation", glm::vec3(0, 0, 0));
+        glm::vec3 scale = wallData.value("scale", glm::vec3(1, 1, 1));
 
         glm::vec3 position;
         glm::vec3 rotation;
@@ -57,7 +59,7 @@ namespace our
                     rotationY = 0;
                 else if (mazeMatrix[r][c] == '|' || mazeMatrix[r][c] == 'T')
                     rotationY = 90;
-                position = initialPosition + glm::vec3(20 * c, 0, (-20) * ((int)mazeMatrix.size() - r - 1));
+                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * ((int)mazeMatrix.size() - r - 1));
                 rotation = initialRotation + glm::vec3(0, rotationY, 0);
                 entity->deserialize(wallData, position, rotation, scale);
                 if (mazeMatrix[r][c] == 'T')
