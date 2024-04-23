@@ -123,6 +123,10 @@ while ((err = glGetError()) != GL_NO_ERROR)
             delete postprocessMaterial->shader;
             delete postprocessMaterial;
         }
+        // delete all objects related to lights
+        if(!lights.empty()){
+               lights.clear();
+            }
     }
 
     void ForwardRenderer::render(World* world){

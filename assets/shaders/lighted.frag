@@ -118,6 +118,7 @@ void main() {
         color += (computed_diffuse + computed_specular) * attenuation;
 
     }
+    //color=specular;
     //frag_color = vec4(color, 1.0);
     frag_color = vec4(color, 1.0);
 }

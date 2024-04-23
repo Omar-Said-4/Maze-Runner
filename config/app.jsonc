@@ -37,7 +37,8 @@
                 "monkey": "assets/textures/monkey.png",
                 "test-albedo": "assets/textures/test-albedo.jpg",
                 "test-occlusion": "assets/textures/test-occlusion.jpg",
-                "test-roughness": "assets/textures/wood.jpg",
+                "test-roughnessg": "assets/textures/test-roughness.png",
+                "test-roughnessm": "assets/textures/roughness.jpg",
                 "test-specular": "assets/textures/test-specular.jpg",
                 "test-emissive": "assets/textures/test-emissive.jpg"
             },
@@ -102,9 +103,9 @@
                     },
                     "albedo": "test-albedo",
                     "occlusion": "test-occlusion",
-                    "roughness": "test-roughness",
-                    "specular": "test-specular",
-                    "emissive": "grass",
+                    "roughness": "wood",
+                    "specular": "wood",
+                    "emissive": "test-emissive",
                     "samplerAlbedo": "default",
                     "samplerOcclusion": "default",
                     "samplerRoughness": "default",
@@ -124,8 +125,8 @@
                     },
                     "albedo": "test-albedo",
                     "occlusion": "test-occlusion",
-                    "roughness": "test-roughness",
-                    "specular": "test-specular",
+                    "roughness": "test-roughnessg",
+                    "specular": "wood",
                     "emissive": "test-emissive",
                     "samplerAlbedo": "default",
                     "samplerOcclusion": "default",
@@ -146,8 +147,8 @@
                     },
                     "albedo": "test-albedo",
                     "occlusion": "test-occlusion",
-                    "roughness": "test-roughness",
-                    "specular": "test-specular",
+                    "roughness": "test-roughnessm",
+                    "specular": "wood",
                     "emissive": "moon",
                     "samplerAlbedo": "default",
                     "samplerOcclusion": "default",
@@ -185,6 +186,7 @@
             },
             
             {
+                "name": "monkey",
                 "rotation": [-45, 0, 0],
                 "components": [
                     {
@@ -200,6 +202,7 @@
                 ]
             },
             {
+                "name":"grass",
                 "position": [0, -1, 0],
                 "rotation": [-90, 0, 0],
                 "scale": [10, 10, 1],
@@ -208,15 +211,11 @@
                         "type": "Mesh Renderer",
                         "mesh": "plane",
                         "material": "grass"
-                    },
-                    {
-                        "type": "Light",
-                        "lightType": "DIRECTIONAL",
-                        "color": [0.0, 0.0, 0.02]      
                     }
                 ]
             },
             {
+                "name":"moon",
                 "position": [0, 10, 0],
                 "rotation": [45, 45, 0],
                 "scale": [5, 5, 5],
@@ -232,8 +231,8 @@
                     },
                     {
                         "type": "Light",
-                        "lightType": "POINT",
-                        "color": [1.05, 0.04, 0.03]      
+                        "lightType": "DIRECTIONAL",
+                         "color": [0.1, 0.1, 0.1]      
                     }
                 ]
             }

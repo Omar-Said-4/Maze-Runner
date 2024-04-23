@@ -79,7 +79,7 @@ namespace our {
             if(samplerAlbedo){
                 samplerAlbedo->bind(0);
             }
-            shader->set("material.albedo", 1);
+            shader->set("material.albedo", 0);
         }
         if (specular){
             glActiveTexture(GL_TEXTURE1);
