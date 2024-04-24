@@ -24,6 +24,5 @@ void main(){
     col.r = texture(tex, vec2(tex_coord.x - STRENGTH, tex_coord.y)).r;
     col.g = texture(tex, tex_coord).g;
     col.b = texture(tex, vec2(tex_coord.x + STRENGTH, tex_coord.y)).b;
-
     frag_color = vec4(col.r, col.g, col.b, 1.0);
 }
