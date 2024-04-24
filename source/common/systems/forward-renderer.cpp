@@ -217,6 +217,8 @@ while ((err = glGetError()) != GL_NO_ERROR)
                   glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(lights[i]->position,1);
                   // light source points i negative y direction in the local space can be added to light component later
                   glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(lights[i]->direction, 0);
+                  // make it a unit vector
+                  direction = glm::normalize(direction);
 
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].position",lightPosition);
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].direction",direction);
@@ -283,7 +285,8 @@ while ((err = glGetError()) != GL_NO_ERROR)
                   glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
                   // light source points i negative y direction in the local space can be added to light component later
                   glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0);
-
+                  // make it a unit vector
+                  direction = glm::normalize(direction);
 
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].position",lightPosition);
                   lightMaterial->shader->set("lights[" + std::to_string(i) + "].direction",direction);

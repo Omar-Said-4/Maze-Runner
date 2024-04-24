@@ -198,6 +198,11 @@
                         "type": "Movement",
                         "linearVelocity": [0, 0.1, 0],
                         "angularVelocity": [0, 45, 0]
+                    },
+                    {
+                        "type": "Light",
+                        "lightType": "SPOT",
+                         "color": [5,0.2, 0.2]      
                     }
                 ]
             },
@@ -232,7 +237,7 @@
                     {
                         "type": "Light",
                         "lightType": "DIRECTIONAL",
-                         "color": [0.1, 0.1, 0.1]      
+                         "color": [0.3,0.2,0]      
                     }
                 ]
             }
