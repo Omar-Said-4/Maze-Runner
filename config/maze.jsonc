@@ -40,6 +40,7 @@
                 "plane": "assets/models/plane.obj",
                 "sphere": "assets/models/sphere.obj",
                 "wall": "assets/models/wall.obj",
+                "Lwall": "assets/models/Lwall2.obj",
                 "coin":"assets/models/coin.obj"
             },
             "samplers":{
@@ -102,6 +103,21 @@
                     "texture": "wall",
                     "sampler": "default"
                 },
+                "Lwall":{
+                    "type": "textured",
+                    "shader": "textured",
+                    "pipelineState": {
+                        "faceCulling":{
+                            "enabled": false
+                        },
+                        "depthTesting":{
+                            "enabled": true
+                        }
+                    },
+                    "tint": [1, 1, 1, 1],
+                    "texture": "wall",
+                    "sampler": "default"
+                },
                 "coin":{
                     "type": "textured",
                     "shader": "textured",
@@ -117,6 +133,7 @@
                     "texture": "coin",
                     "sampler": "default"
                 },
+                
                 "grass":{
                     "type": "textured",
                     "shader": "textured",
@@ -220,6 +237,66 @@
                         "type": "Mesh Renderer",
                         "mesh": "wall",
                         "material": "wall"
+                    }
+                ]
+            },
+            {
+                "isMaze": true,
+                "objectSymbol":["L"],
+                "position": [-0.1, -0.6, 0],
+                "rotation": [0, 0, 0],
+                "scale": [0.1, 0.15, 0.1],
+                "cellSize": 20,
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "Lwall",
+                        "material": "Lwall"
+                    }
+                ]
+            },
+            {
+                "isMaze": true,
+                "objectSymbol":["r"],
+                "position": [-0.1, -0.6, 0],
+                "rotation": [0, 270, 0],
+                "scale": [0.1, 0.15, 0.1],
+                "cellSize": 20,
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "Lwall",
+                        "material": "Lwall"
+                    }
+                ]
+            },
+            {
+                "isMaze": true,
+                "objectSymbol":["7"],
+                "position": [-0.1, -0.6, 0],
+                "rotation": [0, 180, 0],
+                "scale": [0.1, 0.15, 0.1],
+                "cellSize": 20,
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "Lwall",
+                        "material": "Lwall"
+                    }
+                ]
+            },
+            {
+                "isMaze": true,
+                "objectSymbol":["j"],
+                "position": [-0.1, -0.6, 0],
+                "rotation": [0, 90, 0],
+                "scale": [0.1, 0.15, 0.1],
+                "cellSize": 20,
+                "components": [
+                    {
+                        "type": "Mesh Renderer",
+                        "mesh": "Lwall",
+                        "material": "Lwall"
                     }
                 ]
             },
