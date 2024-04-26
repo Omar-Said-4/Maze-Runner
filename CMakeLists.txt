@@ -83,6 +83,8 @@ set(COMMON_SOURCES
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
+        source/common/systems/sound-system.hpp
+        source/common/systems/sound-system.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
 

@@ -10,6 +10,8 @@
 #include <functional>
 #include <array>
 
+#include <systems/sound-system.hpp>
+
 // This struct is used to store the location and size of a button and the code it should execute when clicked
 struct Button {
     // The position (of the top-left corner) of the button and its size in pixels
@@ -42,10 +44,11 @@ class Menustate: public our::State {
     our::TintedMaterial * highlightMaterial;
     // A rectangle mesh on which the menu material will be drawn
     our::Mesh* rectangle;
+    our::Mesh* rectangle2;
     // A variable to record the time since the state is entered (it will be used for the fading effect).
     float time;
     // An array of the button that we can interact with
-    std::array<Button, 2> buttons;
+    std::array<Button, 3> buttons;
 
     void onInitialize() override {
         // First, we create a material for the menu's background
@@ -56,7 +59,13 @@ class Menustate: public our::State {
         menuMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
         menuMaterial->shader->link();
         // Then we load the menu texture
-        menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+        if(our::SoundSystem::global_music_state){
+            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
+        }
+        else{
+            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+        }   
+        //menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
         // Initially, the menu material will be black, then it will fade in
         menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
         // Second, we create a material to highlight the hovered buttons
@@ -79,6 +88,14 @@ class Menustate: public our::State {
         // Note that the texture coordinates at the origin is (0.0, 1.0) since we will use the 
         // projection matrix to make the origin at the the top-left corner of the screen.
         rectangle = new our::Mesh({
+            {{0.0f, 0.0f, 0.0f}, {0, 0, 200, 255}, {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+            {{1.0f, 0.0f, 0.0f}, {0, 200, 0, 255}, {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
+            {{1.0f, 1.0f, 0.0f}, {255, 255, 255, 255}, {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}},
+            {{0.0f, 1.0f, 0.0f}, {255, 0, 0, 255}, {0.0f, 0.0f}, {0.0f, 0.0f, 1.0f}},
+        },{
+            0, 1, 2, 2, 3, 0,
+        });
+        rectangle2 = new our::Mesh({
             {{0.0f, 0.0f, 0.0f}, {255, 255, 255, 255}, {0.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
             {{1.0f, 0.0f, 0.0f}, {255, 255, 255, 255}, {1.0f, 1.0f}, {0.0f, 0.0f, 1.0f}},
             {{1.0f, 1.0f, 0.0f}, {255, 255, 255, 255}, {1.0f, 0.0f}, {0.0f, 0.0f, 1.0f}},
@@ -86,7 +103,6 @@ class Menustate: public our::State {
         },{
             0, 1, 2, 2, 3, 0,
         });
-
         // Reset the time elapsed since the state is entered.
         time = 0;
 
@@ -98,13 +114,25 @@ class Menustate: public our::State {
         // - The argument list () which is the arguments that the lambda should receive when it is called.
         //      We leave it empty since button actions receive no input.
         // - The body {} which contains the code to be executed. 
-        buttons[0].position = {830.0f, 607.0f};
-        buttons[0].size = {400.0f, 33.0f};
+        buttons[0].position = {930.0f, 20.0f};
+        buttons[0].size = {330.0f, 120.0f};
         buttons[0].action = [this](){this->getApp()->changeState("play");};
 
-        buttons[1].position = {830.0f, 644.0f};
-        buttons[1].size = {400.0f, 33.0f};
+        buttons[1].position = {20.0f, 30.0f};
+        buttons[1].size = {320.0f, 120.0f};
         buttons[1].action = [this](){this->getApp()->close();};
+        
+        buttons[2].position = {920.0f, 460.0f};
+        buttons[2].size = {350.0f, 80.0f};
+        buttons[2].action = [this](){ 
+         if(!our::SoundSystem::global_music_state){
+            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
+         } 
+         else
+         {
+            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+         }
+         our::SoundSystem::global_music_state=!our::SoundSystem::global_music_state;};
 
     }
 
@@ -119,6 +147,16 @@ class Menustate: public our::State {
         } else if(keyboard.justPressed(GLFW_KEY_ESCAPE)) {
             // If the escape key is pressed in this frame, exit the game
             getApp()->close();
+        }
+        else if(keyboard.justPressed(GLFW_KEY_M)){
+            if(!our::SoundSystem::global_music_state){
+                menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
+             } 
+             else
+             {
+                menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+             }
+             our::SoundSystem::global_music_state=!our::SoundSystem::global_music_state;
         }
 
         // Get a reference to the mouse object and get the current mouse position
@@ -165,7 +203,7 @@ class Menustate: public our::State {
             if(button.isInside(mousePosition)){
                 highlightMaterial->setup();
                 highlightMaterial->shader->set("transform", VP*button.getLocalToWorld());
-                rectangle->draw();
+                rectangle2->draw();
             }
         }
         
