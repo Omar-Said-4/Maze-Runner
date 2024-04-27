@@ -19,6 +19,8 @@ struct Button {
     // The function that should be excuted when the button is clicked. It takes no arguments and returns nothing.
     std::function<void()> action;
 
+    // for hover sound effect
+    bool hover = true;
     // This function returns true if the given vector v is inside the button. Otherwise, false is returned.
     // This is used to check if the mouse is hovering over the button.
     bool isInside(const glm::vec2& v) const {
@@ -51,7 +53,7 @@ class Menustate: public our::State {
     std::array<Button, 3> buttons;
 
     void onInitialize() override {
-        our::SoundSystem::initMenuSound();
+        our::SoundSystem::initMenuSounds();
         // First, we create a material for the menu's background
         menuMaterial = new our::TexturedMaterial();
         // Here, we load the shader that will be used to draw the background
@@ -118,15 +120,20 @@ class Menustate: public our::State {
         // - The body {} which contains the code to be executed. 
         buttons[0].position = {930.0f, 20.0f};
         buttons[0].size = {330.0f, 120.0f};
-        buttons[0].action = [this](){this->getApp()->changeState("play");};
+        buttons[0].action = [this](){
+            our::SoundSystem::play_custom_sound("Button");
+            this->getApp()->changeState("play");};
 
         buttons[1].position = {20.0f, 30.0f};
         buttons[1].size = {320.0f, 120.0f};
-        buttons[1].action = [this](){this->getApp()->close();};
+        buttons[1].action = [this](){
+            our::SoundSystem::play_custom_sound("Button");
+            this->getApp()->close();};
         
         buttons[2].position = {920.0f, 460.0f};
         buttons[2].size = {350.0f, 80.0f};
         buttons[2].action = [this](){ 
+            our::SoundSystem::play_custom_sound("Button");
          if(!our::SoundSystem::global_music_state){
             menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
             our::SoundSystem::play_menu_background();
@@ -146,13 +153,16 @@ class Menustate: public our::State {
         auto& keyboard = getApp()->getKeyboard();
 
         if(keyboard.justPressed(GLFW_KEY_SPACE)){
+            our::SoundSystem::play_custom_sound("Button");
             // If the space key is pressed in this frame, go to the play state
             getApp()->changeState("play");
         } else if(keyboard.justPressed(GLFW_KEY_ESCAPE)) {
+            our::SoundSystem::play_custom_sound("Button");
             // If the escape key is pressed in this frame, exit the game
             getApp()->close();
         }
         else if(keyboard.justPressed(GLFW_KEY_M)){
+            our::SoundSystem::play_custom_sound("Button");
             if(!our::SoundSystem::global_music_state){
                 menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
                 our::SoundSystem::play_menu_background();
@@ -205,11 +215,22 @@ class Menustate: public our::State {
         rectangle->draw();
 
         // For every button, check if the mouse is inside it. If the mouse is inside, we draw the highlight rectangle over it.
+        // for hover effect
         for(auto& button: buttons){
             if(button.isInside(mousePosition)){
                 highlightMaterial->setup();
                 highlightMaterial->shader->set("transform", VP*button.getLocalToWorld());
+                if(button.hover){
+                 our::SoundSystem::play_custom_sound("Hover",false);
+                 
+                }
+                button.hover=false;
+                
                 rectangle2->draw();
+            }
+            else
+            {
+                button.hover=true;
             }
         }
         
@@ -223,6 +244,6 @@ class Menustate: public our::State {
         delete menuMaterial;
         delete highlightMaterial->shader;
         delete highlightMaterial;
-        our::SoundSystem::destroyMenuSound();
+        our::SoundSystem::destroyMenuSounds();
     }
 };

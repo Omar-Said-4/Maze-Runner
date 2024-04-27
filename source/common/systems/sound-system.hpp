@@ -25,8 +25,9 @@ namespace our
                 static void deinit_engine();
                 static void play_menu_background();
                 static void stop_menu_background();
-                static void initMenuSound();
-                static void destroyMenuSound();
+                static void initMenuSounds();
+                static void destroyMenuSounds();
+                static void play_custom_sound(std::string sound_name,bool wait_tell_finish=true);
 
     };
 }
