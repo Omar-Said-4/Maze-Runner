@@ -51,6 +51,7 @@ class Menustate: public our::State {
     std::array<Button, 3> buttons;
 
     void onInitialize() override {
+        our::SoundSystem::initMenuSound();
         // First, we create a material for the menu's background
         menuMaterial = new our::TexturedMaterial();
         // Here, we load the shader that will be used to draw the background
@@ -61,6 +62,7 @@ class Menustate: public our::State {
         // Then we load the menu texture
         if(our::SoundSystem::global_music_state){
             menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
+            our::SoundSystem::play_menu_background();
         }
         else{
             menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
@@ -127,10 +129,12 @@ class Menustate: public our::State {
         buttons[2].action = [this](){ 
          if(!our::SoundSystem::global_music_state){
             menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
+            our::SoundSystem::play_menu_background();
          } 
          else
          {
             menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+            our::SoundSystem::stop_menu_background();
          }
          our::SoundSystem::global_music_state=!our::SoundSystem::global_music_state;};
 
@@ -151,10 +155,12 @@ class Menustate: public our::State {
         else if(keyboard.justPressed(GLFW_KEY_M)){
             if(!our::SoundSystem::global_music_state){
                 menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
+                our::SoundSystem::play_menu_background();
              } 
              else
              {
                 menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
+                our::SoundSystem::stop_menu_background();
              }
              our::SoundSystem::global_music_state=!our::SoundSystem::global_music_state;
         }
@@ -217,5 +223,6 @@ class Menustate: public our::State {
         delete menuMaterial;
         delete highlightMaterial->shader;
         delete highlightMaterial;
+        our::SoundSystem::destroyMenuSound();
     }
 };

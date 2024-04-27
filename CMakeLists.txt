@@ -14,8 +14,7 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)           # Don't build Installation I
 set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)     # Add variables to use High Performance Graphics Card if available
 add_subdirectory(vendor/glfw)                       # Build the GLFW project to use later as a library
 
-#Irrklang directory
-set(IRRKLANG_DIR ${CMAKE_CURRENT_SOURCE_DIR}/vendor/irrKlang)
+
 
 # A variable with all the source files of GLAD
 set(GLAD_SOURCE vendor/glad/src/gl.c)
@@ -91,6 +90,7 @@ set(COMMON_SOURCES
         # adding light
         source/common/components/light.cpp
         source/common/components/light.hpp
+        
 )
 
 # Define the directories in which to search for the included headers
@@ -101,7 +101,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
-        ${IRRKLANG_DIR}/include
+        vendor/miniaudio
 )
 
 
@@ -129,12 +129,3 @@ set(STATES_SOURCES
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)
 
-# Copy IRRklang DLL files to the binary directory
-add_custom_command(TARGET GAME_APPLICATION POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/dlls
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-        ${IRRKLANG_DIR}/bin/win64/irrKlang.dll
-        ${IRRKLANG_DIR}/bin/win64/ikpMP3.dll
-        ${IRRKLANG_DIR}/bin/win64/ikpFlac.dll
-        ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/
-        )

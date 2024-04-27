@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <fstream>
 #include <flags/flags.h>
@@ -17,9 +18,8 @@
 #include "states/entity-test-state.hpp"
 #include "states/renderer-test-state.hpp"
 #include <filesystem>
-
+#include<systems/sound-system.hpp>
 int main(int argc, char** argv) {
-    
     flags::args args(argc, argv); // Parse the command line arguments
     // config_path is the path to the json file containing the application configuration
     // Default: "config/app.json"
@@ -34,6 +34,7 @@ int main(int argc, char** argv) {
 
     std::filesystem::current_path(trimmed_path);
     std::cout<<"Current path: "<<trimmed_path<<std::endl;
+
     // /* setting file paths  to work regardless of th relative path or true path */
     std::string config_path = args.get<std::string>("c", "config/app.jsonc");
     // run_for_frames is how many frames to run the application before automatically closing

@@ -23,6 +23,9 @@ class Playstate: public our::State {
         if(config.contains("assets")){
             our::deserializeAllAssets(config["assets"]);
         }
+        // init assets audio unordered map
+       //  our::SoundSystem::initMap();
+       //  our::SoundSystem::play_menu_background();
         // If we have a world in the scene config, we use it to populate our world
         if(config.contains("world")){
             world.deserialize(config["world"]);
@@ -58,6 +61,7 @@ class Playstate: public our::State {
         // Clear the world
         world.clear();
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
+        //our::SoundSystem::stop_menu_background();
         our::clearAllAssets();
     }
 };
