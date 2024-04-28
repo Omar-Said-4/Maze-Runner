@@ -13,9 +13,9 @@
 #include <systems/sound-system.hpp>
 
 
-// This state shows how to use some of the abstractions we created to make a menu.
-class Menustate: public our::State {
-// This struct is used to store the location and size of a button and the code it should execute when clicked
+// This state shows how to use some of the abstractions we created to make a score.
+class Scorestate: public our::State {
+    // This struct is used to store the location and size of a button and the code it should execute when clicked
     struct Button {
         // The position (of the top-left corner) of the button and its size in pixels
         glm::vec2 position, size;
@@ -40,38 +40,35 @@ class Menustate: public our::State {
         }
     };
 
-    // A meterial holding the menu shader and the menu texture to draw
-    our::TexturedMaterial* menuMaterial;
+    // A meterial holding the score shader and the score texture to draw
+    our::TexturedMaterial* scoreMaterial;
     // A material to be used to highlight hovered buttons (we will use blending to create a negative effect).
     our::TintedMaterial * highlightMaterial;
-    // A rectangle mesh on which the menu material will be drawn
+    // A rectangle mesh on which the score material will be drawn
     our::Mesh* rectangle;
     our::Mesh* rectangle2;
     // A variable to record the time since the state is entered (it will be used for the fading effect).
     float time;
     // An array of the button that we can interact with
-    std::array<Button, 3> buttons;
+    std::array<Button, 2> buttons;
 
     void onInitialize() override {
-        our::SoundSystem::initMenuSounds();
-        // First, we create a material for the menu's background
-        menuMaterial = new our::TexturedMaterial();
-        // Here, we load the shader that will be used to draw the background
-        menuMaterial->shader = new our::ShaderProgram();
-        menuMaterial->shader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
-        menuMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
-        menuMaterial->shader->link();
-        // Then we load the menu texture
+        our::SoundSystem::initScoreSounds();
         if(our::SoundSystem::global_music_state){
-            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
-            our::SoundSystem::play_custom_sound("Menu",false,true);
+            our::SoundSystem::play_custom_sound("Score",false,true);
         }
-        else{
-            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
-        }   
-        //menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
-        // Initially, the menu material will be black, then it will fade in
-        menuMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
+        // First, we create a material for the score's background
+        scoreMaterial = new our::TexturedMaterial();
+        // Here, we load the shader that will be used to draw the background
+        scoreMaterial->shader = new our::ShaderProgram();
+        scoreMaterial->shader->attach("assets/shaders/textured.vert", GL_VERTEX_SHADER);
+        scoreMaterial->shader->attach("assets/shaders/textured.frag", GL_FRAGMENT_SHADER);
+        scoreMaterial->shader->link();
+        // Then we load the score texture
+        scoreMaterial->texture = our::texture_utils::loadImage("assets/textures/score.jpg");
+
+        // Initially, the score material will be black, then it will fade in
+        scoreMaterial->tint = glm::vec4(0.0f, 0.0f, 0.0f, 0.0f);
         // Second, we create a material to highlight the hovered buttons
         highlightMaterial = new our::TintedMaterial();
         // Since the highlight is not textured, we used the tinted material shaders
@@ -110,7 +107,7 @@ class Menustate: public our::State {
         // Reset the time elapsed since the state is entered.
         time = 0;
 
-        // Fill the positions, sizes and actions for the menu buttons
+        // Fill the positions, sizes and actions for the score buttons
         // Note that we use lambda expressions to set the actions of the buttons.
         // A lambda expression consists of 3 parts:
         // - The capture list [] which is the variables that the lambda should remember because it will use them during execution.
@@ -124,27 +121,13 @@ class Menustate: public our::State {
             our::SoundSystem::play_custom_sound("Button");
             this->getApp()->changeState("play");};
 
-        buttons[1].position = {20.0f, 30.0f};
-        buttons[1].size = {320.0f, 120.0f};
+        buttons[1].position = {25.0f, 40.0f};
+        buttons[1].size = {250.0f, 120.0f};
         buttons[1].action = [this](){
             our::SoundSystem::play_custom_sound("Button");
             this->getApp()->close();};
         
-        buttons[2].position = {920.0f, 460.0f};
-        buttons[2].size = {350.0f, 80.0f};
-        buttons[2].action = [this](){ 
-            our::SoundSystem::play_custom_sound("Button");
-         if(!our::SoundSystem::global_music_state){
-            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
-            our::SoundSystem::play_custom_sound("Menu",false,true);
-         } 
-         else
-         {
-            menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
-                our::SoundSystem::stop_custom_sound("Menu");
-         }
-         our::SoundSystem::global_music_state=!our::SoundSystem::global_music_state;};
-
+        
     }
 
     void onDraw(double deltaTime) override {
@@ -155,7 +138,7 @@ class Menustate: public our::State {
         if(keyboard.justPressed(GLFW_KEY_SPACE)){
             our::SoundSystem::play_custom_sound("Button");
             // If the space key is pressed in this frame, go to the play state
-            getApp()->changeState("play");
+            getApp()->changeState("menu");
         } else if(keyboard.justPressed(GLFW_KEY_ESCAPE)) {
             our::SoundSystem::play_custom_sound("Button");
             // If the escape key is pressed in this frame, exit the game
@@ -164,13 +147,11 @@ class Menustate: public our::State {
         else if(keyboard.justPressed(GLFW_KEY_M)){
             our::SoundSystem::play_custom_sound("Button");
             if(!our::SoundSystem::global_music_state){
-                menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu3.png");
-            our::SoundSystem::play_custom_sound("Menu",false,true);
+            our::SoundSystem::play_custom_sound("Score",false,true);
              } 
              else
              {
-                menuMaterial->texture = our::texture_utils::loadImage("assets/textures/menu.png");
-                our::SoundSystem::stop_custom_sound("Menu");
+                our::SoundSystem::stop_custom_sound("Score");
              }
              our::SoundSystem::global_music_state=!our::SoundSystem::global_music_state;
         }
@@ -180,7 +161,7 @@ class Menustate: public our::State {
         glm::vec2 mousePosition = mouse.getMousePosition();
 
         // If the mouse left-button is just pressed, check if the mouse was inside
-        // any menu button. If it was inside a menu button, run the action of the button.
+        // any score button. If it was inside a score button, run the action of the button.
         if(mouse.justPressed(0)){
             for(auto& button: buttons){
                 if(button.isInside(mousePosition))
@@ -199,19 +180,19 @@ class Menustate: public our::State {
         // Note that the top is at 0.0 and the bottom is at the framebuffer height. This allows us to consider the top-left
         // corner of the window to be the origin which makes dealing with the mouse input easier. 
         glm::mat4 VP = glm::ortho(0.0f, (float)size.x, (float)size.y, 0.0f, 1.0f, -1.0f);
-        // The local to world (model) matrix of the background which is just a scaling matrix to make the menu cover the whole
+        // The local to world (model) matrix of the background which is just a scaling matrix to make the score cover the whole
         // window. Note that we defind the scale in pixels.
         glm::mat4 M = glm::scale(glm::mat4(1.0f), glm::vec3(size.x, size.y, 1.0f));
 
         // First, we apply the fading effect.
         time += (float)deltaTime;
-        menuMaterial->tint = glm::vec4(glm::smoothstep(0.00f, 2.00f, time));
-        // Then we render the menu background
-        // Notice that I don't clear the screen first, since I assume that the menu rectangle will draw over the whole
+        scoreMaterial->tint = glm::vec4(glm::smoothstep(0.00f, 2.00f, time));
+        // Then we render the score background
+        // Notice that I don't clear the screen first, since I assume that the score rectangle will draw over the whole
         // window anyway.
 
-        menuMaterial->setup();
-        menuMaterial->shader->set("transform", VP*M);
+        scoreMaterial->setup();
+        scoreMaterial->shader->set("transform", VP*M);
         rectangle->draw();
 
         // For every button, check if the mouse is inside it. If the mouse is inside, we draw the highlight rectangle over it.
@@ -239,11 +220,11 @@ class Menustate: public our::State {
     void onDestroy() override {
         // Delete all the allocated resources
         delete rectangle;
-        delete menuMaterial->texture;
-        delete menuMaterial->shader;
-        delete menuMaterial;
+        delete scoreMaterial->texture;
+        delete scoreMaterial->shader;
+        delete scoreMaterial;
         delete highlightMaterial->shader;
         delete highlightMaterial;
-        our::SoundSystem::destroyMenuSounds();
+        our::SoundSystem::destroyScoreSounds();
     }
 };
