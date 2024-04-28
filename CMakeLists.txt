@@ -83,6 +83,10 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/wall.hpp
+        source/common/components/wall.cpp
+        source/common/components/coin.hpp
+        source/common/components/coin.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
