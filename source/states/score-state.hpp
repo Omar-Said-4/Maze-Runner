@@ -119,7 +119,7 @@ class Scorestate: public our::State {
         buttons[0].size = {330.0f, 120.0f};
         buttons[0].action = [this](){
             our::SoundSystem::play_custom_sound("Button");
-            this->getApp()->changeState("play");};
+            this->getApp()->changeState("menu");};
 
         buttons[1].position = {25.0f, 40.0f};
         buttons[1].size = {250.0f, 120.0f};

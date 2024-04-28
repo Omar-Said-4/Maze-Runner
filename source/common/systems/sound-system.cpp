@@ -9,7 +9,7 @@ namespace our{
 
 
 bool SoundSystem::global_music_state = false;
-bool SoundSystem::win = true;
+bool SoundSystem::win = false;
 ma_engine SoundSystem::engine;
 std::unordered_map<std::string, ma_sound*> SoundSystem::Audios;
 void SoundSystem::init_engine(){

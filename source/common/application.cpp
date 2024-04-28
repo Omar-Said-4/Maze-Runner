@@ -9,7 +9,7 @@
 #include <queue>
 #include <tuple>
 #include <filesystem>
-
+#include<stb_image.h>
 #include <flags/flags.h>
 #include<texture/texture2d.hpp>
 // Include the Dear ImGui implementation headers
@@ -115,7 +115,7 @@ void our::Application::configureOpenGL() {
     glfwWindowHint(GLFW_RESIZABLE, GLFW_FALSE);
 
     //Set Number of sample used in MSAA (0 = Disabled)
-    glfwWindowHint(GLFW_SAMPLES, 0);
+    glfwWindowHint(GLFW_SAMPLES, 8);
 
     //Enable Double Buffering
     glfwWindowHint(GLFW_DOUBLEBUFFER, GLFW_TRUE);
@@ -168,9 +168,9 @@ int our::Application::run(int run_for_frames) {
         std::cerr << "Failed to Initialize GLFW" << std::endl;
         return -1;
     }
-
+  
     configureOpenGL(); // This function sets OpenGL window hints.
-
+    
     auto win_config = getWindowConfiguration();             // Returns the WindowConfiguration current struct instance.
 
     // Create a window with the given "WindowConfiguration" attributes.
@@ -183,7 +183,34 @@ int our::Application::run(int run_for_frames) {
         glfwTerminate();
         return -1;
     }
+    GLFWimage images[1]; 
+
+    // change window icon
+    images[0].pixels = stbi_load("assets/images/icon.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
+    glfwSetWindowIcon(window, 1, images); 
+    stbi_image_free(images[0].pixels);
+    images[0].pixels = stbi_load("assets/images/cursor.png", &images[0].width, &images[0].height, 0, 4); //rgba channels 
+    
+
+    // Create a custom cursor from the image data
+    GLFWcursor* cursor = glfwCreateCursor(&images[0], 23, 23);
+if (!cursor) {
+    // Handle error, e.g., log the error or use a default cursor
+    std::cerr << "Failed to create cursor from image" << std::endl;
+}
+
+    // Set the cursor
+    glfwSetCursor(window, cursor);
+
+    // Free the image data
+    stbi_image_free(images[0].pixels);
     glfwMakeContextCurrent(window);         // Tell GLFW to make the context of our window the main context on the current thread.
+
+   
+    // Calculate the window position to center it on the screen
+    
+    // Set the window position
+    glfwSetWindowPos(window, 100, 100);
 
     gladLoadGL(glfwGetProcAddress);         // Load the OpenGL functions from the driver
 
@@ -267,9 +294,10 @@ int our::Application::run(int run_for_frames) {
         glfwPollEvents(); // Read all the user events and call relevant callbacks.
 
         // Start a new ImGui frame
+                ImGui::GetIO().ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplGlfw_NewFrame();
-        ImGui::NewFrame();
+        ImGui::NewFrame();    
 
         if(currentState) currentState->onImmediateGui(); // Call to run any required Immediate GUI.
 
@@ -384,9 +412,9 @@ int our::Application::run(int run_for_frames) {
             // write collectables
             // Time is Up
             if(display_time==0){
+                our::SoundSystem::win=false;
                 currentState->getApp()->changeState("score");
             }
-            // make 2 digits value
             
             
             // write it in the window
@@ -437,9 +465,7 @@ int our::Application::run(int run_for_frames) {
             float collectWindowTop = collectWindowPos.y;
             float collectWindowBottom = collectWindowPos.y + collectWindowSize.y;
             
-            // Mouse position
-            ImVec2 mousePos = ImGui::GetIO().MousePos;
-
+        
            
 
             ImGuiStyle *style = &ImGui::GetStyle();
@@ -539,7 +565,6 @@ int our::Application::run(int run_for_frames) {
         // Update the keyboard and mouse data
         keyboard.update();
         mouse.update();
-
         // If a scene change was requested, apply it
         while(nextState){
             // If a scene was already running, destroy it (not delete since we can go back to it later)
