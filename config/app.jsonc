@@ -17,7 +17,9 @@
         },
         "assets":{
             "audio":{
-               // "Menu":"assets/audio/button.wav" 
+                "Game":"assets/audio/game.mp3",
+                "Collect":"assets/audio/collect.mp3",
+                "Powerup":"assets/audio/powerup.mp3"
             },
             "shaders":{
                 "tinted":{

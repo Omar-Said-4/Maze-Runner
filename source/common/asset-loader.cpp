@@ -122,8 +122,8 @@ namespace our {
             AssetLoader<Mesh>::deserialize(assetData["meshes"]);
         if(assetData.contains("materials"))
             AssetLoader<Material>::deserialize(assetData["materials"]);
-        // if (assetData.contains("audio"))
-        //     AssetLoader<ma_sound>::deserialize(assetData["audio"]);
+        if (assetData.contains("audio"))
+             AssetLoader<ma_sound>::deserialize(assetData["audio"]);
     }
 
     void clearAllAssets(){
@@ -132,7 +132,7 @@ namespace our {
         AssetLoader<Sampler>::clear();
         AssetLoader<Mesh>::clear();
         AssetLoader<Material>::clear();
-//        AssetLoader<ma_sound>::clear();
+        AssetLoader<ma_sound>::clear();
     }
 
 }

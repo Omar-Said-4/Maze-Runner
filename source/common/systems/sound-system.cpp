@@ -37,8 +37,10 @@ void SoundSystem::stop_menu_background(){
         }
 
 void SoundSystem::initMap(){
-    ma_sound* sound = AssetLoader<ma_sound>::get("Menu");
-    SoundSystem::Audios["Menu"] = sound;
+    std::unordered_map<std::string, ma_sound*> tempMap = AssetLoader<ma_sound>::getMap();
+    for(auto& [name, sound] : tempMap){
+        SoundSystem::Audios[name] = sound;
+    }
 }
  void SoundSystem::initMenuSounds()
  {
@@ -73,13 +75,27 @@ void SoundSystem::initMap(){
        delete SoundSystem::Audios["Hover"];
      SoundSystem::Audios["Hover"] = nullptr;
  }
-    void SoundSystem::play_custom_sound(std::string sound_name, bool wait_tell_finish){
+    void SoundSystem::play_custom_sound(std::string sound_name, bool wait_tell_finish,bool loop){
         ma_sound_seek_to_pcm_frame(SoundSystem::Audios[sound_name], 0);
         ma_sound_start(SoundSystem::Audios[sound_name]);
+        if(loop){
+            ma_sound_set_looping(SoundSystem::Audios[sound_name], true);
+        }
+        else{
+            ma_sound_set_looping(SoundSystem::Audios[sound_name], false);
+        }
         if(wait_tell_finish){
             while (ma_sound_is_playing(SoundSystem::Audios[sound_name]));
         }
 
+    }
+    void SoundSystem::stop_custom_sound(std::string sound_name){
+        ma_sound_stop(SoundSystem::Audios[sound_name]);
+    }
+    void SoundSystem::destroy_sounds(){
+        for(auto& [name, sound] : SoundSystem::Audios){
+            ma_sound_uninit(sound);
+        }
     }
 
 }

@@ -27,7 +27,8 @@ namespace our
                 static void stop_menu_background();
                 static void initMenuSounds();
                 static void destroyMenuSounds();
-                static void play_custom_sound(std::string sound_name,bool wait_tell_finish=true);
-
+                static void play_custom_sound(std::string sound_name,bool wait_tell_finish=true,bool loop =false);
+                static void stop_custom_sound(std::string sound_name);
+                static void destroy_sounds();
     };
 }
