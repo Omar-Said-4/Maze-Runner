@@ -14,6 +14,8 @@ set(GLFW_INSTALL OFF CACHE BOOL "" FORCE)           # Don't build Installation I
 set(GLFW_USE_HYBRID_HPG ON CACHE BOOL "" FORCE)     # Add variables to use High Performance Graphics Card if available
 add_subdirectory(vendor/glfw)                       # Build the GLFW project to use later as a library
 
+
+
 # A variable with all the source files of GLAD
 set(GLAD_SOURCE vendor/glad/src/gl.c)
 # A variables with all the source files of Dear ImGui
@@ -80,12 +82,15 @@ set(COMMON_SOURCES
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
+        source/common/systems/sound-system.hpp
+        source/common/systems/sound-system.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
 
         # adding light
         source/common/components/light.cpp
         source/common/components/light.hpp
+        
 )
 
 # Define the directories in which to search for the included headers
@@ -96,6 +101,7 @@ include_directories(
         vendor/glm
         vendor/imgui
         vendor/utils
+        vendor/miniaudio
 )
 
 
@@ -122,3 +128,4 @@ set(STATES_SOURCES
 # Then we link GLFW with each target
 add_executable(GAME_APPLICATION source/main.cpp ${STATES_SOURCES} ${COMMON_SOURCES} ${VENDOR_SOURCES})
 target_link_libraries(GAME_APPLICATION glfw)
+

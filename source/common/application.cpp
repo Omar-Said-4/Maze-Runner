@@ -16,7 +16,7 @@
 #define IMGUI_IMPL_OPENGL_LOADER_GLAD2
 #include <imgui_impl/imgui_impl_glfw.h>
 #include <imgui_impl/imgui_impl_opengl3.h>
-
+#include<systems/sound-system.hpp>
 #if !defined(NDEBUG)
 // If NDEBUG (no debug) is not defined, enable OpenGL debug messages
 #define ENABLE_OPENGL_DEBUG_MESSAGES
@@ -151,7 +151,8 @@ our::WindowConfiguration our::Application::getWindowConfiguration() {
 // run_for_frames decides how many frames should be run before the application automatically closes.
 // if run_for_frames == 0, the application runs indefinitely till manually closed.
 int our::Application::run(int run_for_frames) {
-
+    // Initialize the audio engine
+    our::SoundSystem::init_engine();
     // Set the function to call when an error occurs.
     glfwSetErrorCallback(glfw_error_callback);
 
@@ -339,6 +340,9 @@ int our::Application::run(int run_for_frames) {
 
     // And finally terminate GLFW
     glfwTerminate();
+
+    // destroy the audio engine
+    our::SoundSystem::deinit_engine();
     return 0; // Good bye
 }
 

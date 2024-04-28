@@ -1,4 +1,5 @@
 {
+   
     "start-scene": "menu",
     "window":
     {
@@ -15,6 +16,11 @@
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets":{
+            "audio":{
+                "Game":"assets/audio/game.mp3",
+                "Collect":"assets/audio/collect.mp3",
+                "Powerup":"assets/audio/powerup.mp3"
+            },
             "shaders":{
                 "tinted":{
                     "vs":"assets/shaders/tinted.vert",

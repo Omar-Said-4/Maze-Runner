@@ -32,6 +32,9 @@ namespace our {
             }
             return nullptr;
         };
+         static std::unordered_map<std::string, T*>& getMap() {
+            return assets;
+        };
         // This function deletes all the assets held by this class and clear the assets map 
         static void clear(){
             for(auto& [name, asset] : assets){
