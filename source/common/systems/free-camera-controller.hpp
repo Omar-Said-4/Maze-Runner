@@ -165,7 +165,7 @@ namespace our
                 if (entity->getComponent<WallComponent>())
                 {
                     // Calculate world-space positions of wall's center and player's center
-                    glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(entity->localTransform.position, 1.0));
+                    glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
                     float minX = wallPosition.x - 9.0f;
                     float maxX = wallPosition.x + 9.0f;
@@ -176,6 +176,7 @@ namespace our
                     if (isInsideWallCell)
                     {
                         std::cout << "Collided!" << std::endl;
+                        std::cout << "minX="<<minX<<" maxX="<< maxX<<" minZ="<<minZ<<" maxZ="<<maxZ<< std::endl;
                         return true;
                     }
                 }

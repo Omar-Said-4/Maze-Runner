@@ -98,7 +98,7 @@ namespace our
                 c = mazeObjects[symbol][i].second;
                 Entity *entity = add();
                 entity->parent = nullptr;
-                position = initialPosition + glm::vec3(cellSize * c * 2, 0, (-1 * cellSize) * (numOfMazeRows - r - 1));
+                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * (numOfMazeRows - r - 1));
                 entity->deserialize(data, position, rotation, scale);
             }
         }
