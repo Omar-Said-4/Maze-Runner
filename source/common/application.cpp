@@ -592,7 +592,8 @@ if (!cursor) {
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
-
+    // destroy cursor
+    glfwDestroyCursor(cursor);
     // Destroy the window
     glfwDestroyWindow(window);
 
