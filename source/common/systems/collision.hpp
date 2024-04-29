@@ -52,8 +52,8 @@ namespace our
                 if (entity->getComponent<CoinComponent>())
                 {
                     // Calculate world-space positions of the coin
-                    glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix() * glm::vec4(entity->localTransform.position, 1.0));
-                    if (abs(position.x - coinPosition.x) < 0.4 && abs(position.z - coinPosition.z) < 0.1)
+                    glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if (abs(position.x - coinPosition.x) < 0.5 && abs(position.z - coinPosition.z) < 0.2)
                     {
                         std::cout << "COIN!" << std::endl;
                     }

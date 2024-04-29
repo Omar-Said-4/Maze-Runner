@@ -211,11 +211,11 @@
       },
       {
         "isMaze": true,
-        "objectSymbol": ["|", "T","r","j","7","-","L"],
+        "objectSymbol": ["|", "T", "r", "j", "7", "-", "L"],
         "position": [0, 5.5, 0],
         "rotation": [0, 0, 0],
         "scale": [0.05, 0.05, 0.05],
-        "cellSize":12.9,
+        "cellSize": 12.9,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -230,7 +230,7 @@
       {
         "isMaze": true,
         "objectSymbol": ["o"],
-        "position": [0, 4, 0],
+        "position": [0, 2, 0],
         "rotation": [45, 45, 0],
         "scale": [4, 4, 4],
         "cellSize": 12.9,
