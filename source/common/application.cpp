@@ -136,7 +136,7 @@ void our::Application::configureOpenGL() {
     glfwWindowHint(GLFW_REFRESH_RATE, GLFW_DONT_CARE);
 
     // disable window bar
-    glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
+    //glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 
     // make it start at the center of the screen
     glfwWindowHint(GLFW_CENTER_CURSOR, GLFW_TRUE);
@@ -210,7 +210,7 @@ if (!cursor) {
     // Calculate the window position to center it on the screen
     
     // Set the window position
-    glfwSetWindowPos(window, 100, 100);
+   // glfwSetWindowPos(window, 100, 100);
 
     gladLoadGL(glfwGetProcAddress);         // Load the OpenGL functions from the driver
 
