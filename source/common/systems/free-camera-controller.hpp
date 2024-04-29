@@ -167,16 +167,16 @@ namespace our
                     // Calculate world-space positions of wall's center and player's center
                     glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                    float minX = wallPosition.x - 9.0f;
-                    float maxX = wallPosition.x + 9.0f;
-                    float minZ = wallPosition.z - 9.0f;
-                    float maxZ = wallPosition.z + 9.0f;
+                    float minX = wallPosition.x - 7.0f;
+                    float maxX = wallPosition.x + 7.0f;
+                    float minZ = wallPosition.z - 7.0f;
+                    float maxZ = wallPosition.z + 7.0f;
                     bool isInsideWallCell = (position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ);
 
                     if (isInsideWallCell)
                     {
                         std::cout << "Collided!" << std::endl;
-                        std::cout << "minX="<<minX<<" maxX="<< maxX<<" minZ="<<minZ<<" maxZ="<<maxZ<< std::endl;
+                        std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
                         return true;
                     }
                 }
