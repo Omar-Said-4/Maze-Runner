@@ -4,7 +4,7 @@
 #include "../components/camera.hpp"
 #include "../components/wall.hpp"
 #include "../components/free-camera-controller.hpp"
-
+#include"systems/sound-system.hpp"
 #include "../application.hpp"
 
 #include <glm/glm.hpp>
@@ -106,15 +106,19 @@ namespace our
             // S & W moves the player back and forth
             // If the move makes a collision, we revert it
             bool collided = false;
-            if (app->getKeyboard().isPressed(GLFW_KEY_W))
+            if (app->getKeyboard().isPressed(GLFW_KEY_W)){
                 position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z));  // was (0.2,0.2,0.2)
+                our::SoundSystem::play_custom_sound("WALK",false,false);
+            }
 
             collided = detectWallCollision(world, position);
             if (collided)
                 position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
 
-            if (app->getKeyboard().isPressed(GLFW_KEY_S))
+            if (app->getKeyboard().isPressed(GLFW_KEY_S)){
                 position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
+                our::SoundSystem::play_custom_sound("WALK",false,false);
+            }
 
             collided = detectWallCollision(world, position);
             if (collided)
@@ -132,13 +136,17 @@ namespace our
             if (collided)
                 position += up * (deltaTime * current_sensitivity.y);
             // A & D moves the player left or right
-            if (app->getKeyboard().isPressed(GLFW_KEY_D))
+            if (app->getKeyboard().isPressed(GLFW_KEY_D)){
                 position += right * (deltaTime * current_sensitivity.x);
+                our::SoundSystem::play_custom_sound("WALK",false,false);
+            }
             collided = detectWallCollision(world, position);
             if (collided)
                 position -= right * (deltaTime * current_sensitivity.x);
-            if (app->getKeyboard().isPressed(GLFW_KEY_A))
+            if (app->getKeyboard().isPressed(GLFW_KEY_A)){
                 position -= right * (deltaTime * current_sensitivity.x);
+                our::SoundSystem::play_custom_sound("WALK",false,false);
+            }
             collided = detectWallCollision(world, position);
             if (collided)
                 position += right * (deltaTime * current_sensitivity.x);
