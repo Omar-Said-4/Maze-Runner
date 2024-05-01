@@ -59,6 +59,8 @@ bool our::ShaderProgram::link() const {
     // an error in the given program. You should use it to check if there is a
     // linking error and print it so that you can know what is wrong with the
     // program. The returned string will be empty if there is no errors.
+
+    //Link the program
     glLinkProgram(this->program);
 
     // Check for linking errors

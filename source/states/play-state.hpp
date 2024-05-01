@@ -8,7 +8,7 @@
 #include <systems/movement.hpp>
 #include <systems/collision.hpp>
 #include <asset-loader.hpp>
-
+#include <systems/sound-system.hpp>
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State
 {
@@ -28,6 +28,13 @@ class Playstate : public our::State
         {
             our::deserializeAllAssets(config["assets"]);
         }
+        // init assets audio unordered map
+        our::SoundSystem::initMap();
+        if (our::SoundSystem::global_music_state)
+            {
+                our::SoundSystem::play_custom_sound("Game",false,true);
+            }
+       //  our::SoundSystem::play_menu_background();
         // If we have a world in the scene config, we use it to populate our world
         if (config.contains("world"))
         {
@@ -56,7 +63,20 @@ class Playstate : public our::State
         if (keyboard.justPressed(GLFW_KEY_ESCAPE))
         {
             // If the escape  key is pressed in this frame, go to the play state
-            getApp()->changeState("menu");
+            getApp()->changeState("score");
+        }
+        else if(keyboard.justPressed(GLFW_KEY_M)){
+            // start or stop the background music
+            if (our::SoundSystem::global_music_state)
+            {
+                our::SoundSystem::stop_custom_sound("Game");
+                our::SoundSystem::global_music_state = false;
+            }
+            else
+            {
+                our::SoundSystem::play_custom_sound("Game",false,true);
+                our::SoundSystem::global_music_state = true;
+            }
         }
     }
 
@@ -68,7 +88,9 @@ class Playstate : public our::State
         cameraController.exit();
         // Clear the world
         world.clear();
+        // uminit all sounds
         // and we delete all the loaded assets to free memory on the RAM and the VRAM
+        our::SoundSystem::destroy_sounds();
         our::clearAllAssets();
     }
 };

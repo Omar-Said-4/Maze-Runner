@@ -8,6 +8,9 @@
 #include "mesh/mesh-utils.hpp"
 #include "material/material.hpp"
 #include "deserialize-utils.hpp"
+#include<systems/sound-system.hpp>
+#include <miniaudio.h>
+#include<iostream>
 #include "maze/maze_utils.hpp"
 #include "maze/maze.hpp"
 
@@ -114,7 +117,17 @@ namespace our
             }
         }
     };
-
+      template<>
+    void AssetLoader<ma_sound>::deserialize(const nlohmann::json& data) {
+        if(data.is_object()){
+            for(auto& [name, desc] : data.items()){
+                std::string type = desc.get<std::string>();
+                ma_sound * sound = new ma_sound();
+                our::SoundSystem::init_audio(sound,type.c_str());
+                assets[name] = sound;
+            }
+        }
+    };
     template <>
     void AssetLoader<Maze>::deserialize(const nlohmann::json &data)
     {
@@ -140,6 +153,8 @@ namespace our
             AssetLoader<Mesh>::deserialize(assetData["meshes"]);
         if (assetData.contains("materials"))
             AssetLoader<Material>::deserialize(assetData["materials"]);
+        if (assetData.contains("audio"))
+             AssetLoader<ma_sound>::deserialize(assetData["audio"]);
         if (assetData.contains("maze"))
             AssetLoader<Maze>::deserialize(assetData["maze"]);
     }
@@ -151,6 +166,7 @@ namespace our
         AssetLoader<Sampler>::clear();
         AssetLoader<Mesh>::clear();
         AssetLoader<Material>::clear();
+        AssetLoader<ma_sound>::clear();
         AssetLoader<Maze>::clear();
     }
 

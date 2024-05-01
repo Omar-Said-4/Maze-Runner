@@ -5,6 +5,7 @@
 #include "mesh-renderer.hpp"
 #include "free-camera-controller.hpp"
 #include "movement.hpp"
+#include "light.hpp"
 #include "wall.hpp"
 #include "coin.hpp"
 
@@ -33,6 +34,10 @@ namespace our
         else if (type == MeshRendererComponent::getID())
         {
             component = entity->addComponent<MeshRendererComponent>();
+        }
+        else if (type == LightComponent::getID())
+        {
+            component = entity->addComponent<LightComponent>();
         }
         else if (type == WallComponent::getID())
         {

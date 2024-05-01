@@ -24,7 +24,6 @@ namespace our {
             //TODO: (Req 10) Pick the correct pipeline state to draw the sky
             // Hints: the sky will be draw after the opaque objects so we would need depth testing but which depth funtion should we pick?
             // We will draw the sphere from the inside, so what options should we pick for the face culling.
-            
             //create skyPipelineState to render sky
             PipelineState skyPipelineState{};
             // Enable depth testing
@@ -72,10 +71,8 @@ while ((err = glGetError()) != GL_NO_ERROR)
         if(config.contains("postprocess")){
             //TODO: (Req 11) Create a framebuffer
              // we need to generate the frame buffer using our postprocess frame buffer.
-             
-            glGenFramebuffers(1, &postprocessFrameBuffer); // Generate a framebuffer object for post-processing
-            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer); // Bind the framebuffer for drawing operations
-
+            glGenFramebuffers(1, &postprocessFrameBuffer);
+            glBindFramebuffer(GL_DRAW_FRAMEBUFFER, postprocessFrameBuffer);
             //TODO: (Req 11) Create a color and a depth texture and attach them to the framebuffer
             // Hints: The color format can be (Red, Green, Blue and Alpha components with 8 bits for each channel).
             // The depth format can be (Depth component with 24 bits).
@@ -83,7 +80,8 @@ while ((err = glGetError()) != GL_NO_ERROR)
             colorTarget = texture_utils::empty(GL_RGBA8, windowSize);
             depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT24, windowSize);
             // Attach the color and depth texture to the framebuffer
-            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(),0);
+            glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(),
+                                   0);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
             //TODO: (Req 11) Unbind the framebuffer just to be safe
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
@@ -133,6 +131,10 @@ while ((err = glGetError()) != GL_NO_ERROR)
             delete postprocessMaterial->shader;
             delete postprocessMaterial;
         }
+        // delete all objects related to lights
+        if(!lights.empty()){
+               lights.clear();
+            }
     }
 
     void ForwardRenderer::render(World* world){
@@ -159,6 +161,10 @@ while ((err = glGetError()) != GL_NO_ERROR)
                     opaqueCommands.push_back(command);
                 }
             }
+            if (auto lightComponent = entity->getComponent<LightComponent>(); lightComponent)
+            {
+                lights.push_back(lightComponent);
+            }
         }
 
         // If there is no camera, we return (we cannot render without a camera)
@@ -176,19 +182,16 @@ while ((err = glGetError()) != GL_NO_ERROR)
         // Sort the transparent render commands based on their alignment with the camera forward vector
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
             //TODO: (Req 9) Finish this function
-            // HINT: the following return should return true "first" should be drawn before "second".
+            // HINT: the following return should return true "first" should be drawn before "second". 
             // Calculate distances from the camera to the objects and Sort in descending order (farthest first) 
             return glm::dot(cameraForward, first.center) > glm::dot(cameraForward, second.center);
         });
 
         //TODO: (Req 9) Get the camera ViewProjection matrix and store it in VP
-        // Get the view matrix and projection matrix and multiply them
         glm::mat4 VP = camera->getProjectionMatrix(this->windowSize) * camera->getViewMatrix();
         //TODO: (Req 9) Set the OpenGL viewport using viewportStart and viewportSize
-
         glViewport(0, 0, this->windowSize.x, this->windowSize.y);
         //TODO: (Req 9) Set the clear color to black and the clear depth to 1
-        // Setup the clear configuration
         glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         glClearDepth(1);
         //TODO: (Req 9) Set the color mask to true and the depth mask to true (to ensure the glClear will affect the framebuffer)
@@ -206,17 +209,48 @@ while ((err = glGetError()) != GL_NO_ERROR)
         //TODO: (Req 9) Draw all the opaque commands
         // Don't forget to set the "transform" uniform to be equal the model-view-projection matrix for each render command
         for(auto opaqueCommand:opaqueCommands ){
-            // Get the local-to-world transformation matrix for the opaque command
             glm::mat4 Mat = opaqueCommand.localToWorld;
-            // Calculate the model-view-projection (MVP) matrix by multiplying the view-projection (VP) matrix with the local-to-world matrix
             glm::mat4 mpv = VP * Mat;
-            // Set up the material properties for rendering
             opaqueCommand.material->setup();
-            // Set the "transform" uniform in the shader to the calculated MVP matrix
-            opaqueCommand.material->shader->set("transform", mpv);
-            // Draw the mesh associated with the opaque command
-            opaqueCommand.mesh->draw();
+            // if it's a light material edit it in shader            
+            if (auto lightMaterial = dynamic_cast<litMaterial *>(opaqueCommand.material); lightMaterial)
+            {
+                lightMaterial->shader->set("VP", VP);
+                lightMaterial->shader->set("camera_position", eye);
+                lightMaterial->shader->set("M", opaqueCommand.localToWorld);
+                lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(opaqueCommand.localToWorld)));
+                lightMaterial->shader->set("light_count", (int)lights.size());
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.2f, 0.5f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.1f, 0.1f));
+                lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
+                lightMaterial->shader->set("cameraPosition", eye);
+                for (int i = 0; i < lights.size(); i++)
+                {
+                  // light source is at the origin in the local space can be added to light component later
+                  glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(lights[i]->position,1);
+                  // light source points i negative y direction in the local space can be added to light component later
+                  glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(lights[i]->direction, 0);
+                  // make it a unit vector
+                  direction = glm::normalize(direction);
 
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].position",lightPosition);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].direction",direction);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].color",lights[i]->color);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].type", (int)lights[i]->lightType);
+                  if(lights[i]->lightType!=LightType::DIRECTIONAL)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].attenuation", *lights[i]->attenuation);
+                  }
+                  if(lights[i]->lightType==LightType::SPOT)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].cone_angles", *lights[i]->coneAngles);
+                  }
+                }
+            }
+            else{
+                opaqueCommand.material->shader->set("transform", mpv);
+            }
+            opaqueCommand.mesh->draw();
         }
         // If there is a sky material, draw the sky
         if(this->skyMaterial){
@@ -225,22 +259,21 @@ while ((err = glGetError()) != GL_NO_ERROR)
             //TODO: (Req 10) Get the camera position
              glm::vec3 cameraPosition =eye;
             //TODO: (Req 10) Create a model matrix for the sy such that it always follows the camera (sky sphere center = camera position)
-            // Create a Transform object for the sky
+             // Create a Transform object for the sky
             our::Transform skyTransformObj;
             // Set the position of the sky to match the camera position
             skyTransformObj.position = cameraPosition;
             // Convert the sky's transformation to a 4x4 matrix (model matrix)
-            glm::mat4 skySphereModel = skyTransformObj.toMat4();
-
+            glm::mat4 skySphereModel = skyTransformObj.toMat4();  
             //TODO: (Req 10) We want the sky to be drawn behind everything (in NDC space, z=1)
             // We can acheive the is by multiplying by an extra matrix after the projection but what values should we put in it?
             glm::mat4 alwaysBehindTransform = glm::mat4(
-            // R1   R2    R3   R4
+                // R1   R2    R3   R4
                 1.0f, 0.0f, 0.0f, 0.0f,    // C1
                 0.0f, 1.0f, 0.0f, 0.0f,   // C2
                 0.0f, 0.0f, 0.0f, 0.0f,  // C3
                 0.0f, 0.0f, 1.0f, 1.0f  //  C4
-        );   
+            );
             //TODO: (Req 10) set the "transform" uniform
             this->skyMaterial->shader->set("transform", alwaysBehindTransform * VP * skySphereModel);
             //TODO: (Req 10) draw the sky sphere
@@ -253,7 +286,42 @@ while ((err = glGetError()) != GL_NO_ERROR)
             glm::mat4 Mat = transparentCommand.localToWorld;
             glm::mat4 mpv = VP * Mat;
             transparentCommand.material->setup();
-            transparentCommand.material->shader->set("transform", mpv);
+            if (auto lightMaterial = dynamic_cast<litMaterial *>(transparentCommand.material); lightMaterial)
+            {
+                lightMaterial->shader->set("VP", VP);
+                lightMaterial->shader->set("camera_position", eye);
+                lightMaterial->shader->set("M", transparentCommand.localToWorld);
+                lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(transparentCommand.localToWorld)));
+                lightMaterial->shader->set("light_count", (int)lights.size());
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.0f, 0.0f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.0f, 0.0f));
+                lightMaterial->shader->set("sky.horizon",glm::vec3(0.0f, 0.0f, 0.0f));
+                for (int i = 0; i < lights.size(); i++)
+                {
+                  // light source is at the origin in the local space can be added to light component later
+                  glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);
+                  // light source points i negative y direction in the local space can be added to light component later
+                  glm::vec3 direction = lights[i]->getOwner()->getLocalToWorldMatrix() * glm::vec4(0, -1, 0, 0);
+                  // make it a unit vector
+                  direction = glm::normalize(direction);
+
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].position",lightPosition);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].direction",direction);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].color",lights[i]->color);
+                  lightMaterial->shader->set("lights[" + std::to_string(i) + "].type", (int)lights[i]->lightType);
+                  if(lights[i]->lightType!=LightType::DIRECTIONAL)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].attenuation", *lights[i]->attenuation);
+                  }
+                  if(lights[i]->lightType==LightType::SPOT)
+                  {
+                    lightMaterial->shader->set("lights[" + std::to_string(i) + "].cone_angles", *lights[i]->coneAngles);
+                  }
+                }
+            }
+            else{
+                transparentCommand.material->shader->set("transform", mpv);
+            }
             transparentCommand.mesh->draw();
         }
 
@@ -263,13 +331,14 @@ while ((err = glGetError()) != GL_NO_ERROR)
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             // TODO: (Req 11) Setup the postprocess material and draw the fullscreen triangle
            
-            // Set up the postprocess material 
+           // Set up the postprocess material 
             postprocessMaterial->setup();
             // Bind the vertex array object for the post-process rendering
             glBindVertexArray(postProcessVertexArray);
             // Draw a triangle 
             // This is used for full-screen post-processing effects
             glDrawArrays(GL_TRIANGLES, 0, 3);
+
         }
     }
 

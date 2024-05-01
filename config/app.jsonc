@@ -1,8 +1,9 @@
 {
+   
     "start-scene": "menu",
     "window":
     {
-        "title":"Default Game Window",
+        "title":"Maze Runner",
         "size":{
             "width":1280,
             "height":720
@@ -15,6 +16,11 @@
             "postprocess": "assets/shaders/postprocess/vignette.frag"
         },
         "assets":{
+            "audio":{
+                "Game":"assets/audio/game.mp3",
+                "Collect":"assets/audio/collect.mp3",
+                "Powerup":"assets/audio/powerup.mp3"
+            },
             "shaders":{
                 "tinted":{
                     "vs":"assets/shaders/tinted.vert",
@@ -23,6 +29,10 @@
                 "textured":{
                     "vs":"assets/shaders/textured.vert",
                     "fs":"assets/shaders/textured.frag"
+                },
+                "lighting":{
+                    "vs":"assets/shaders/lighted.vert",
+                    "fs":"assets/shaders/lighted.frag"
                 }
             },
             "textures":{
@@ -30,7 +40,13 @@
                 "grass": "assets/textures/grass_ground_d.jpg",
                 "wood": "assets/textures/wood.jpg",
                 "glass": "assets/textures/glass-panels.png",
-                "monkey": "assets/textures/monkey.png"
+                "monkey": "assets/textures/monkey.png",
+                "test-albedo": "assets/textures/test-albedo.jpg",
+                "test-occlusion": "assets/textures/test-occlusion.jpg",
+                "test-roughnessg": "assets/textures/test-roughness.png",
+                "test-roughnessm": "assets/textures/roughness.jpg",
+                "test-specular": "assets/textures/test-specular.jpg",
+                "test-emissive": "assets/textures/test-emissive.jpg"
             },
             "meshes":{
                 "cube": "assets/models/cube.obj",
@@ -77,12 +93,12 @@
                     },
                     "transparent": true,
                     "tint": [1, 1, 1, 1],
-                    "texture": "glass",
+                    "texture": "test-emissive",
                     "sampler": "pixelated"
                 },
                 "grass":{
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lighting",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -91,13 +107,20 @@
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "grass",
-                    "sampler": "default"
+                    "albedo": "test-albedo",
+                    "occlusion": "test-occlusion",
+                    "roughness": "wood",
+                    "specular": "wood",
+                    "emissive": "test-emissive",
+                    "samplerAlbedo": "default",
+                    "samplerOcclusion": "default",
+                    "samplerRoughness": "default",
+                    "samplerSpecular": "default",
+                    "samplerEmissive": "default"
                 },
                 "monkey":{
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lighting",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -106,13 +129,20 @@
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "monkey",
-                    "sampler": "default"
+                    "albedo": "test-albedo",
+                    "occlusion": "test-occlusion",
+                    "roughness": "test-roughnessg",
+                    "specular": "wood",
+                    "emissive": "test-emissive",
+                    "samplerAlbedo": "default",
+                    "samplerOcclusion": "default",
+                    "samplerRoughness": "default",
+                    "samplerSpecular": "default",
+                    "samplerEmissive": "default"
                 },
                 "moon":{
-                    "type": "textured",
-                    "shader": "textured",
+                    "type": "lit",
+                    "shader": "lighting",
                     "pipelineState": {
                         "faceCulling":{
                             "enabled": false
@@ -121,9 +151,16 @@
                             "enabled": true
                         }
                     },
-                    "tint": [1, 1, 1, 1],
-                    "texture": "moon",
-                    "sampler": "default"
+                    "albedo": "test-albedo",
+                    "occlusion": "test-occlusion",
+                    "roughness": "test-roughnessm",
+                    "specular": "wood",
+                    "emissive": "moon",
+                    "samplerAlbedo": "default",
+                    "samplerOcclusion": "default",
+                    "samplerRoughness": "default",
+                    "samplerSpecular": "default",
+                    "samplerEmissive": "default"
                 }
             }
         },
@@ -153,7 +190,9 @@
                     }
                 ]
             },
+            
             {
+                "name": "monkey",
                 "rotation": [-45, 0, 0],
                 "components": [
                     {
@@ -165,10 +204,16 @@
                         "type": "Movement",
                         "linearVelocity": [0, 0.1, 0],
                         "angularVelocity": [0, 45, 0]
+                    },
+                    {
+                        "type": "Light",
+                        "lightType": "SPOT",
+                         "color": [5,0.2, 0.2]      
                     }
                 ]
             },
             {
+                "name":"grass",
                 "position": [0, -1, 0],
                 "rotation": [-90, 0, 0],
                 "scale": [10, 10, 1],
@@ -181,66 +226,7 @@
                 ]
             },
             {
-                "position": [0, 1, 2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 1, -2],
-                "rotation": [0, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [-2, 1, 0],
-                "rotation": [0, 90, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
-                "position": [0, 3, 0],
-                "rotation": [90, 0, 0],
-                "scale": [2, 2, 2],
-                "components": [
-                    {
-                        "type": "Mesh Renderer",
-                        "mesh": "plane",
-                        "material": "glass"
-                    }
-                ]
-            },
-            {
+                "name":"moon",
                 "position": [0, 10, 0],
                 "rotation": [45, 45, 0],
                 "scale": [5, 5, 5],
@@ -252,7 +238,12 @@
                     },
                     {
                         "type": "Movement",
-                        "angularVelocity": [0, 90, 0]
+                        "angularVelocity": [0, 20, 0]
+                    },
+                    {
+                        "type": "Light",
+                        "lightType": "DIRECTIONAL",
+                         "color": [0.3,0.2,0]      
                     }
                 ]
             }
