@@ -9,6 +9,7 @@ namespace our{
 
 
 bool SoundSystem::global_music_state = false;
+bool SoundSystem::win = false;
 ma_engine SoundSystem::engine;
 std::unordered_map<std::string, ma_sound*> SoundSystem::Audios;
 void SoundSystem::init_engine(){
@@ -28,13 +29,7 @@ void SoundSystem::deinit_engine(){
 void SoundSystem::init_audio(ma_sound*sound,const char * path){
      ma_sound_init_from_file(&SoundSystem::engine, path, 0, NULL, NULL, sound);
 }
-void SoundSystem::play_menu_background(){
-         ma_sound_start(SoundSystem::Audios["Menu"]);
-}
-void SoundSystem::stop_menu_background(){
-         ma_sound_stop(SoundSystem::Audios["Menu"]);
-        //ma_sound_uninit(SoundSystem::Audios["Menu"]);
-        }
+
 
 void SoundSystem::initMap(){
     std::unordered_map<std::string, ma_sound*> tempMap = AssetLoader<ma_sound>::getMap();
@@ -47,7 +42,6 @@ void SoundSystem::initMap(){
         ma_sound* sound = new ma_sound();
         SoundSystem::init_audio(sound, "assets/audio/Menu.mp3");
         SoundSystem::Audios["Menu"] = sound;
-        ma_sound_set_looping(SoundSystem::Audios["Menu"], true);
         ma_sound* sound2 = new ma_sound();
         SoundSystem::init_audio(sound2, "assets/audio/button.wav");
         SoundSystem::Audios["Button"] = sound2;
@@ -55,11 +49,47 @@ void SoundSystem::initMap(){
         SoundSystem::init_audio(sound3, "assets/audio/hover.wav");
         SoundSystem::Audios["Hover"] = sound3;
  }
- 
+  void SoundSystem::initScoreSounds()
+ {
+        ma_sound* sound = new ma_sound();
+        if(win){
+            SoundSystem::init_audio(sound, "assets/audio/win.mp3");
+        }
+        else
+        {
+            SoundSystem::init_audio(sound, "assets/audio/lose.mp3");
+        }
+        SoundSystem::Audios["Score"] = sound;
+        ma_sound* sound2 = new ma_sound();
+        SoundSystem::init_audio(sound2, "assets/audio/button.wav");
+        SoundSystem::Audios["Button"] = sound2;
+        ma_sound* sound3 = new ma_sound();
+        SoundSystem::init_audio(sound3, "assets/audio/hover.wav");
+        SoundSystem::Audios["Hover"] = sound3;
+ }
+ void SoundSystem::destroyScoreSounds()
+ {
+    // delete score audio
+    our::SoundSystem::stop_custom_sound("Score");
+     ma_sound_uninit(SoundSystem::Audios["Score"]);
+     if(SoundSystem::Audios["Score"] != nullptr)
+       delete SoundSystem::Audios["Score"];
+     SoundSystem::Audios["Score"] = nullptr;
+    // delete button audio
+    ma_sound_uninit(SoundSystem::Audios["Button"]);
+     if(SoundSystem::Audios["Button"] != nullptr)
+       delete SoundSystem::Audios["Button"];
+     SoundSystem::Audios["Button"] = nullptr;
+     // delete hover audio
+    ma_sound_uninit(SoundSystem::Audios["Hover"]);
+     if(SoundSystem::Audios["Hover"] != nullptr)
+       delete SoundSystem::Audios["Hover"];
+     SoundSystem::Audios["Hover"] = nullptr;
+ }
  void SoundSystem::destroyMenuSounds()
  {
     // delete mmenu audio
-     SoundSystem::stop_menu_background();
+    our::SoundSystem::stop_custom_sound("Menu");
      ma_sound_uninit(SoundSystem::Audios["Menu"]);
      if(SoundSystem::Audios["Menu"] != nullptr)
        delete SoundSystem::Audios["Menu"];

@@ -16,6 +16,8 @@ namespace our
         public:
                  // background music audio state
                 static bool global_music_state;
+                // for system win or lose score state background music
+                static bool win;
                 // start the audio engine
                 static void init_engine();
                 // to be deserialized
@@ -23,9 +25,9 @@ namespace our
                 static void initMap();
                 // destroy the audio engine
                 static void deinit_engine();
-                static void play_menu_background();
-                static void stop_menu_background();
                 static void initMenuSounds();
+                static void initScoreSounds();
+                static void destroyScoreSounds();
                 static void destroyMenuSounds();
                 static void play_custom_sound(std::string sound_name,bool wait_tell_finish=true,bool loop =false);
                 static void stop_custom_sound(std::string sound_name);

@@ -102,6 +102,7 @@ include_directories(
         vendor/imgui
         vendor/utils
         vendor/miniaudio
+        vendor/utils/stb
 )
 
 

@@ -7,7 +7,7 @@
 #include <systems/free-camera-controller.hpp>
 #include <systems/movement.hpp>
 #include <asset-loader.hpp>
-
+#include <systems/sound-system.hpp>
 // This state shows how to use the ECS framework and deserialization.
 class Playstate: public our::State {
 
@@ -53,7 +53,7 @@ class Playstate: public our::State {
 
         if(keyboard.justPressed(GLFW_KEY_ESCAPE)){
             // If the escape  key is pressed in this frame, go to the play state
-            getApp()->changeState("menu");
+            getApp()->changeState("score");
         }
         else if(keyboard.justPressed(GLFW_KEY_M)){
             // start or stop the background music
