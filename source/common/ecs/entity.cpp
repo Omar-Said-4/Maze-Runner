@@ -44,4 +44,22 @@ namespace our
         }
     }
 
+    void Entity::deserialize(const nlohmann::json &data, glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale)
+    {
+        if (!data.is_object())
+            return;
+        name = data.value("name", name);
+        localTransform.set(position, rotation, scale);
+        if (data.contains("components"))
+        {
+            if (const auto &components = data["components"]; components.is_array())
+            {
+                for (auto &component : components)
+                {
+                    deserializeComponent(component, this);
+                }
+            }
+        }
+    }
+
 }

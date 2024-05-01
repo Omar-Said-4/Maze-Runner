@@ -2,6 +2,10 @@
 
 #include <unordered_set>
 #include "entity.hpp"
+#include <iostream>
+#include "../asset-loader.hpp"
+#include "../maze/maze.hpp"
+#include <json/json.hpp>
 
 namespace our
 {
@@ -12,6 +16,9 @@ namespace our
         std::unordered_set<Entity *> entities;         // These are the entities held by this world
         std::unordered_set<Entity *> markedForRemoval; // These are the entities that are awaiting to be deleted
                                                        // when deleteMarkedEntities is called
+        std::unordered_map<char, std::vector<std::pair<int, int>>> mazeObjects;
+        int numOfMazeRows, numOfMazeColumns;
+
     public:
         World() = default;
 
@@ -19,6 +26,10 @@ namespace our
         // If parent pointer is not null, the new entities will be have their parent set to that given pointer
         // If any of the entities has children, this function will be called recursively for these children
         void deserialize(const nlohmann::json &data, Entity *parent = nullptr);
+        void deserializeGround(const nlohmann::json &data);
+        void deserializeMaze(const nlohmann::json &data);
+
+        void loadMazeObjects(const nlohmann::json &data);
 
         // This adds an entity to the entities set and returns a pointer to that entity
         // WARNING The entity is owned by this world so don't use "delete" to delete it, instead, call "markForRemoval"
@@ -84,5 +95,4 @@ namespace our
         World(const World &) = delete;
         World &operator=(World const &) = delete;
     };
-
 }

@@ -33,4 +33,11 @@ namespace our
         scale = data.value("scale", scale);
     }
 
+    void Transform::set(glm::vec3 &position, glm::vec3 &rotation, glm::vec3 &scale)
+    {
+        this->position = position;
+        this->rotation = glm::radians(rotation);
+        this->scale = scale;
+    }
+
 }

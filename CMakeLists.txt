@@ -50,6 +50,11 @@ set(COMMON_SOURCES
         source/common/mesh/mesh-utils.hpp
         source/common/mesh/mesh-utils.cpp
 
+        source/common/maze/maze.hpp
+        source/common/maze/maze.cpp
+        source/common/maze/maze_utils.hpp
+        source/common/maze/maze_utils.cpp
+
         source/common/texture/sampler.hpp
         source/common/texture/sampler.cpp
         source/common/texture/texture2d.hpp
@@ -79,6 +84,10 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
+        source/common/components/wall.hpp
+        source/common/components/wall.cpp
+        source/common/components/coin.hpp
+        source/common/components/coin.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
