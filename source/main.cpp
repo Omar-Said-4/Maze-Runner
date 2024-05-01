@@ -37,7 +37,7 @@ int main(int argc, char** argv) {
     std::cout<<"Current path: "<<trimmed_path<<std::endl;
 
     // /* setting file paths  to work regardless of th relative path or true path */
-    std::string config_path = args.get<std::string>("c", "config/app.jsonc");
+    std::string config_path = args.get<std::string>("c", "config/maze.jsonc");
     // run_for_frames is how many frames to run the application before automatically closing
     // This is useful for testing multiple configurations in a batch
     // Default: 0 where the application runs indefinitely until manually closed
