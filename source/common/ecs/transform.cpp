@@ -12,16 +12,9 @@ namespace our
     glm::mat4 Transform::toMat4() const
     {
         // TODO: (Req 3) Write this function
-        // Create a scale matrix with the given scale values
         glm::mat4 scaleMatrix = glm::scale(glm::mat4(1.0f), scale);
-
-        // Create a rotation matrix using the yaw, pitch, and roll values
         glm::mat4 rotationMatrix = glm::yawPitchRoll(rotation.y, rotation.x, rotation.z);
-
-        // Create a translation matrix with the given position values
         glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), position);
-
-        // Multiply the matrices in the correct order to obtain the final transformation matrix
         return translationMatrix * rotationMatrix * scaleMatrix;
     }
 

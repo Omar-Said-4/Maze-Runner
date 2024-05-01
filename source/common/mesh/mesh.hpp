@@ -80,13 +80,8 @@ namespace our {
         // this function should delete the vertex & element buffers and the vertex array object
         ~Mesh(){
             //TODO: (Req 2) Write this function
-            // Delete vertex buffer object
             glDeleteBuffers(1, &VBO);
-
-            // Delete element buffer object
             glDeleteBuffers(1, &EBO);
-
-            // Delete vertex array object
             glDeleteVertexArrays(1, &VAO);
         }
 
