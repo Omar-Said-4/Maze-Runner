@@ -20,7 +20,7 @@
 #if !defined(NDEBUG)
 // If NDEBUG (no debug) is not defined, enable OpenGL debug messages
 #define ENABLE_OPENGL_DEBUG_MESSAGES
-#define GAME_OVER_TIME_SECS 30
+#define GAME_OVER_TIME_SECS 500
 #endif
 
 #include "texture/screenshot.hpp"

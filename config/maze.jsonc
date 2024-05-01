@@ -14,6 +14,11 @@
       "postprocess": "assets/shaders/postprocess/vignette.frag"
     },
     "assets": {
+      "audio":{
+        "Game":"assets/audio/game.mp3",
+        "Collect":"assets/audio/collect.mp3",
+        "Powerup":"assets/audio/powerup.mp3"
+      },
       "shaders": {
         "tinted": {
           "vs": "assets/shaders/tinted.vert",
@@ -182,7 +187,7 @@
     },
     "world": [
       {
-        "position": [0, 2, 30],
+        "position": [0, 2, 20],
         "components": [
           {
             "type": "Camera"
@@ -211,7 +216,7 @@
       },
       {
         "isMaze": true,
-        "objectSymbol": ["|", "T", "r", "j", "7", "-", "L"],
+        "objectSymbol": ["|", "-"],
         "position": [0, 5.5, 0],
         "rotation": [0, 0, 0],
         "scale": [0.05, 0.05, 0.05],
