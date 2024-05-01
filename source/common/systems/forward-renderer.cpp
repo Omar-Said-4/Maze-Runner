@@ -79,6 +79,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
             // Create texture targets for color and depth
             colorTarget = texture_utils::empty(GL_RGBA8, windowSize);
             depthTarget = texture_utils::empty(GL_DEPTH_COMPONENT24, windowSize);
+            // Attach the color and depth texture to the framebuffer
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorTarget->getOpenGLName(),
                                    0);
             glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthTarget->getOpenGLName(), 0);
@@ -172,12 +173,17 @@ while ((err = glGetError()) != GL_NO_ERROR)
         //TODO: (Req 9) Modify the following line such that "cameraForward" contains a vector pointing the camera forward direction
         // HINT: See how you wrote the CameraComponent::getViewMatrix, it should help you solve this one
         auto Mat = camera->getOwner()->getLocalToWorldMatrix();
+        // Calculate the eye position in world coordinates
         glm::vec3 eye = Mat * glm::vec4(0, 0, 0, 1);
+        // Calculate the center position (looking direction) in world coordinates
         glm::vec3 center = Mat * glm::vec4(0, 0, -1, 1);
+        // Calculate the normalized camera forward vector
         glm::vec3 cameraForward = glm::normalize(center - eye);
+        // Sort the transparent render commands based on their alignment with the camera forward vector
         std::sort(transparentCommands.begin(), transparentCommands.end(), [cameraForward](const RenderCommand& first, const RenderCommand& second){
             //TODO: (Req 9) Finish this function
             // HINT: the following return should return true "first" should be drawn before "second". 
+            // Calculate distances from the camera to the objects and Sort in descending order (farthest first) 
             return glm::dot(cameraForward, first.center) > glm::dot(cameraForward, second.center);
         });
 
@@ -253,16 +259,20 @@ while ((err = glGetError()) != GL_NO_ERROR)
             //TODO: (Req 10) Get the camera position
              glm::vec3 cameraPosition =eye;
             //TODO: (Req 10) Create a model matrix for the sy such that it always follows the camera (sky sphere center = camera position)
+             // Create a Transform object for the sky
             our::Transform skyTransformObj;
+            // Set the position of the sky to match the camera position
             skyTransformObj.position = cameraPosition;
-            glm::mat4 skySphereModel = skyTransformObj.toMat4(); 
+            // Convert the sky's transformation to a 4x4 matrix (model matrix)
+            glm::mat4 skySphereModel = skyTransformObj.toMat4();  
             //TODO: (Req 10) We want the sky to be drawn behind everything (in NDC space, z=1)
             // We can acheive the is by multiplying by an extra matrix after the projection but what values should we put in it?
             glm::mat4 alwaysBehindTransform = glm::mat4(
-                1.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 1.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 0.0f, 0.0f,
-                0.0f, 0.0f, 1.0f, 1.0f
+                // R1   R2    R3   R4
+                1.0f, 0.0f, 0.0f, 0.0f,    // C1
+                0.0f, 1.0f, 0.0f, 0.0f,   // C2
+                0.0f, 0.0f, 0.0f, 0.0f,  // C3
+                0.0f, 0.0f, 1.0f, 1.0f  //  C4
             );
             //TODO: (Req 10) set the "transform" uniform
             this->skyMaterial->shader->set("transform", alwaysBehindTransform * VP * skySphereModel);
@@ -321,9 +331,12 @@ while ((err = glGetError()) != GL_NO_ERROR)
             glBindFramebuffer(GL_DRAW_FRAMEBUFFER, 0);
             // TODO: (Req 11) Setup the postprocess material and draw the fullscreen triangle
            
+           // Set up the postprocess material 
             postprocessMaterial->setup();
+            // Bind the vertex array object for the post-process rendering
             glBindVertexArray(postProcessVertexArray);
-           
+            // Draw a triangle 
+            // This is used for full-screen post-processing effects
             glDrawArrays(GL_TRIANGLES, 0, 3);
 
         }
