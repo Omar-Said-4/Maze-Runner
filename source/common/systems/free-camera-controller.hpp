@@ -107,27 +107,27 @@ namespace our
             // If the move makes a collision, we revert it
             bool collided = false;
             if (app->getKeyboard().isPressed(GLFW_KEY_W))
-                position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * (current_sensitivity.z));
+                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z));  // was (0.2,0.2,0.2)
 
             collided = detectWallCollision(world, position);
             if (collided)
                 position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
 
             if (app->getKeyboard().isPressed(GLFW_KEY_S))
-                position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
+                position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
 
             collided = detectWallCollision(world, position);
             if (collided)
                 position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
-                position += up * (deltaTime * current_sensitivity.y);
+                position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
 
             collided = detectWallCollision(world, position);
             if (collided)
                 position -= up * (deltaTime * current_sensitivity.y);
             if (app->getKeyboard().isPressed(GLFW_KEY_E))
-                position -= up * (deltaTime * current_sensitivity.y);
+                position -= 0 * (deltaTime * current_sensitivity.y);   // was up became
             collided = detectWallCollision(world, position);
             if (collided)
                 position += up * (deltaTime * current_sensitivity.y);
