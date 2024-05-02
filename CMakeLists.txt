@@ -99,7 +99,10 @@ set(COMMON_SOURCES
         # adding light
         source/common/components/light.cpp
         source/common/components/light.hpp
-        
+
+        # Collision
+        source/common/components/collision.cpp
+        source/common/components/collision.hpp
 )
 
 # Define the directories in which to search for the included headers

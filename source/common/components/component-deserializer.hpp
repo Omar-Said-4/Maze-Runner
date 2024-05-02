@@ -8,6 +8,7 @@
 #include "light.hpp"
 #include "wall.hpp"
 #include "coin.hpp"
+#include "collision.hpp"
 
 namespace our
 {
@@ -47,6 +48,11 @@ namespace our
         {
             component = entity->addComponent<CoinComponent>();
         }
+        else if (type == CollisionComponent::getID())
+        {
+            component = entity->addComponent<CollisionComponent>();
+        }
+
         if (component)
             component->deserialize(data);
     }

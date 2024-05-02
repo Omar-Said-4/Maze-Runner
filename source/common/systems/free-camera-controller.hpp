@@ -4,6 +4,7 @@
 #include "../components/camera.hpp"
 #include "../components/wall.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/collision.hpp"
 
 #include "../application.hpp"
 
@@ -105,43 +106,71 @@ namespace our
             // We change the camera position based on the keys WASD/QE
             // S & W moves the player back and forth
             // If the move makes a collision, we revert it
-            bool collided = false;
             if (app->getKeyboard().isPressed(GLFW_KEY_W))
                 position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * (current_sensitivity.z));
-
-            collided = detectWallCollision(world, position);
-            if (collided)
-                position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
 
             if (app->getKeyboard().isPressed(GLFW_KEY_S))
                 position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
 
-            collided = detectWallCollision(world, position);
-            if (collided)
-                position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
                 position += up * (deltaTime * current_sensitivity.y);
 
-            collided = detectWallCollision(world, position);
-            if (collided)
-                position -= up * (deltaTime * current_sensitivity.y);
             if (app->getKeyboard().isPressed(GLFW_KEY_E))
                 position -= up * (deltaTime * current_sensitivity.y);
-            collided = detectWallCollision(world, position);
-            if (collided)
-                position += up * (deltaTime * current_sensitivity.y);
+
             // A & D moves the player left or right
             if (app->getKeyboard().isPressed(GLFW_KEY_D))
                 position += right * (deltaTime * current_sensitivity.x);
-            collided = detectWallCollision(world, position);
-            if (collided)
-                position -= right * (deltaTime * current_sensitivity.x);
+
             if (app->getKeyboard().isPressed(GLFW_KEY_A))
                 position -= right * (deltaTime * current_sensitivity.x);
-            collided = detectWallCollision(world, position);
-            if (collided)
-                position += right * (deltaTime * current_sensitivity.x);
+
+            for (auto entity : world->getEntities())
+            {
+                auto collisionComponent = entity->getComponent<CollisionComponent>();
+                if (collisionComponent)
+                {
+                    switch (collisionComponent->collisionType)
+                    {
+                    case CollisionType::WALL:
+                        // Calculate world-space positions of wall's center and player's center
+                        glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+
+                        float halfCellSize = collisionComponent->collisionCellSize / 2;
+
+                        float minX = wallPosition.x - halfCellSize;
+                        float maxX = wallPosition.x + halfCellSize;
+                        float minZ = wallPosition.z - halfCellSize;
+                        float maxZ = wallPosition.z + halfCellSize;
+
+                        bool isInsideWallCell = (position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ);
+
+                        if (isInsideWallCell)
+                        {
+                            if (app->getKeyboard().isPressed(GLFW_KEY_W))
+                                position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * (current_sensitivity.z));
+
+                            if (app->getKeyboard().isPressed(GLFW_KEY_S))
+                                position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
+
+                            // Q & E moves the player up and down
+                            if (app->getKeyboard().isPressed(GLFW_KEY_Q))
+                                position -= up * (deltaTime * current_sensitivity.y);
+
+                            if (app->getKeyboard().isPressed(GLFW_KEY_E))
+                                position += up * (deltaTime * current_sensitivity.y);
+
+                            // A & D moves the player left or right
+                            if (app->getKeyboard().isPressed(GLFW_KEY_D))
+                                position -= right * (deltaTime * current_sensitivity.x);
+
+                            if (app->getKeyboard().isPressed(GLFW_KEY_A))
+                                position += right * (deltaTime * current_sensitivity.x);
+                        }
+                    }
+                }
+            }
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
@@ -153,37 +182,5 @@ namespace our
                 app->getMouse().unlockMouse(app->getWindow());
             }
         }
-
-        bool detectWallCollision(World *world, glm::vec3 &position)
-        {
-            auto entities = world->getEntities();
-
-            float baseDistance = 5;
-
-            for (auto entity : entities)
-            {
-                if (entity->getComponent<WallComponent>())
-                {
-                    // Calculate world-space positions of wall's center and player's center
-                    glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-
-                    float minX = wallPosition.x - 7.0f;
-                    float maxX = wallPosition.x + 7.0f;
-                    float minZ = wallPosition.z - 7.0f;
-                    float maxZ = wallPosition.z + 7.0f;
-                    bool isInsideWallCell = (position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ);
-
-                    if (isInsideWallCell)
-                    {
-                        std::cout << "Collided!" << std::endl;
-                        std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
-                        return true;
-                    }
-                }
-            }
-
-            return false;
-        }
     };
-
 }

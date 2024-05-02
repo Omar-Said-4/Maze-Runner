@@ -14,10 +14,10 @@
       "postprocess": "assets/shaders/postprocess/vignette.frag"
     },
     "assets": {
-      "audio":{
-        "Game":"assets/audio/game.mp3",
-        "Collect":"assets/audio/collect.mp3",
-        "Powerup":"assets/audio/powerup.mp3"
+      "audio": {
+        "Game": "assets/audio/game.mp3",
+        "Collect": "assets/audio/collect.mp3",
+        "Powerup": "assets/audio/powerup.mp3"
       },
       "shaders": {
         "tinted": {
@@ -228,7 +228,9 @@
             "material": "wall"
           },
           {
-            "type": "wall"
+            "type": "Collision",
+            "collisionType": "WALL",
+            "collisionCellSize": 12.9
           }
         ]
       },
@@ -250,7 +252,9 @@
             "angularVelocity": [90, 0, 0]
           },
           {
-            "type": "coin"
+            "type": "Collision",
+            "collisionType": "COIN",
+            "collisionCellSize": 12.9
           }
         ]
       }
