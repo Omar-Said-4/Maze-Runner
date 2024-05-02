@@ -188,10 +188,13 @@ namespace our
                         float minZ = coinPosition.z - collisionCellSize;
                         float maxZ = coinPosition.z + collisionCellSize;
                         bool isOnCoin = (position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ);
-
-                        if (isOnCoin)
+                        bool isTaken = entity->localTransform.scale.x == 0.0f;
+                        if (isOnCoin && !isTaken)
                         {
-                            std::cout << "COIN!" << std::endl;
+                            entity->localTransform.scale.x = 0.0f;
+                            entity->localTransform.scale.y = 0.0f;
+                            entity->localTransform.scale.z = 0.0f;
+                            app->incrementCollectedCoins();
                         }
                     }
                     break;
