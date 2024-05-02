@@ -6,6 +6,7 @@
 #include "../components/camera.hpp"
 #include "../components/coin.hpp"
 #include "../components/bolt.hpp"
+#include "../components/rocket.hpp"
 #include "../components/free-camera-controller.hpp"
 #include"../systems/sound-system.hpp"
 #include <glm/glm.hpp>
@@ -73,6 +74,20 @@ namespace our
                         our::GameActionsSystem::setSpeedUp();
                         our::GameActionsSystem::collectPowerup();
                         our::GameActionsSystem::resetPowerupTimer(our::powerups::speedUp);
+                        world->markForRemoval(entity);
+                    }
+                }
+                else if(entity->getComponent<RocketComponent>())
+                {
+                    // Calculate world-space positions of the rocket
+                    glm::vec3 rocketPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if (abs(position.x - rocketPosition.x) < 0.8 && abs(position.z - rocketPosition.z) < 0.8)
+                    {
+                        std::cout << "ROCKET!" << std::endl;
+                        our::SoundSystem::play_custom_sound("Powerup",false,false);
+                        our::GameActionsSystem::setGravityUp();
+                        our::GameActionsSystem::collectPowerup();
+                        our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp);
                         world->markForRemoval(entity);
                     }
                 }

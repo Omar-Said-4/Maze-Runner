@@ -426,7 +426,7 @@ if (!cursor) {
             ImGui::End();
             }
             // powerup popup message
-            const float messageDuration = 8.0f; // Duration of the message in seconds
+            const float messageDuration1 = 8.0f; // Duration of the message in seconds
             if (our::GameActionsSystem::getSpeedUp()) {
                 ImGui::PushFont(powerupFont);
                 ImGui::Begin("POWERUP", &(our::GameActionsSystem::getSpeedUp()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
@@ -439,9 +439,39 @@ if (!cursor) {
                 our::GameActionsSystem::increasePowerupTimer(our::powerups::speedUp,ImGui::GetIO().DeltaTime);
 
                 // If message duration elapsed, hide the message
-                if (our::GameActionsSystem::getPowerupTimer(our::powerups::speedUp) >= messageDuration) {
+                if (our::GameActionsSystem::getPowerupTimer(our::powerups::speedUp) >= messageDuration1) {
                     our::GameActionsSystem::resetSpeedUp();
                     our::GameActionsSystem::resetPowerupTimer(our::powerups::speedUp); // Reset the timer for future messages
+                }
+            }
+            const float messageDuration2 = 5.0f; // Duration of the message in seconds
+            if(our::GameActionsSystem::getGravityUp())
+            {
+                ImGui::PushFont(powerupFont);
+                ImGui::Begin("POWERUP2", &(our::GameActionsSystem::getGravityUp()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+                ImGui::SetWindowPos("POWERUP2", ImVec2(win_config.size.x/2-250, 80));
+                ImGui::Text("GRAVITY POWERUP ACQUIRED !");
+                ImGui::PopFont();                      
+                ImGui::End();
+
+                // Update message timer
+                our::GameActionsSystem::increasePowerupTimer(our::powerups::gravityUp,ImGui::GetIO().DeltaTime);
+
+                // If message duration elapsed, hide the message
+                if (our::GameActionsSystem::getPowerupTimer(our::powerups::gravityUp) >= messageDuration2) {
+                    our::GameActionsSystem::resetGravityUp();
+                    our::GameActionsSystem::setGravityDown();
+                    our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp); 
+                }
+            }
+            if(our::GameActionsSystem::getGravityDown())
+            {
+                our::GameActionsSystem::increasePowerupTimer(our::powerups::gravityUp,ImGui::GetIO().DeltaTime);
+
+                // If message duration elapsed, hide the message
+                if (our::GameActionsSystem::getPowerupTimer(our::powerups::gravityUp) >= messageDuration2) {
+                    our::GameActionsSystem::resetGravityDown();
+                    our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp); 
                 }
             }
 

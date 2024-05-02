@@ -5,7 +5,9 @@ namespace our
     unsigned short int GameActionsSystem::coins_collected = 0;
     unsigned short int GameActionsSystem::powerups_collected = 0;
     bool GameActionsSystem::speedUp = false;
-    powerupTimer GameActionsSystem::powerupTimers={0};
+    bool GameActionsSystem::gravityUp = false;
+    bool GameActionsSystem::gravityDown = false;
+    powerupTimer GameActionsSystem::powerupTimers={0,0};
     int GameActionsSystem::getScore()
     {
         return score;
@@ -21,6 +23,8 @@ namespace our
         coins_collected = 0;
         speedUp = false;
         powerups_collected = 0;
+        gravityUp = false;
+        gravityDown = false;
     }
     unsigned short int  GameActionsSystem::getCoinsCollected()
     {
@@ -54,6 +58,9 @@ namespace our
         case powerups::speedUp:
             return powerupTimers.speedup;
             break;
+        case powerups::gravityUp:
+            return powerupTimers.gravity;
+            break;
         default:
             break;
         }
@@ -64,6 +71,9 @@ namespace our
         {
         case powerups::speedUp:
             powerupTimers.speedup = 0;
+            break;
+        case powerups::gravityUp:
+            powerupTimers.gravity = 0;
             break;
         default:
             break;
@@ -80,8 +90,35 @@ namespace our
         case powerups::speedUp:
             powerupTimers.speedup+=increase;
             break;
+        case powerups::gravityUp:
+            powerupTimers.gravity+=increase;
+            break;
         default:
             break;
         }
+    }
+    void GameActionsSystem::setGravityUp()
+    {
+        gravityUp = true;
+    }
+    void GameActionsSystem::resetGravityUp()
+    {
+        gravityUp=false;
+    }
+    bool & GameActionsSystem::getGravityUp()
+    {
+        return gravityUp;
+    }
+    void GameActionsSystem::setGravityDown()
+    {
+        gravityDown = true;
+    }
+    void GameActionsSystem::resetGravityDown()
+    {
+        gravityDown=false;
+    }
+    bool & GameActionsSystem::getGravityDown()
+    {
+        return gravityDown;
     }
 }

@@ -5,10 +5,12 @@
 namespace our
 {
       enum class powerups{
-            speedUp
+            speedUp,
+            gravityUp
         };
         struct powerupTimer{
            float speedup;
+           float gravity;
         };
 
     // The sound system is responsible for sound accross the whole game.
@@ -20,6 +22,10 @@ namespace our
         static unsigned short int coins_collected;
         static unsigned short int powerups_collected;
         static bool speedUp;
+
+        // gravity powerup
+        static bool gravityUp;
+        static bool gravityDown;
         static powerupTimer powerupTimers;
         public:
         // get the player current score
@@ -37,5 +43,11 @@ namespace our
         static float& getPowerupTimer(powerups powerup);
         static void resetPowerupTimer(powerups powerup);
         static void increasePowerupTimer(powerups powerup,float increase);
+        static void setGravityUp();
+        static void resetGravityUp();
+        static bool & getGravityUp();
+        static void setGravityDown();
+        static void resetGravityDown();
+        static bool & getGravityDown();
     };
 }

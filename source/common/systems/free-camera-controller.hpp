@@ -73,7 +73,10 @@ namespace our
             if (app->getMouse().isPressed(GLFW_MOUSE_BUTTON_1))
             {
                 glm::vec2 delta = app->getMouse().getMouseDelta();
+                if (!our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
+                {
                 rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
+                }
                 rotation.y -= delta.x * controller->rotationSensitivity; // The x-axis controls the yaw
             }
 
@@ -107,7 +110,7 @@ namespace our
             // S & W moves the player back and forth
             // If the move makes a collision, we revert it
             bool collided = false;
-            if (app->getKeyboard().isPressed(GLFW_KEY_W)){
+            if (app->getKeyboard().isPressed(GLFW_KEY_W) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
                 position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z));  // was (0.2,0.2,0.2)
                 if (our::GameActionsSystem::getSpeedUp())
                 {
@@ -122,7 +125,7 @@ namespace our
             if (collided)
                 position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
 
-            if (app->getKeyboard().isPressed(GLFW_KEY_S)){
+            if (app->getKeyboard().isPressed(GLFW_KEY_S)&& !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
                 position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
                 if (our::GameActionsSystem::getSpeedUp())
                 {
@@ -132,14 +135,17 @@ namespace our
                   our::SoundSystem::play_custom_sound("WALK",false,false);
                 }            
                 }
-
+             
             collided = detectWallCollision(world, position);
             if (collided)
                 position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
                 position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
-
+            if(our::GameActionsSystem::getGravityUp())
+                position += up * (deltaTime * 10);  
+            if(our::GameActionsSystem::getGravityDown())
+                position -= up * (deltaTime * 10);
             collided = detectWallCollision(world, position);
             if (collided)
                 position -= 0 * (deltaTime * current_sensitivity.y);  // was up became 0
@@ -149,7 +155,7 @@ namespace our
             if (collided)
                 position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
             // A & D moves the player left or right
-            if (app->getKeyboard().isPressed(GLFW_KEY_D)){
+            if (app->getKeyboard().isPressed(GLFW_KEY_D)&& !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
                 position += right * (deltaTime * current_sensitivity.x);  
             if (our::GameActionsSystem::getSpeedUp())
                 {
@@ -162,7 +168,7 @@ namespace our
             collided = detectWallCollision(world, position);
             if (collided)
                 position -= right * (deltaTime * current_sensitivity.x); 
-            if (app->getKeyboard().isPressed(GLFW_KEY_A)){
+            if (app->getKeyboard().isPressed(GLFW_KEY_A)&& !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
                 position -= right * (deltaTime * current_sensitivity.x);
             if (our::GameActionsSystem::getSpeedUp())
                 {
