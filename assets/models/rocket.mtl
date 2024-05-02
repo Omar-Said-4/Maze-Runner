@@ -1,0 +1,14 @@
+# Blender 4.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl base_material
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd source/ed4d2bee9e27_space_rocket__carto_rgb.jpg
+map_Ns ed4d2bee9e27_space_rocket__carto.fbm/ed4d2bee9e27_space_rocket__carto_roughness.jpg
+map_refl ed4d2bee9e27_space_rocket__carto.fbm/ed4d2bee9e27_space_rocket__carto_metallic.jpg
+map_Bump -bm 1.000000 ed4d2bee9e27_space_rocket__carto.fbm/ed4d2bee9e27_space_rocket__carto_normals.jpg

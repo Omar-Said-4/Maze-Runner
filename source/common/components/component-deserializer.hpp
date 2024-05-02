@@ -8,7 +8,8 @@
 #include "light.hpp"
 #include "wall.hpp"
 #include "coin.hpp"
-
+#include"bolt.hpp"
+#include"rocket.hpp"
 namespace our
 {
 
@@ -46,6 +47,14 @@ namespace our
         else if (type == CoinComponent::getID())
         {
             component = entity->addComponent<CoinComponent>();
+        }
+        else if(type == BoltComponent::getID())
+        {
+            component = entity->addComponent<BoltComponent>();
+        }
+        else if(type==RocketComponent::getID())
+        {
+            component = entity->addComponent<RocketComponent>();
         }
         if (component)
             component->deserialize(data);

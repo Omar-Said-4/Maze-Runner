@@ -9,6 +9,7 @@
 #include <systems/collision.hpp>
 #include <asset-loader.hpp>
 #include <systems/sound-system.hpp>
+#include<systems/game-actions.hpp>
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State
 {
@@ -34,7 +35,8 @@ class Playstate : public our::State
             {
                 our::SoundSystem::play_custom_sound("Game",false,true);
             }
-       //  our::SoundSystem::play_menu_background();
+        //   reset app score
+        our::GameActionsSystem::resetScore();  
         // If we have a world in the scene config, we use it to populate our world
         if (config.contains("world"))
         {
@@ -51,6 +53,7 @@ class Playstate : public our::State
     void onDraw(double deltaTime) override
     {
         // Here, we just run a bunch of systems to control the world logic
+        renderer.updateFogTime((float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
         collisionSystem.update(&world, (float)deltaTime);

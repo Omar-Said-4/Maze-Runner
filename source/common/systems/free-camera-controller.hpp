@@ -5,6 +5,7 @@
 #include "../components/wall.hpp"
 #include "../components/free-camera-controller.hpp"
 #include"systems/sound-system.hpp"
+#include"systems/game-actions.hpp"
 #include "../application.hpp"
 
 #include <glm/glm.hpp>
@@ -99,7 +100,7 @@ namespace our
 
             glm::vec3 current_sensitivity = controller->positionSensitivity;
             // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
-            if (app->getKeyboard().isPressed(GLFW_KEY_LEFT_SHIFT))
+            if (our::GameActionsSystem::getSpeedUp())  // replace left shift with speedUp
                 current_sensitivity *= controller->speedupFactor;
 
             // We change the camera position based on the keys WASD/QE
@@ -108,48 +109,72 @@ namespace our
             bool collided = false;
             if (app->getKeyboard().isPressed(GLFW_KEY_W)){
                 position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z));  // was (0.2,0.2,0.2)
-                our::SoundSystem::play_custom_sound("WALK",false,false);
+                if (our::GameActionsSystem::getSpeedUp())
+                {
+                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                }
+                else{
+                  our::SoundSystem::play_custom_sound("WALK",false,false);
+                }
             }
 
             collided = detectWallCollision(world, position);
             if (collided)
-                position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
+                position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
 
             if (app->getKeyboard().isPressed(GLFW_KEY_S)){
                 position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
-                our::SoundSystem::play_custom_sound("WALK",false,false);
-            }
+                if (our::GameActionsSystem::getSpeedUp())
+                {
+                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                }
+                else{
+                  our::SoundSystem::play_custom_sound("WALK",false,false);
+                }            
+                }
 
             collided = detectWallCollision(world, position);
             if (collided)
-                position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
+                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
                 position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
 
             collided = detectWallCollision(world, position);
             if (collided)
-                position -= up * (deltaTime * current_sensitivity.y);
+                position -= 0 * (deltaTime * current_sensitivity.y);  // was up became 0
             if (app->getKeyboard().isPressed(GLFW_KEY_E))
                 position -= 0 * (deltaTime * current_sensitivity.y);   // was up became
             collided = detectWallCollision(world, position);
             if (collided)
-                position += up * (deltaTime * current_sensitivity.y);
+                position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
             // A & D moves the player left or right
             if (app->getKeyboard().isPressed(GLFW_KEY_D)){
-                position += right * (deltaTime * current_sensitivity.x);
-                our::SoundSystem::play_custom_sound("WALK",false,false);
-            }
+                position += right * (deltaTime * current_sensitivity.x);  
+            if (our::GameActionsSystem::getSpeedUp())
+                {
+                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                }
+                else{
+                  our::SoundSystem::play_custom_sound("WALK",false,false);
+                }            
+                }
             collided = detectWallCollision(world, position);
             if (collided)
-                position -= right * (deltaTime * current_sensitivity.x);
+                position -= right * (deltaTime * current_sensitivity.x); 
             if (app->getKeyboard().isPressed(GLFW_KEY_A)){
                 position -= right * (deltaTime * current_sensitivity.x);
-                our::SoundSystem::play_custom_sound("WALK",false,false);
-            }
+            if (our::GameActionsSystem::getSpeedUp())
+                {
+                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                }
+                else{
+                  our::SoundSystem::play_custom_sound("WALK",false,false);
+                }           
+                 }
             collided = detectWallCollision(world, position);
             if (collided)
-                position += right * (deltaTime * current_sensitivity.x);
+                position += right * (deltaTime * current_sensitivity.x); 
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked

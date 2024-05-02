@@ -18,7 +18,8 @@
         "Game":"assets/audio/game.mp3",
         "Collect":"assets/audio/collect.mp3",
         "Powerup":"assets/audio/powerup.mp3",
-        "WALK": "assets/audio/footsteps.flac"
+        "WALK": "assets/audio/footsteps.flac",
+        "RUN": "assets/audio/running.mp3"
       },
       "shaders": {
         "tinted": {
@@ -37,7 +38,9 @@
         "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
         "wall": "assets/textures/wall.jpg",
-        "coin": "assets/textures/coin.png"
+        "coin": "assets/textures/coin.png",
+        "bolt": "assets/textures/speed-powerup2.jpg",
+        "rocket":"assets/textures/rocket.jpg"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -46,7 +49,9 @@
         "sphere": "assets/models/sphere.obj",
         "wall": "assets/models/wall.obj",
         "Lwall": "assets/models/Lwall2.obj",
-        "coin": "assets/models/coin.obj"
+        "coin": "assets/models/coin.obj",
+        "bolt": "assets/models/bolt.obj",
+        "rocket": "assets/models/rocket.obj"
       },
       "samplers": {
         "default": {},
@@ -183,6 +188,36 @@
           "tint": [1, 1, 1, 1],
           "texture": "moon",
           "sampler": "default"
+        },
+        "bolt":{
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "bolt",
+          "sampler": "default"
+        },
+        "rocket":{
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "rocket",
+          "sampler": "default"
         }
       }
     },
@@ -252,6 +287,50 @@
           },
           {
             "type": "coin"
+          }
+        ]
+      },
+      {
+        "isMaze": true,
+        "objectSymbol": ["s"],
+        "position": [0, 2, 0],
+        "rotation": [0, 0, 0],
+        "scale": [4, 4, 4],
+        "cellSize": 12.9,
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "bolt",
+            "material": "bolt"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 180, 0]
+          },
+          {
+            "type": "bolt"
+          }
+        ]
+      },
+      {
+        "isMaze": true,
+        "objectSymbol": ["r"],
+        "position": [0, 2, 0],
+        "rotation": [0, 0, 0],
+        "scale": [4, 4, 4],
+        "cellSize": 12.9,
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "rocket",
+            "material": "rocket"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 180, 0]
+          },
+          {
+            "type": "rocket"
           }
         ]
       }

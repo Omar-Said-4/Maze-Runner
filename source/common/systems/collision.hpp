@@ -5,6 +5,7 @@
 
 #include "../components/camera.hpp"
 #include "../components/coin.hpp"
+#include "../components/bolt.hpp"
 #include "../components/free-camera-controller.hpp"
 #include"../systems/sound-system.hpp"
 #include <glm/glm.hpp>
@@ -12,7 +13,7 @@
 #include <glm/trigonometric.hpp>
 #include <glm/gtx/fast_trigonometry.hpp>
 #include "../application.hpp"
-
+#include"../systems/game-actions.hpp"
 namespace our
 {
 
@@ -49,16 +50,30 @@ namespace our
 
             for (auto entity : entities)
             {
-                auto coin=entity->getComponent<CoinComponent>();
-                if (coin)
+                if (entity->getComponent<CoinComponent>())
                 {
                     // Calculate world-space positions of the coin
                     glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - coinPosition.x) < 0.5 && abs(position.z - coinPosition.z) < 0.2)
+                    if (abs(position.x - coinPosition.x) < 0.8 && abs(position.z - coinPosition.z) < 0.8)
                     {
                         std::cout << "COIN!" << std::endl;
                         world->markForRemoval(entity);
                         our::SoundSystem::play_custom_sound("Collect",false,false);
+                        our::GameActionsSystem::collectCoin();
+                    }
+                }
+                else if(entity->getComponent<BoltComponent>())
+                {
+                    // Calculate world-space positions of the bolt
+                    glm::vec3 boltPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if (abs(position.x - boltPosition.x) < 0.8 && abs(position.z - boltPosition.z) < 0.8)
+                    {
+                        std::cout << "BOLT!" << std::endl;
+                        our::SoundSystem::play_custom_sound("Powerup",false,false);
+                        our::GameActionsSystem::setSpeedUp();
+                        our::GameActionsSystem::collectPowerup();
+                        our::GameActionsSystem::resetPowerupTimer(our::powerups::speedUp);
+                        world->markForRemoval(entity);
                     }
                 }
             }

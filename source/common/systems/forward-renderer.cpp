@@ -342,5 +342,9 @@ while ((err = glGetError()) != GL_NO_ERROR)
 
         }
     }
+     void ForwardRenderer::updateFogTime(float time)
+     {
+        postprocessMaterial->shader->set("time", time);
+     }
 
 }

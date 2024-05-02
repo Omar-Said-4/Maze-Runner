@@ -88,11 +88,18 @@ set(COMMON_SOURCES
         source/common/components/wall.cpp
         source/common/components/coin.hpp
         source/common/components/coin.cpp
+        source/common/components/bolt.hpp
+        source/common/components/bolt.cpp
+        source/common/components/rocket.hpp
+        source/common/components/rocket.cpp
 
+        
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/sound-system.hpp
         source/common/systems/sound-system.cpp
+        source/common/systems/game-actions.hpp
+        source/common/systems/game-actions.cpp
         source/common/systems/free-camera-controller.hpp
         source/common/systems/movement.hpp
 

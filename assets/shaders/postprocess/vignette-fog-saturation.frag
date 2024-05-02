@@ -2,6 +2,7 @@
 
 // Uniform variable representing the texture holding the scene pixels
 uniform sampler2D tex;
+uniform float time;
 
 // Input variable representing the texture coordinates of the fragment
 in vec2 tex_coord;
@@ -39,21 +40,22 @@ void main(){
     // Multiply the scene color by the vignette intensity to apply the vignette effect
     sceneColor.rgb *= vignette;
 
+    float fogMovement = 2*sin(time)* 0.2;
     // Introduce fog based on fragment depth:
-
-    float depth = tex_coord.y/2 +tex_coord.x/2; 
+    float depth = (tex_coord.y/2 + fogMovement) +(tex_coord.x/2+fogMovement); 
 
     // Define fog color
-    vec3 fogColor = vec3(0.7, 0.7, 0.7); // Adjust fog color as needed
+    vec3 fogColor = vec3(0.5, 0.5, 0.5); // Adjust fog color as needed
 
     // Define fog parameters
     float fogStart = 0.2; // Start of fog
     float fogEnd = 1.0; // End of fog
-
+    
     // Calculate fog intensity based on fragment depth
     float fogIntensity = smoothstep(fogStart, fogEnd, abs(depth));
     fogIntensity += smoothstep(fogStart, fogEnd, abs(tex_coord.x - 0.8)); // Use the absolute difference between texture x-coordinate and the center
-
+    // Modulate fog intensity based on time to make fog appear to move
+    fogIntensity += fogMovement ; // Adjust the amplitude and speed of fog movement as needed
     // Mix the scene color with the fog color based on fog intensity
     sceneColor.rgb = mix(sceneColor.rgb, fogColor, fogIntensity);
 

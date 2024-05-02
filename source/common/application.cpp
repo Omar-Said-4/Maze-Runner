@@ -1,5 +1,5 @@
 #include "application.hpp"
-
+#include<systems/game-actions.hpp>
 #include <iostream>
 #include <fstream>
 #include <string>
@@ -20,7 +20,7 @@
 #if !defined(NDEBUG)
 // If NDEBUG (no debug) is not defined, enable OpenGL debug messages
 #define ENABLE_OPENGL_DEBUG_MESSAGES
-#define GAME_OVER_TIME_SECS 500
+#define GAME_OVER_TIME_SECS 120
 #endif
 
 #include "texture/screenshot.hpp"
@@ -241,7 +241,7 @@ if (!cursor) {
     ImGui::CreateContext();
     ImGuiIO& io = ImGui::GetIO();
     ImFont *playFont = io.Fonts->AddFontFromFileTTF("assets/fonts/chary.ttf", 30.0f);
-    ImFont *powerupFont = io.Fonts->AddFontFromFileTTF("assets/fonts/HalloweenSlimePersonalUse.otf", 60.0f);
+    ImFont *powerupFont = io.Fonts->AddFontFromFileTTF("assets/fonts/HalloweenSlimePersonalUse.otf", 40.0f);
 
     // for hover effect
     ImVec4 textColorCollect = ImVec4(1.0f, 1.0f, 1.0f, 0.5f);
@@ -357,7 +357,7 @@ if (!cursor) {
             ImGui::PushFont(playFont);
             // write collectables
             std::string string1 = "COINS: ";
-            std::string coins = std::to_string(2);
+            std::string coins = std::to_string(our::GameActionsSystem::getCoinsCollected());
             std::string stringLine1 = string1 + coins + "/10";
 
             std::string string2 = "KEYS: ";
@@ -426,24 +426,22 @@ if (!cursor) {
             ImGui::End();
             }
             // powerup popup message
-            static bool powerUp=true;
-            static float messageTimer = 0.0f;
-            const float messageDuration = 2.0f; // Duration of the message in seconds
-            if (powerUp) {
+            const float messageDuration = 8.0f; // Duration of the message in seconds
+            if (our::GameActionsSystem::getSpeedUp()) {
                 ImGui::PushFont(powerupFont);
-                ImGui::Begin("POWERUP", &powerUp, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-                ImGui::SetWindowPos("POWERUP", ImVec2(win_config.size.x/2-210, win_config.size.y/2));
-                ImGui::Text("POWERUP ACQUIRED !");
+                ImGui::Begin("POWERUP", &(our::GameActionsSystem::getSpeedUp()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+                ImGui::SetWindowPos("POWERUP", ImVec2(win_config.size.x/2-250, 30));
+                ImGui::Text("SPEED UP POWERUP ACQUIRED !");
                 ImGui::PopFont();                      
                 ImGui::End();
 
                 // Update message timer
-                messageTimer += ImGui::GetIO().DeltaTime;
+                our::GameActionsSystem::increasePowerupTimer(our::powerups::speedUp,ImGui::GetIO().DeltaTime);
 
                 // If message duration elapsed, hide the message
-                if (messageTimer >= messageDuration) {
-                    powerUp = false;
-                    messageTimer = 0.0f; // Reset the timer for future messages
+                if (our::GameActionsSystem::getPowerupTimer(our::powerups::speedUp) >= messageDuration) {
+                    our::GameActionsSystem::resetSpeedUp();
+                    our::GameActionsSystem::resetPowerupTimer(our::powerups::speedUp); // Reset the timer for future messages
                 }
             }
 
@@ -487,13 +485,13 @@ if (!cursor) {
             ImGui::PushFont(powerupFont);
             std::string string1 = "GAME OVER :(";
             std::string string2 = "SCORE: ";
-            string2+=" 5000";
+            string2+=" " + std::to_string(our::GameActionsSystem::getScore());
             std::string string3 ="COINS COLLECTED: ";
-            string3+=" 5/10";
+            string3+= std::to_string(our::GameActionsSystem::getCoinsCollected()) + "/10";
             std::string string4 ="KEYS COLLECTED: ";
             string4+=" 2/10";
             std::string string5 ="POWERUPS COLLECTED: ";
-            string5+=" 1/2";
+            string5+=" " + std::to_string(our::GameActionsSystem::getPowerupsCollected())+"/10";
             std::string string6 ="REMAINING TIME: ";
             string6+=timer_display;
 
