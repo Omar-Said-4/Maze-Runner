@@ -179,6 +179,22 @@ namespace our
                         }
                     }
                     break;
+                    case CollisionType::COIN:
+                    {
+                        glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                        float collisionCellSize = collisionComponent->collisionCellSize / 2;
+                        float minX = coinPosition.x - collisionCellSize;
+                        float maxX = coinPosition.x + collisionCellSize;
+                        float minZ = coinPosition.z - collisionCellSize;
+                        float maxZ = coinPosition.z + collisionCellSize;
+                        bool isOnCoin = (position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ);
+
+                        if (isOnCoin)
+                        {
+                            std::cout << "COIN!" << std::endl;
+                        }
+                    }
+                    break;
                     }
                 }
             }

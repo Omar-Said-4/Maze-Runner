@@ -259,7 +259,7 @@
           {
             "type": "Collision",
             "collisionType": "COIN",
-            "collisionCellSize": 12.9
+            "collisionCellSize": 3
           }
         ]
       }
