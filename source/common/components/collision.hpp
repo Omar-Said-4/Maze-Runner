@@ -13,7 +13,7 @@ namespace our
         COIN,
         WALL,
         POWERUP,
-        LAND
+        GROUND
     };
 
     class CollisionComponent : public Component
@@ -21,6 +21,7 @@ namespace our
     public:
         CollisionType collisionType; // The type of the collision
         float collisionCellSize;
+        float playerHeight;
         // The ID of this component type is "Collision"
         static std::string getID() { return "Collision"; }
 

@@ -17,9 +17,9 @@ namespace our
         {
             collisionType = CollisionType::WALL;
         }
-        else if (collisionTypeStr == "LAND")
+        else if (collisionTypeStr == "GROUND")
         {
-            collisionType = CollisionType::LAND;
+            collisionType = CollisionType::GROUND;
         }
         else if (collisionTypeStr == "COIN")
         {
@@ -31,5 +31,6 @@ namespace our
         }
 
         collisionCellSize = data.value("collisionCellSize", 12.9f);
+        playerHeight = data.value("playerHeight", 5.0f);
     }
 }

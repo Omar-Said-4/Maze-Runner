@@ -134,7 +134,7 @@ namespace our
                     switch (collisionComponent->collisionType)
                     {
                     case CollisionType::WALL:
-                        // Calculate world-space positions of wall's center and player's center
+                    { // Calculate world-space positions of wall's center and player's center
                         glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
                         float halfCellSize = collisionComponent->collisionCellSize / 2;
@@ -168,6 +168,17 @@ namespace our
                             if (app->getKeyboard().isPressed(GLFW_KEY_A))
                                 position += right * (deltaTime * current_sensitivity.x);
                         }
+                    }
+                    break;
+                    case CollisionType::GROUND:
+                    {
+                        glm::vec3 groundPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                        if (position.y < (groundPosition.y + collisionComponent->playerHeight))
+                        {
+                            position.y = (groundPosition.y + collisionComponent->playerHeight);
+                        }
+                    }
+                    break;
                     }
                 }
             }

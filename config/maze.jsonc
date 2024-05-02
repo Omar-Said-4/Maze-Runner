@@ -211,6 +211,11 @@
             "type": "Mesh Renderer",
             "mesh": "plane",
             "material": "grass"
+          },
+          {
+            "type": "Collision",
+            "collisionType": "GROUND",
+            "playerHeight": 5
           }
         ]
       },
