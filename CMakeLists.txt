@@ -92,8 +92,11 @@ set(COMMON_SOURCES
         source/common/components/bolt.cpp
         source/common/components/rocket.hpp
         source/common/components/rocket.cpp
+        source/common/components/portal.hpp
+        source/common/components/portal.cpp
+        source/common/components/key.hpp
+        source/common/components/key.cpp
 
-        
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp
         source/common/systems/sound-system.hpp

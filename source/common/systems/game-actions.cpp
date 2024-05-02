@@ -4,6 +4,7 @@ namespace our
     int GameActionsSystem::score = 0;
     unsigned short int GameActionsSystem::coins_collected = 0;
     unsigned short int GameActionsSystem::powerups_collected = 0;
+    unsigned short int GameActionsSystem::keys_collected = 0;
     bool GameActionsSystem::speedUp = false;
     bool GameActionsSystem::gravityUp = false;
     bool GameActionsSystem::gravityDown = false;
@@ -23,6 +24,7 @@ namespace our
         coins_collected = 0;
         speedUp = false;
         powerups_collected = 0;
+        keys_collected = 0;
         gravityUp = false;
         gravityDown = false;
     }
@@ -120,5 +122,14 @@ namespace our
     bool & GameActionsSystem::getGravityDown()
     {
         return gravityDown;
+    }
+    void GameActionsSystem::collectKey()
+    {
+        score+=200;
+        keys_collected++;
+    }
+    unsigned short int GameActionsSystem::getKeysCollected()
+    {
+        return keys_collected;
     }
 }

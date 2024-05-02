@@ -10,6 +10,8 @@
 #include "coin.hpp"
 #include"bolt.hpp"
 #include"rocket.hpp"
+#include"portal.hpp"
+#include"key.hpp"
 namespace our
 {
 
@@ -55,6 +57,14 @@ namespace our
         else if(type==RocketComponent::getID())
         {
             component = entity->addComponent<RocketComponent>();
+        }
+        else if(type==PortalComponent::getID())
+        {
+            component = entity->addComponent<PortalComponent>();
+        }
+        else if(type==KeyComponent::getID())
+        {
+            component = entity->addComponent<KeyComponent>();
         }
         if (component)
             component->deserialize(data);

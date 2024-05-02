@@ -21,6 +21,7 @@ namespace our
         static int score;
         static unsigned short int coins_collected;
         static unsigned short int powerups_collected;
+        static unsigned short int keys_collected;
         static bool speedUp;
 
         // gravity powerup
@@ -49,5 +50,7 @@ namespace our
         static void setGravityDown();
         static void resetGravityDown();
         static bool & getGravityDown();
+        static void collectKey();
+        static unsigned short int getKeysCollected();
     };
 }

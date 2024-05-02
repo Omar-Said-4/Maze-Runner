@@ -19,7 +19,8 @@
         "Collect":"assets/audio/collect.mp3",
         "Powerup":"assets/audio/powerup.mp3",
         "WALK": "assets/audio/footsteps.flac",
-        "RUN": "assets/audio/running.mp3"
+        "RUN": "assets/audio/running.mp3",
+        "KEY1": "assets/audio/key1.wav"
       },
       "shaders": {
         "tinted": {
@@ -40,7 +41,9 @@
         "wall": "assets/textures/wall.jpg",
         "coin": "assets/textures/coin.png",
         "bolt": "assets/textures/speed-powerup2.jpg",
-        "rocket":"assets/textures/rocket.jpg"
+        "rocket":"assets/textures/rocket.jpg",
+        "key": "assets/textures/key.jpg",
+        "portal": "assets/textures/portal.png"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -51,7 +54,9 @@
         "Lwall": "assets/models/Lwall2.obj",
         "coin": "assets/models/coin.obj",
         "bolt": "assets/models/bolt.obj",
-        "rocket": "assets/models/rocket.obj"
+        "key": "assets/models/collect_key.obj",
+        "rocket": "assets/models/rocket.obj",
+        "portal": "assets/models/portal.obj"
       },
       "samplers": {
         "default": {},
@@ -218,6 +223,36 @@
           "tint": [1, 1, 1, 1],
           "texture": "rocket",
           "sampler": "default"
+        },
+        "key": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "key",
+          "sampler": "default"
+        },
+        "portal": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "portal",
+          "sampler": "default"
         }
       }
     },
@@ -305,7 +340,7 @@
           },
           {
             "type": "Movement",
-            "angularVelocity": [0, 180, 0]
+            "angularVelocity": [0, -180, 0]
           },
           {
             "type": "bolt"
@@ -331,6 +366,28 @@
           },
           {
             "type": "rocket"
+          }
+        ]
+      },
+      {
+        "isMaze": true,
+        "objectSymbol": ["k"],
+        "position": [0, 1, 0],
+        "rotation": [0, 0, 0],
+        "scale": [4, 4, 4],
+        "cellSize": 12.9,
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "key",
+            "material": "key"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, -180, 0]
+          },
+          {
+            "type": "key"
           }
         ]
       }

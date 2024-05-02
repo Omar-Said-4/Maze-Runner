@@ -7,6 +7,7 @@
 #include "../components/coin.hpp"
 #include "../components/bolt.hpp"
 #include "../components/rocket.hpp"
+#include "../components/key.hpp"
 #include "../components/free-camera-controller.hpp"
 #include"../systems/sound-system.hpp"
 #include <glm/glm.hpp>
@@ -88,6 +89,18 @@ namespace our
                         our::GameActionsSystem::setGravityUp();
                         our::GameActionsSystem::collectPowerup();
                         our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp);
+                        world->markForRemoval(entity);
+                    }
+                }
+                else if(entity->getComponent<KeyComponent>())
+                {
+                    // Calculate world-space positions of the key
+                    glm::vec3 keyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if (abs(position.x - keyPosition.x) < 0.8 && abs(position.z - keyPosition.z) < 0.8)
+                    {
+                        std::cout << "KEY!" << std::endl;
+                        our::SoundSystem::play_custom_sound("KEY1",false,false);
+                        our::GameActionsSystem::collectKey();
                         world->markForRemoval(entity);
                     }
                 }

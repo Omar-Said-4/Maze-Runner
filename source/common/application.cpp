@@ -361,7 +361,7 @@ if (!cursor) {
             std::string stringLine1 = string1 + coins + "/10";
 
             std::string string2 = "KEYS: ";
-            std::string keys = std::to_string(2);
+            std::string keys = std::to_string(our::GameActionsSystem::getKeysCollected());
             std::string stringLine2 = string2 + keys + "/10";
 
 
@@ -519,7 +519,7 @@ if (!cursor) {
             std::string string3 ="COINS COLLECTED: ";
             string3+= std::to_string(our::GameActionsSystem::getCoinsCollected()) + "/10";
             std::string string4 ="KEYS COLLECTED: ";
-            string4+=" 2/10";
+            string4+=" "+std::to_string(our::GameActionsSystem::getKeysCollected())+"/10";
             std::string string5 ="POWERUPS COLLECTED: ";
             string5+=" " + std::to_string(our::GameActionsSystem::getPowerupsCollected())+"/10";
             std::string string6 ="REMAINING TIME: ";
