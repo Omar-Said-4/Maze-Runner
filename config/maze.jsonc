@@ -20,7 +20,9 @@
         "Powerup":"assets/audio/powerup.mp3",
         "WALK": "assets/audio/footsteps.flac",
         "RUN": "assets/audio/running.mp3",
-        "KEY1": "assets/audio/key1.wav"
+        "KEY1": "assets/audio/key1.wav",
+        "KEY2": "assets/audio/master-key.wav",
+        "NOCOLLECT": "assets/audio/nocollect.mp3"
       },
       "shaders": {
         "tinted": {
@@ -43,7 +45,8 @@
         "bolt": "assets/textures/speed-powerup2.jpg",
         "rocket":"assets/textures/rocket.jpg",
         "key": "assets/textures/key.jpg",
-        "portal": "assets/textures/portal.png"
+        "portal": "assets/textures/portal.png",
+        "master-key": "assets/textures/master-key.jpg"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -56,7 +59,8 @@
         "bolt": "assets/models/bolt.obj",
         "key": "assets/models/collect_key.obj",
         "rocket": "assets/models/rocket.obj",
-        "portal": "assets/models/portal.obj"
+        "portal": "assets/models/portal.obj",
+        "master-key": "assets/models/master_key.obj"
       },
       "samplers": {
         "default": {},
@@ -253,6 +257,21 @@
           "tint": [1, 1, 1, 1],
           "texture": "portal",
           "sampler": "default"
+        },
+        "master-key": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": {
+              "enabled": true
+            }
+          },
+          "tint": [1, 1, 1, 1],
+          "texture": "master-key",
+          "sampler": "default"
         }
       }
     },
@@ -307,7 +326,7 @@
       {
         "isMaze": true,
         "objectSymbol": ["o"],
-        "position": [0, 2, 0],
+        "position": [0, 1, 0],
         "rotation": [45, 45, 0],
         "scale": [4, 4, 4],
         "cellSize": 12.998,
@@ -329,7 +348,7 @@
       {
         "isMaze": true,
         "objectSymbol": ["s"],
-        "position": [0, 2, 0],
+        "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
         "cellSize": 12.998,
@@ -351,7 +370,7 @@
       {
         "isMaze": true,
         "objectSymbol": ["r"],
-        "position": [0, 2, 0],
+        "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
         "cellSize": 12.998,
@@ -373,7 +392,7 @@
       {
         "isMaze": true,
         "objectSymbol": ["k"],
-        "position": [0, 1, 0],
+        "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
         "cellSize": 12.998,
@@ -411,6 +430,28 @@
           },
           {
             "type": "portal"
+          }
+        ]
+      },
+      {
+        "isMaze": true,
+        "objectSymbol": ["m"],
+        "position": [0, -2, 0],
+        "rotation": [0, 0, 0],
+        "scale": [4, 4, 4],
+        "cellSize": 12.998,
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "master-key",
+            "material": "master-key"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, -180, 0]
+          },
+          {
+            "type": "master-key"
           }
         ]
       }

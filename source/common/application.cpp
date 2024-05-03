@@ -474,7 +474,6 @@ if (!cursor) {
                     our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp); 
                 }
             }
-             const float messageDuration3 = 3.0f; // Duration of the message in seconds
             if(our::GameActionsSystem::getPortal())
             {
                 ImGui::PushFont(powerupFont);
@@ -483,7 +482,24 @@ if (!cursor) {
                 ImGui::Text("PORTAL POWERUP ACQUIRED");
                 ImGui::PopFont();                      
                 ImGui::End();
+            }
+            
+            const float messageDuration3 = 2.0f; // Duration of the message in seconds
+            static float timer_alert=0;
+            if(our::GameActionsSystem::getCantCollectMasterKey())
+            {
+                timer_alert+=ImGui::GetIO().DeltaTime;
+                ImGui::PushFont(powerupFont);
+                ImGui::Begin("ALERT", &(our::GameActionsSystem::getCantCollectMasterKey()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+                ImGui::SetWindowPos("ALERT", ImVec2(win_config.size.x/2-250, 500));
+                ImGui::Text("Get the Remaining Keys first");
+                ImGui::PopFont();                      
+                ImGui::End();
+                 if (timer_alert >= messageDuration3) {
+                    timer_alert=0;
+                    our::GameActionsSystem::resetCantCollectMasterKey();
                 }
+            }
 
 
         }

@@ -16,6 +16,10 @@ namespace our
             inwall = 1,
             outwall = 2 
         };
+        enum class endState{
+            win,
+            lose
+        };
         struct powerupTimer{
            float speedup;
            float gravity;
@@ -34,6 +38,7 @@ namespace our
         static unsigned short int powerups_collected;
         static unsigned short int keys_collected;
         static bool speedUp;
+        static bool cantCollectMasterKey;
 
         // gravity powerup
         static bool gravityUp;
@@ -43,6 +48,8 @@ namespace our
         static portalState pS;
         static powerupTimer powerupTimers;
         static bool portal;
+
+        static endState end;
         public:
 
         // camera parameters
@@ -81,5 +88,10 @@ namespace our
         static unsigned short int getTotalCoins();
         static unsigned short int getTotalPowerups();
         static unsigned short int getTotalKeys();
+        static void setCantCollectMasterKey();
+        static void resetCantCollectMasterKey();
+        static bool & getCantCollectMasterKey();
+        static void collectExitKey();
+
     };
 }

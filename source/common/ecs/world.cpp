@@ -142,19 +142,24 @@ namespace our
             }
             else if(symbol =='c')
             {
-                // no double cameras
-                int size = mazeObjects[symbol].size();
+            // no double cameras
+            int size = mazeObjects[symbol].size();
                if(size > 1)
                {
                  
-                 // only keep the first camera and get the rest cameras positions
-                // for(int i = 1; i < size; i++)
-                // {
-                //     mazeObjects['.'].push_back({mazeObjects[symbol][i].first,mazeObjects[symbol][i].second});
-                // }
                   mazeObjects['.'].insert(mazeObjects['.'].end(), mazeObjects[symbol].begin() + 1, mazeObjects[symbol].end());
                   mazeObjects[symbol].erase(mazeObjects[symbol].begin()+1,mazeObjects[symbol].end());
                }
+            }
+            else if(symbol=='m')
+            {
+                // no double master keys
+                int size = mazeObjects[symbol].size();
+                if(size > 1)
+                {
+                    mazeObjects['.'].insert(mazeObjects['.'].end(), mazeObjects[symbol].begin() + 1, mazeObjects[symbol].end());
+                    mazeObjects[symbol].erase(mazeObjects[symbol].begin()+1,mazeObjects[symbol].end());
+                }
             }
             for (int i = 0; i < mazeObjects[symbol].size(); i++)
             {

@@ -15,7 +15,8 @@ namespace our
     powerupTimer GameActionsSystem::powerupTimers={0,0};
     portalState GameActionsSystem::pS = portalState::off;
     bool GameActionsSystem::portal = false;
-
+    bool GameActionsSystem::cantCollectMasterKey = false;
+    endState GameActionsSystem::end = endState::lose;
     glm::vec3 GameActionsSystem::cameraPosition = glm::vec3(0,0,0);
     glm::vec3 GameActionsSystem::cameraRotation = glm::vec3(0,0,0);
     glm::vec3 GameActionsSystem::cameraScale = glm::vec3(1,1,1);
@@ -43,6 +44,8 @@ namespace our
         total_coins = 0;
         total_powerups = 0;
         total_keys = 0;
+        cantCollectMasterKey = false;
+        end = endState::lose;
     }
     unsigned short int  GameActionsSystem::getCoinsCollected()
     {
@@ -192,5 +195,21 @@ namespace our
     unsigned short int GameActionsSystem::getTotalKeys()
     {
         return total_keys;
+    }
+    void GameActionsSystem::setCantCollectMasterKey()
+    {
+        cantCollectMasterKey = true;
+    }
+    void GameActionsSystem::resetCantCollectMasterKey()
+    {
+        cantCollectMasterKey = false;
+    }
+    bool &GameActionsSystem::getCantCollectMasterKey()
+    {
+        return cantCollectMasterKey;
+    }
+    void GameActionsSystem::collectExitKey()
+    {
+        score+=1000;
     }
 }

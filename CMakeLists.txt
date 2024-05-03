@@ -96,6 +96,8 @@ set(COMMON_SOURCES
         source/common/components/portal.cpp
         source/common/components/key.hpp
         source/common/components/key.cpp
+        source/common/components/master-key.hpp
+        source/common/components/master-key.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp

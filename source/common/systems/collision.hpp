@@ -9,6 +9,7 @@
 #include "../components/rocket.hpp"
 #include "../components/key.hpp"
 #include "../components/portal.hpp"
+#include "../components/master-key.hpp"
 #include "../components/free-camera-controller.hpp"
 #include"../systems/sound-system.hpp"
 #include <glm/glm.hpp>
@@ -116,6 +117,27 @@ namespace our
                         our::GameActionsSystem::collectPowerup();
                         our::GameActionsSystem::portalStateInc();
                         world->markForRemoval(entity);
+                    }
+                }
+                else if(entity->getComponent<MasterKeyComponent>())
+                {
+                    // Calculate world-space positions of the master key
+                    glm::vec3 masterKeyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if (abs(position.x - masterKeyPosition.x) < 0.8 && abs(position.z - masterKeyPosition.z) < 0.8)
+                    {
+                        std::cout << "MASTER KEY!" << std::endl;
+                        if(our::GameActionsSystem::getKeysCollected() != our::GameActionsSystem::getTotalKeys() && !our::GameActionsSystem::getCantCollectMasterKey())                        {
+                            our::SoundSystem::play_custom_sound("NOCOLLECT",false,false);
+                            our::GameActionsSystem::setCantCollectMasterKey();
+                        }
+                        else if (our::GameActionsSystem::getKeysCollected() == our::GameActionsSystem::getTotalKeys() )
+                        {
+                          our::SoundSystem::play_custom_sound("KEY2",false,false);
+                          our::GameActionsSystem::collectExitKey();
+                          world->markForRemoval(entity);
+                            
+                        }
+                       
                     }
                 }
             }

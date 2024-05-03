@@ -12,6 +12,7 @@
 #include"rocket.hpp"
 #include"portal.hpp"
 #include"key.hpp"
+#include"master-key.hpp"
 namespace our
 {
 
@@ -65,6 +66,10 @@ namespace our
         else if(type==KeyComponent::getID())
         {
             component = entity->addComponent<KeyComponent>();
+        }
+        else if(type==MasterKeyComponent::getID())
+        {
+            component = entity->addComponent<MasterKeyComponent>();
         }
         if (component)
             component->deserialize(data);
