@@ -177,6 +177,12 @@ namespace our
             }
             collided = detectWallCollision(world, position);
             crossedMazeBorders = detectMazeBordersCrossing(world, position);
+            if (crossedMazeBorders)
+            {
+                position=our::GameActionsSystem::cameraPosition;
+                rotation=our::GameActionsSystem::cameraRotation;
+                return;
+            }
 
             if (collided)
                 position -= right * (deltaTime * current_sensitivity.x);

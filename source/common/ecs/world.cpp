@@ -1,6 +1,7 @@
 #include "world.hpp"
 #include "../deserialize-utils.hpp"
 #include "../systems/game-actions.hpp"
+
 namespace our
 {
 
@@ -53,6 +54,11 @@ namespace our
         glm::vec3 scale = cameraData.value("scale", glm::vec3(1, 1, 1));
         glm::vec3 position = glm::vec3(mazeCellSize * mazeObjects['c'][0].second, 2, (-1 * mazeCellSize) * (numOfMazeRows - mazeObjects['c'][0].first - 1));
         entity->deserialize(cameraData, position, rotation, scale);
+        
+        // init system camera return position
+        our::GameActionsSystem::cameraPosition = position;
+        our::GameActionsSystem::cameraRotation = rotation;
+        our::GameActionsSystem::cameraScale = scale;
     }
 
     void World::deserializeGround(const nlohmann::json &groundData)
@@ -130,13 +136,25 @@ namespace our
             {
                 our::GameActionsSystem::setTotalKeys(mazeObjects[symbol].size());
             }
-            else if (symbol == 'c')
-            {
-                our::GameActionsSystem::setTotalCoins(mazeObjects[symbol].size());
-            }
             else if (symbol == 'o')
             {
                 our::GameActionsSystem::setTotalCoins(mazeObjects[symbol].size());
+            }
+            else if(symbol =='c')
+            {
+                // no double cameras
+                int size = mazeObjects[symbol].size();
+               if(size > 1)
+               {
+                 
+                 // only keep the first camera and get the rest cameras positions
+                // for(int i = 1; i < size; i++)
+                // {
+                //     mazeObjects['.'].push_back({mazeObjects[symbol][i].first,mazeObjects[symbol][i].second});
+                // }
+                  mazeObjects['.'].insert(mazeObjects['.'].end(), mazeObjects[symbol].begin() + 1, mazeObjects[symbol].end());
+                  mazeObjects[symbol].erase(mazeObjects[symbol].begin()+1,mazeObjects[symbol].end());
+               }
             }
             for (int i = 0; i < mazeObjects[symbol].size(); i++)
             {

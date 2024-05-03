@@ -2,6 +2,7 @@
 #include <unordered_map>
 #include <string>
 #include<asset-loader.hpp>
+#include <glm/glm.hpp>
 namespace our
 {
       enum class powerups{
@@ -43,6 +44,11 @@ namespace our
         static powerupTimer powerupTimers;
         static bool portal;
         public:
+
+        // camera parameters
+        static glm::vec3 cameraPosition;
+        static glm::vec3 cameraRotation;
+        static glm::vec3 cameraScale;
         // get the player current score
         static int getScore();
         // player collected a coin

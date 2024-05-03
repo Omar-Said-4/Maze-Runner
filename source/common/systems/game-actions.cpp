@@ -15,6 +15,10 @@ namespace our
     powerupTimer GameActionsSystem::powerupTimers={0,0};
     portalState GameActionsSystem::pS = portalState::off;
     bool GameActionsSystem::portal = false;
+
+    glm::vec3 GameActionsSystem::cameraPosition = glm::vec3(0,0,0);
+    glm::vec3 GameActionsSystem::cameraRotation = glm::vec3(0,0,0);
+    glm::vec3 GameActionsSystem::cameraScale = glm::vec3(1,1,1);
     int GameActionsSystem::getScore()
     {
         return score;
