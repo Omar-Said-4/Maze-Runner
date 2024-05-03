@@ -11,6 +11,7 @@
 #include "../components/portal.hpp"
 #include "../components/master-key.hpp"
 #include "../components/free-camera-controller.hpp"
+#include "../components/door.hpp"
 #include"../systems/sound-system.hpp"
 #include <glm/glm.hpp>
 #include <glm/gtc/constants.hpp>
@@ -60,7 +61,7 @@ namespace our
                     glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                     if (abs(position.x - coinPosition.x) < 0.8 && abs(position.z - coinPosition.z) < 0.8)
                     {
-                        std::cout << "COIN!" << std::endl;
+                        //std::cout << "COIN!" << std::endl;
                         world->markForRemoval(entity);
                         our::SoundSystem::play_custom_sound("Collect",false,false);
                         our::GameActionsSystem::collectCoin();
@@ -72,7 +73,7 @@ namespace our
                     glm::vec3 boltPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                     if (abs(position.x - boltPosition.x) < 0.8 && abs(position.z - boltPosition.z) < 0.8)
                     {
-                        std::cout << "BOLT!" << std::endl;
+                       // std::cout << "BOLT!" << std::endl;
                         our::SoundSystem::play_custom_sound("Powerup",false,false);
                         our::GameActionsSystem::setSpeedUp();
                         our::GameActionsSystem::collectPowerup();
@@ -86,12 +87,13 @@ namespace our
                     glm::vec3 rocketPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                     if (abs(position.x - rocketPosition.x) < 0.8 && abs(position.z - rocketPosition.z) < 0.8)
                     {
-                        std::cout << "ROCKET!" << std::endl;
+                        //std::cout << "ROCKET!" << std::endl;
                         our::SoundSystem::play_custom_sound("Powerup",false,false);
                         our::GameActionsSystem::setGravityUp();
                         our::GameActionsSystem::collectPowerup();
                         our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp);
                         world->markForRemoval(entity);
+                        our::GameActionsSystem::setGravity(rocketPosition.x,rocketPosition.z);
                     }
                 }
                 else if(entity->getComponent<KeyComponent>())
@@ -100,7 +102,7 @@ namespace our
                     glm::vec3 keyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                     if (abs(position.x - keyPosition.x) < 0.8 && abs(position.z - keyPosition.z) < 0.8)
                     {
-                        std::cout << "KEY!" << std::endl;
+                       // std::cout << "KEY!" << std::endl;
                         our::SoundSystem::play_custom_sound("KEY1",false,false);
                         our::GameActionsSystem::collectKey();
                         world->markForRemoval(entity);
@@ -112,7 +114,7 @@ namespace our
                     glm::vec3 portalPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                     if (abs(position.x - portalPosition.x) < 0.8 && abs(position.z - portalPosition.z) < 0.8)
                     {
-                        std::cout << "PORTAL!" << std::endl;
+                       // std::cout << "PORTAL!" << std::endl;
                         our::SoundSystem::play_custom_sound("Powerup",false,false);
                         our::GameActionsSystem::collectPowerup();
                         our::GameActionsSystem::portalStateInc();
@@ -125,7 +127,7 @@ namespace our
                     glm::vec3 masterKeyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                     if (abs(position.x - masterKeyPosition.x) < 0.8 && abs(position.z - masterKeyPosition.z) < 0.8)
                     {
-                        std::cout << "MASTER KEY!" << std::endl;
+                       // std::cout << "MASTER KEY!" << std::endl;
                         if(our::GameActionsSystem::getKeysCollected() != our::GameActionsSystem::getTotalKeys() && !our::GameActionsSystem::getCantCollectMasterKey())                        {
                             our::SoundSystem::play_custom_sound("NOCOLLECT",false,false);
                             our::GameActionsSystem::setCantCollectMasterKey();
@@ -138,6 +140,30 @@ namespace our
                             
                         }
                        
+                    }
+                }
+                else if(entity->getComponent<DoorComponent>())
+                {
+                    // Calculate world-space positions of the door
+                    glm::vec3 doorPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if( our::GameActionsSystem::getOpenDoor())
+                    {
+                        entity->localTransform.rotation.y=(our::GameActionsSystem::doorStartAngle-0.3*(our::GameActionsSystem::getPowerupTimer(powerups::door)));
+                        return;
+                    }
+                    if (abs(position.x - doorPosition.x) < 2.3 && abs(position.z - doorPosition.z) < 10.8)
+                    {
+                        //std::cout << "DOOR!" << std::endl;
+                        if(!our::GameActionsSystem::getExitKey()&& !our::GameActionsSystem::getTouchDoor())
+                        {
+                            our::SoundSystem::play_custom_sound("NOCOLLECT",false,false);
+                            our::GameActionsSystem::setTouchDoor();
+                        }
+                        else if (our::GameActionsSystem::getExitKey())
+                        {
+                            our::SoundSystem::play_custom_sound("DOOR",false,false);
+                            our::GameActionsSystem::setOpenDoor();
+                        }
                     }
                 }
             }

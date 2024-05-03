@@ -2,6 +2,7 @@
 #include <miniaudio.h>
 
 #include"sound-system.hpp"
+#include"game-actions.hpp"
 #include <cstdio>
 #include<string>
 namespace our{
@@ -9,7 +10,6 @@ namespace our{
 
 
 bool SoundSystem::global_music_state = false;
-bool SoundSystem::win = false;
 ma_engine SoundSystem::engine;
 std::unordered_map<std::string, ma_sound*> SoundSystem::Audios;
 void SoundSystem::init_engine(){
@@ -52,7 +52,7 @@ void SoundSystem::initMap(){
   void SoundSystem::initScoreSounds()
  {
         ma_sound* sound = new ma_sound();
-        if(win){
+        if(our::GameActionsSystem::getGameState()==endState::win){
             SoundSystem::init_audio(sound, "assets/audio/win.mp3");
         }
         else
@@ -106,7 +106,7 @@ void SoundSystem::initMap(){
      SoundSystem::Audios["Hover"] = nullptr;
  }
     void SoundSystem::play_custom_sound(std::string sound_name, bool wait_tell_finish,bool loop){
-        if (ma_sound_is_playing(SoundSystem::Audios[sound_name])&& !wait_tell_finish) {
+        if (ma_sound_is_playing(SoundSystem::Audios[sound_name])&& !wait_tell_finish && ! sound_name.compare("Hover")==0) {
         return; // Exit the function if the sound is already playing
     }
         ma_sound_seek_to_pcm_frame(SoundSystem::Audios[sound_name], 0);

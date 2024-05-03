@@ -40,7 +40,7 @@ void main(){
     // Multiply the scene color by the vignette intensity to apply the vignette effect
     sceneColor.rgb *= vignette;
 
-    float fogMovement = 2*sin(time)* 0.2;
+    float fogMovement = sin(time)* 0.05;
     // Introduce fog based on fragment depth:
     float depth = (tex_coord.y/2 + fogMovement) +(tex_coord.x/2+fogMovement); 
 

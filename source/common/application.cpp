@@ -366,7 +366,15 @@ if (!cursor) {
 
 
             std::string string3 = "EXIT KEY: ";
-            std::string exit_key = "NOT YET";
+            std::string exit_key;//
+            if(our::GameActionsSystem::getExitKey())
+            {
+                exit_key = "COLLECTED";
+            }
+            else
+            {
+               exit_key = "NOT YET";
+            }
             std::string stringLine3 = string3 + exit_key;
             // write it in the window
             ImGui::Text(stringLine1.c_str());
@@ -412,9 +420,13 @@ if (!cursor) {
             // write collectables
             // Time is Up
             if(display_time==0){
-                our::SoundSystem::win=false;
+                our::GameActionsSystem::setGameOver();
                 currentState->getApp()->changeState("score");
             }
+            if(our::GameActionsSystem::getGameState()==endState::win){
+                currentState->getApp()->changeState("score");
+            }
+           
             
             
             // write it in the window
@@ -492,7 +504,7 @@ if (!cursor) {
                 ImGui::PushFont(powerupFont);
                 ImGui::Begin("ALERT", &(our::GameActionsSystem::getCantCollectMasterKey()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
                 ImGui::SetWindowPos("ALERT", ImVec2(win_config.size.x/2-250, 500));
-                ImGui::Text("Get the Remaining Keys first");
+                ImGui::Text("Get THE REMAINING KEYS FIRST");
                 ImGui::PopFont();                      
                 ImGui::End();
                  if (timer_alert >= messageDuration3) {
@@ -500,6 +512,33 @@ if (!cursor) {
                     our::GameActionsSystem::resetCantCollectMasterKey();
                 }
             }
+            static float timer_alert2=0;
+            if(our::GameActionsSystem::getTouchDoor())
+            {
+                timer_alert2+=ImGui::GetIO().DeltaTime;
+                ImGui::PushFont(powerupFont);
+                ImGui::Begin("ALERT2", &(our::GameActionsSystem::getTouchDoor()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+                ImGui::SetWindowPos("ALERT2", ImVec2(win_config.size.x/2-250, 400));
+                ImGui::Text("Get THE EXIT KEY FIRST");
+                ImGui::PopFont();                      
+                ImGui::End();
+                 if (timer_alert2 >= messageDuration3) {
+                    timer_alert2=0;
+                    our::GameActionsSystem::resetTouchDoor();
+                }
+            }
+            const float openDoorTimer=5.0f;
+            if(our::GameActionsSystem::getOpenDoor())
+            {
+                our::GameActionsSystem::increasePowerupTimer(powerups::door,ImGui::GetIO().DeltaTime);
+                if(our::GameActionsSystem::getPowerupTimer(powerups::door)>openDoorTimer)
+                {
+                    our::GameActionsSystem::resetOpenDoor();
+                    our::GameActionsSystem::setGameWin();
+                }
+
+            }
+
 
 
         }
@@ -511,7 +550,7 @@ if (!cursor) {
             ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(1.0f, 1.0f, 1.0f, 1.0f));
             // start window GUI
             ImGui::Begin("EXIT", nullptr, ImGuiWindowFlags_NoMove| ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoTitleBar);
-            ImGui::SetWindowPos("EXIT", ImVec2(win_config.size.x/2-230, win_config.size.y/2-200));
+            ImGui::SetWindowPos("EXIT", ImVec2(win_config.size.x/2-180, win_config.size.y/2-150));
             ImVec2 collectWindowPos = ImGui::GetWindowPos();
             ImVec2 collectWindowSize = ImGui::GetWindowSize();
             float collectWindowLeft = collectWindowPos.x;
@@ -539,7 +578,18 @@ if (!cursor) {
             colors[ImGuiCol_ScrollbarBg] = ImVec4(1.0f, 1.0f, 1.0f, 0.0f);
 
             ImGui::PushFont(powerupFont);
-            std::string string1 = "GAME OVER :(";
+            std::string string1;
+            if (our::GameActionsSystem::getGameState()==endState::lose){
+              string1= "GAME OVER :(";
+            }
+            else if(our::GameActionsSystem::getGameState()==endState::play)
+            {
+               string1="YOU QUITTED ;(";
+            }   
+            else
+            {
+                string1= "CONGRATULATIONS :)";
+            }
             std::string string2 = "SCORE: ";
             string2+=" " + std::to_string(our::GameActionsSystem::getScore());
             std::string string3 ="COINS COLLECTED: ";

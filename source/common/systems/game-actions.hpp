@@ -8,7 +8,8 @@ namespace our
       enum class powerups{
             speedUp,
             gravityUp,
-            portal
+            portal,
+            door
         };
         // only one portal per game in a chosen position
         enum  portalState{
@@ -18,11 +19,13 @@ namespace our
         };
         enum class endState{
             win,
-            lose
+            lose,
+            play
         };
         struct powerupTimer{
            float speedup;
            float gravity;
+           float door;
         };
 
     // The sound system is responsible for sound accross the whole game.
@@ -39,10 +42,14 @@ namespace our
         static unsigned short int keys_collected;
         static bool speedUp;
         static bool cantCollectMasterKey;
-
+        static bool exitKey;
+        static bool touchDoor;
+        static bool openDoor;
         // gravity powerup
         static bool gravityUp;
         static bool gravityDown;
+        static float gravityx;
+        static float gravityz;
 
         // portal powerup
         static portalState pS;
@@ -51,11 +58,11 @@ namespace our
 
         static endState end;
         public:
-
         // camera parameters
         static glm::vec3 cameraPosition;
         static glm::vec3 cameraRotation;
         static glm::vec3 cameraScale;
+        static float doorStartAngle;
         // get the player current score
         static int getScore();
         // player collected a coin
@@ -92,6 +99,19 @@ namespace our
         static void resetCantCollectMasterKey();
         static bool & getCantCollectMasterKey();
         static void collectExitKey();
+        static bool & getExitKey();
+        static void setTouchDoor();
+        static void resetTouchDoor();
+        static bool & getTouchDoor();
+        static float & getGravityX();
+        static float & getGravityZ();
+        static void setGravity(float x,float z);
+        static void setOpenDoor();
+        static void resetOpenDoor();
+        static bool & getOpenDoor();
 
+        static void setGameOver();
+        static void setGameWin();
+        static endState getGameState();
     };
 }

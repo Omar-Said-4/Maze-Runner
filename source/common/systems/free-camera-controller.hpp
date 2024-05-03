@@ -3,6 +3,7 @@
 #include "../ecs/world.hpp"
 #include "../components/camera.hpp"
 #include "../components/wall.hpp"
+#include"../components/door.hpp"
 #include "../components/free-camera-controller.hpp"
 #include "systems/sound-system.hpp"
 #include "systems/game-actions.hpp"
@@ -34,6 +35,12 @@ namespace our
         // This should be called every frame to update all entities containing a FreeCameraControllerComponent
         void update(World *world, float deltaTime)
         {
+
+            // if door is open game is done no need for the camer controller
+            if (our::GameActionsSystem::getOpenDoor())
+            {
+                return;
+            }
             // First of all, we search for an entity containing both a CameraComponent and a FreeCameraControllerComponent
             // As soon as we find one, we break
             CameraComponent *camera = nullptr;
@@ -103,7 +110,7 @@ namespace our
 
             glm::vec3 current_sensitivity = controller->positionSensitivity;
             // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
-            if (our::GameActionsSystem::getSpeedUp()) // replace left shift with speedUp
+            if (our::GameActionsSystem::getSpeedUp()&&!our::GameActionsSystem::getGravityUp()&&!our::GameActionsSystem::getGravityDown()) // replace left shift with speedUp
                 current_sensitivity *= controller->speedupFactor;
 
             // We change the camera position based on the keys WASD/QE
@@ -124,7 +131,7 @@ namespace our
                 }
             }
 
-            collided = detectWallCollision(world, position);
+            collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             crossedMazeBorders = detectMazeBordersCrossing(world, position);
             if (collided)
                 position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
@@ -142,7 +149,7 @@ namespace our
                 }
             }
 
-            collided = detectWallCollision(world, position);
+            collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             crossedMazeBorders = detectMazeBordersCrossing(world, position);
 
             if (collided)
@@ -150,16 +157,22 @@ namespace our
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
                 position += 0 * (deltaTime * current_sensitivity.y); // was up became 0
-            if (our::GameActionsSystem::getGravityUp())
+            if (our::GameActionsSystem::getGravityUp()){
                 position += up * (deltaTime * 10);
-            if (our::GameActionsSystem::getGravityDown())
+                position.x = our::GameActionsSystem::getGravityX();
+                position.z = our::GameActionsSystem::getGravityZ();
+            }
+            if (our::GameActionsSystem::getGravityDown()){
                 position -= up * (deltaTime * 10);
-            collided = detectWallCollision(world, position);
+                position.x = our::GameActionsSystem::getGravityX();
+                position.z = our::GameActionsSystem::getGravityZ();
+            }
+            collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             if (collided)
                 position -= 0 * (deltaTime * current_sensitivity.y); // was up became 0
             if (app->getKeyboard().isPressed(GLFW_KEY_E))
                 position -= 0 * (deltaTime * current_sensitivity.y); // was up became
-            collided = detectWallCollision(world, position);
+            collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             if (collided)
                 position += 0 * (deltaTime * current_sensitivity.y); // was up became 0
             // A & D moves the player left or right
@@ -175,7 +188,7 @@ namespace our
                     our::SoundSystem::play_custom_sound("WALK", false, false);
                 }
             }
-            collided = detectWallCollision(world, position);
+            collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             crossedMazeBorders = detectMazeBordersCrossing(world, position);
             if (crossedMazeBorders)
             {
@@ -198,7 +211,7 @@ namespace our
                     our::SoundSystem::play_custom_sound("WALK", false, false);
                 }
             }
-            collided = detectWallCollision(world, position);
+            collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             crossedMazeBorders = detectMazeBordersCrossing(world, position);
 
             if (collided)
@@ -250,12 +263,42 @@ namespace our
 
                     if (isInsideWallCell)
                     {
-                        if (our::GameActionsSystem::getPortal())
+                        if (our::GameActionsSystem::getPortal()&&!our::GameActionsSystem::getGravityUp()&&!our::GameActionsSystem::getGravityDown())
                         {
                             our::GameActionsSystem::portalStateInc();
 
                             return false;
                         }
+                        // std::cout << "Collided!" << std::endl;
+                        // std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+         bool detectDoorCollision(World *world, glm::vec3 &position)
+        {
+            auto entities = world->getEntities();
+
+
+            for (auto entity : entities)
+            {
+                if (entity->getComponent<DoorComponent>())
+                {
+                    // if using portal powerup move through the wall
+                    // Calculate world-space positions of wall's center and player's center
+                    glm::vec3 doorPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+
+                    float minX = doorPosition.x - 2.0f;
+                    float maxX = doorPosition.x + 2.0f;
+                    float minZ = doorPosition.z - 14.0f;
+                    float maxZ = doorPosition.z + 14.0f;
+                    bool isInsideDoorCell = (position.x >= minX && position.x <= maxX && position.z >= minZ && position.z <= maxZ);
+
+                    if (isInsideDoorCell)
+                    {
                         // std::cout << "Collided!" << std::endl;
                         // std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
                         return true;

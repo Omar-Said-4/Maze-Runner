@@ -12,11 +12,17 @@ namespace our
     bool GameActionsSystem::speedUp = false;
     bool GameActionsSystem::gravityUp = false;
     bool GameActionsSystem::gravityDown = false;
-    powerupTimer GameActionsSystem::powerupTimers={0,0};
+    powerupTimer GameActionsSystem::powerupTimers={0,0,0};
     portalState GameActionsSystem::pS = portalState::off;
     bool GameActionsSystem::portal = false;
     bool GameActionsSystem::cantCollectMasterKey = false;
-    endState GameActionsSystem::end = endState::lose;
+    bool GameActionsSystem::exitKey = false;
+    bool GameActionsSystem::touchDoor = false;
+    bool GameActionsSystem::openDoor=false;
+    float GameActionsSystem::gravityx = 0;
+    float GameActionsSystem::gravityz = 0;
+    float GameActionsSystem::doorStartAngle=90.0f;
+    endState GameActionsSystem::end = endState::play;
     glm::vec3 GameActionsSystem::cameraPosition = glm::vec3(0,0,0);
     glm::vec3 GameActionsSystem::cameraRotation = glm::vec3(0,0,0);
     glm::vec3 GameActionsSystem::cameraScale = glm::vec3(1,1,1);
@@ -40,12 +46,15 @@ namespace our
         gravityDown = false;
         pS = portalState::off;
         portal = false;
-        powerupTimers = {0,0};
+        powerupTimers = {0,0,0};
         total_coins = 0;
         total_powerups = 0;
         total_keys = 0;
         cantCollectMasterKey = false;
-        end = endState::lose;
+        end = endState::play;
+        exitKey = false;
+        doorStartAngle=90.0f;
+        openDoor=false;
     }
     unsigned short int  GameActionsSystem::getCoinsCollected()
     {
@@ -84,6 +93,9 @@ namespace our
             break;
         case powerups::portal:
             break;
+        case powerups::door:
+            return powerupTimers.door;
+            break;
         default:
             break;
         }
@@ -99,6 +111,9 @@ namespace our
             powerupTimers.gravity = 0;
             break;
         case powerups::portal:
+            break;
+        case powerups::door:
+            powerupTimers.door=0;
             break;
         default:
             break;
@@ -119,6 +134,9 @@ namespace our
             powerupTimers.gravity+=increase;
             break;
         case powerups::portal:
+            break;
+        case powerups::door:
+           powerupTimers.door+=increase;
             break;
         default:
             break;
@@ -211,5 +229,61 @@ namespace our
     void GameActionsSystem::collectExitKey()
     {
         score+=1000;
+        exitKey=true;
+    }
+    bool &GameActionsSystem::getExitKey()
+    {
+        return exitKey;
+    }
+    bool &GameActionsSystem::getTouchDoor()
+    {
+        return touchDoor;
+    }
+    void GameActionsSystem::setTouchDoor()
+    {
+        touchDoor = true;
+    }
+    void GameActionsSystem::resetTouchDoor()
+    {
+        touchDoor = false;
+    }
+    bool &GameActionsSystem::getOpenDoor()
+    {
+        return openDoor;
+    }
+    void GameActionsSystem::setOpenDoor()
+    {
+        openDoor = true;
+    }
+    void GameActionsSystem::resetOpenDoor()
+    {
+        openDoor = false;
+    }
+    void GameActionsSystem::setGravity(float x,float z)
+    {
+        gravityx = x;
+        gravityz = z;
+    }
+    float &GameActionsSystem::getGravityX()
+    {
+        return gravityx;
+    }
+    float &GameActionsSystem::getGravityZ()
+    {
+        return gravityz;
+    }
+    void GameActionsSystem::setGameOver()
+    {
+      end=endState::lose;
+    }
+    void GameActionsSystem::setGameWin()
+    {
+        end=endState::win;
+        score+=2000;
+        
+    }
+    endState GameActionsSystem::getGameState()
+    {
+        return end;
     }
 }

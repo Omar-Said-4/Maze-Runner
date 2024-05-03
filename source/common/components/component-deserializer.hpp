@@ -13,6 +13,8 @@
 #include"portal.hpp"
 #include"key.hpp"
 #include"master-key.hpp"
+#include"door.hpp"
+#include"../systems/game-actions.hpp"
 namespace our
 {
 
@@ -70,6 +72,13 @@ namespace our
         else if(type==MasterKeyComponent::getID())
         {
             component = entity->addComponent<MasterKeyComponent>();
+        }
+        else if(type==DoorComponent::getID())
+        {
+            component = entity->addComponent<DoorComponent>();
+            // initial door angle
+            our::GameActionsSystem::doorStartAngle=entity->localTransform.rotation.y;
+            
         }
         if (component)
             component->deserialize(data);

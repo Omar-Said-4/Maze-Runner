@@ -10,6 +10,8 @@
 #include <asset-loader.hpp>
 #include <systems/sound-system.hpp>
 #include<systems/game-actions.hpp>
+#include <GLFW/glfw3.h>
+
 // This state shows how to use the ECS framework and deserialization.
 class Playstate : public our::State
 {
@@ -58,7 +60,7 @@ class Playstate : public our::State
         collisionSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
-        renderer.updateFogTime((float)deltaTime);
+        renderer.updateFogTime((float)glfwGetTime());
 
         // Get a reference to the keyboard object
         auto &keyboard = getApp()->getKeyboard();

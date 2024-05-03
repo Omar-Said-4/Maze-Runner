@@ -16,8 +16,6 @@ namespace our
         public:
                  // background music audio state
                 static bool global_music_state;
-                // for system win or lose score state background music
-                static bool win;
                 // start the audio engine
                 static void init_engine();
                 // to be deserialized
