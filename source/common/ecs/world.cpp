@@ -1,6 +1,6 @@
 #include "world.hpp"
 #include "../deserialize-utils.hpp"
-#include"../systems/game-actions.hpp"
+#include "../systems/game-actions.hpp"
 namespace our
 {
 
@@ -23,6 +23,11 @@ namespace our
                 deserializeMaze(entityData);
                 continue;
             }
+            if (entityData.contains("isCamera") && entityData["isCamera"] == true)
+            {
+                deserializeCamera(entityData);
+                continue;
+            }
             // TODO: (Req 8) Create an entity, make its parent "parent" and call its deserialize with "entityData".
             Entity *entity = add();
             entity->parent = parent;
@@ -35,6 +40,21 @@ namespace our
             }
         }
     }
+    void World::deserializeCamera(const nlohmann::json &cameraData)
+    {
+        if (mazeObjects.size() == 0)
+        {
+            loadMazeObjects();
+        }
+        Entity *entity = add();
+        entity->parent = nullptr;
+        int cellSize = cameraData.value("cellSize", 20);
+        glm::vec3 rotation = cameraData.value("rotation", glm::vec3(0, 0, 0));
+        glm::vec3 scale = cameraData.value("scale", glm::vec3(1, 1, 1));
+        glm::vec3 position = glm::vec3(cellSize * mazeObjects['c'][0].second, 2, (-1 * cellSize) * (numOfMazeRows - mazeObjects['c'][0].first - 1));
+        entity->deserialize(cameraData, position, rotation, scale);
+    }
+
     void World::deserializeGround(const nlohmann::json &groundData)
     {
         int rows = groundData.value("rows", 10);
@@ -55,7 +75,7 @@ namespace our
             }
         }
     }
-    void World::loadMazeObjects(const nlohmann::json &data)
+    void World::loadMazeObjects()
     {
         Maze *maze = AssetLoader<Maze>::get("maze");
         std::vector<std::vector<char>> mazeMatrix = maze->getMazeMatrix();
@@ -74,7 +94,7 @@ namespace our
     {
         if (mazeObjects.size() == 0)
         {
-            loadMazeObjects(data);
+            loadMazeObjects();
         }
 
         int cellSize = data.value("cellSize", 20);
@@ -92,20 +112,19 @@ namespace our
         int r, c;
         for (const auto &symbol : objectSymbols)
         {
-            if(symbol=='p'||symbol=='r'||symbol=='s')
+            if (symbol == 'p' || symbol == 'r' || symbol == 's')
             {
                 our::GameActionsSystem::setTotalPowerups(mazeObjects[symbol].size());
-
             }
-            else if(symbol=='k')
+            else if (symbol == 'k')
             {
                 our::GameActionsSystem::setTotalKeys(mazeObjects[symbol].size());
             }
-            else if(symbol=='c')
+            else if (symbol == 'c')
             {
                 our::GameActionsSystem::setTotalCoins(mazeObjects[symbol].size());
             }
-            else if(symbol=='o')
+            else if (symbol == 'o')
             {
                 our::GameActionsSystem::setTotalCoins(mazeObjects[symbol].size());
             }

@@ -28,8 +28,10 @@ namespace our
         void deserialize(const nlohmann::json &data, Entity *parent = nullptr);
         void deserializeGround(const nlohmann::json &data);
         void deserializeMaze(const nlohmann::json &data);
+        void deserializeCamera(const nlohmann::json &cameraData);
 
-        void loadMazeObjects(const nlohmann::json &data);
+
+        void loadMazeObjects();
 
         // This adds an entity to the entities set and returns a pointer to that entity
         // WARNING The entity is owned by this world so don't use "delete" to delete it, instead, call "markForRemoval"
