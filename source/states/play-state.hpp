@@ -53,12 +53,12 @@ class Playstate : public our::State
     void onDraw(double deltaTime) override
     {
         // Here, we just run a bunch of systems to control the world logic
-        renderer.updateFogTime((float)deltaTime);
         movementSystem.update(&world, (float)deltaTime);
         cameraController.update(&world, (float)deltaTime);
         collisionSystem.update(&world, (float)deltaTime);
         // And finally we use the renderer system to draw the scene
         renderer.render(&world);
+        renderer.updateFogTime((float)deltaTime);
 
         // Get a reference to the keyboard object
         auto &keyboard = getApp()->getKeyboard();
