@@ -42,16 +42,16 @@ namespace our
     }
     void World::deserializeCamera(const nlohmann::json &cameraData)
     {
+        mazeCellSize = cameraData.value("cellSize", mazeCellSize);
         if (mazeObjects.size() == 0)
         {
             loadMazeObjects();
         }
         Entity *entity = add();
         entity->parent = nullptr;
-        int cellSize = cameraData.value("cellSize", 20);
         glm::vec3 rotation = cameraData.value("rotation", glm::vec3(0, 0, 0));
         glm::vec3 scale = cameraData.value("scale", glm::vec3(1, 1, 1));
-        glm::vec3 position = glm::vec3(cellSize * mazeObjects['c'][0].second, 2, (-1 * cellSize) * (numOfMazeRows - mazeObjects['c'][0].first - 1));
+        glm::vec3 position = glm::vec3(mazeCellSize * mazeObjects['c'][0].second, 2, (-1 * mazeCellSize) * (numOfMazeRows - mazeObjects['c'][0].first - 1));
         entity->deserialize(cameraData, position, rotation, scale);
     }
 
@@ -90,14 +90,24 @@ namespace our
         }
     }
 
+    std::pair<int, int> World::getXBordersOfMaze()
+    {
+        return {-7, mazeCellSize * numOfMazeColumns - 7};
+    }
+
+    std::pair<int, int> World::getZBordersOfMaze()
+    {
+        return {7, -1 * mazeCellSize * numOfMazeRows +7};
+    }
+
     void World::deserializeMaze(const nlohmann::json &data)
     {
+        mazeCellSize = data.value("cellSize", mazeCellSize);
         if (mazeObjects.size() == 0)
         {
             loadMazeObjects();
         }
 
-        int cellSize = data.value("cellSize", 20);
         std::unordered_set<char> objectSymbols;
         if (data.contains("objectSymbol"))
         {
@@ -134,7 +144,7 @@ namespace our
                 c = mazeObjects[symbol][i].second;
                 Entity *entity = add();
                 entity->parent = nullptr;
-                position = initialPosition + glm::vec3(cellSize * c, 0, (-1 * cellSize) * (numOfMazeRows - r - 1));
+                position = initialPosition + glm::vec3(mazeCellSize * c, 0, (-1 * mazeCellSize) * (numOfMazeRows - r - 1));
                 entity->deserialize(data, position, rotation, scale);
             }
         }

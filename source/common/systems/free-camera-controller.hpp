@@ -4,8 +4,8 @@
 #include "../components/camera.hpp"
 #include "../components/wall.hpp"
 #include "../components/free-camera-controller.hpp"
-#include"systems/sound-system.hpp"
-#include"systems/game-actions.hpp"
+#include "systems/sound-system.hpp"
+#include "systems/game-actions.hpp"
 #include "../application.hpp"
 
 #include <glm/glm.hpp>
@@ -75,7 +75,7 @@ namespace our
                 glm::vec2 delta = app->getMouse().getMouseDelta();
                 if (!our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
                 {
-                rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
+                    rotation.x -= delta.y * controller->rotationSensitivity; // The y-axis controls the pitch
                 }
                 rotation.y -= delta.x * controller->rotationSensitivity; // The x-axis controls the yaw
             }
@@ -103,84 +103,100 @@ namespace our
 
             glm::vec3 current_sensitivity = controller->positionSensitivity;
             // If the LEFT SHIFT key is pressed, we multiply the position sensitivity by the speed up factor
-            if (our::GameActionsSystem::getSpeedUp())  // replace left shift with speedUp
+            if (our::GameActionsSystem::getSpeedUp()) // replace left shift with speedUp
                 current_sensitivity *= controller->speedupFactor;
 
             // We change the camera position based on the keys WASD/QE
             // S & W moves the player back and forth
             // If the move makes a collision, we revert it
             bool collided = false;
-            if (app->getKeyboard().isPressed(GLFW_KEY_W) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
-                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z));  // was (0.2,0.2,0.2)
+            bool crossedMazeBorders = false;
+            if (app->getKeyboard().isPressed(GLFW_KEY_W) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
+            {
+                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z)); // was (0.2,0.2,0.2)
                 if (our::GameActionsSystem::getSpeedUp())
                 {
-                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                    our::SoundSystem::play_custom_sound("RUN", false, false);
                 }
-                else{
-                  our::SoundSystem::play_custom_sound("WALK",false,false);
+                else
+                {
+                    our::SoundSystem::play_custom_sound("WALK", false, false);
                 }
             }
 
             collided = detectWallCollision(world, position);
+            crossedMazeBorders = detectMazeBordersCrossing(world, position);
             if (collided)
                 position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
 
-            if (app->getKeyboard().isPressed(GLFW_KEY_S)&& !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
-                position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
+            if (app->getKeyboard().isPressed(GLFW_KEY_S) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
+            {
+                position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
                 if (our::GameActionsSystem::getSpeedUp())
                 {
-                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                    our::SoundSystem::play_custom_sound("RUN", false, false);
                 }
-                else{
-                  our::SoundSystem::play_custom_sound("WALK",false,false);
-                }            
+                else
+                {
+                    our::SoundSystem::play_custom_sound("WALK", false, false);
                 }
-             
+            }
+
             collided = detectWallCollision(world, position);
+            crossedMazeBorders = detectMazeBordersCrossing(world, position);
+
             if (collided)
-                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);   // was (0.2,0.2,0.2)
+                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
-                position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
-            if(our::GameActionsSystem::getGravityUp())
-                position += up * (deltaTime * 10);  
-            if(our::GameActionsSystem::getGravityDown())
+                position += 0 * (deltaTime * current_sensitivity.y); // was up became 0
+            if (our::GameActionsSystem::getGravityUp())
+                position += up * (deltaTime * 10);
+            if (our::GameActionsSystem::getGravityDown())
                 position -= up * (deltaTime * 10);
             collided = detectWallCollision(world, position);
             if (collided)
-                position -= 0 * (deltaTime * current_sensitivity.y);  // was up became 0
+                position -= 0 * (deltaTime * current_sensitivity.y); // was up became 0
             if (app->getKeyboard().isPressed(GLFW_KEY_E))
-                position -= 0 * (deltaTime * current_sensitivity.y);   // was up became
+                position -= 0 * (deltaTime * current_sensitivity.y); // was up became
             collided = detectWallCollision(world, position);
             if (collided)
-                position += 0 * (deltaTime * current_sensitivity.y);  // was up became 0
+                position += 0 * (deltaTime * current_sensitivity.y); // was up became 0
             // A & D moves the player left or right
-            if (app->getKeyboard().isPressed(GLFW_KEY_D)&& !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
-                position += right * (deltaTime * current_sensitivity.x);  
-            if (our::GameActionsSystem::getSpeedUp())
+            if (app->getKeyboard().isPressed(GLFW_KEY_D) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
+            {
+                position += right * (deltaTime * current_sensitivity.x);
+                if (our::GameActionsSystem::getSpeedUp())
                 {
-                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                    our::SoundSystem::play_custom_sound("RUN", false, false);
                 }
-                else{
-                  our::SoundSystem::play_custom_sound("WALK",false,false);
-                }            
+                else
+                {
+                    our::SoundSystem::play_custom_sound("WALK", false, false);
                 }
+            }
             collided = detectWallCollision(world, position);
+            crossedMazeBorders = detectMazeBordersCrossing(world, position);
+
             if (collided)
-                position -= right * (deltaTime * current_sensitivity.x); 
-            if (app->getKeyboard().isPressed(GLFW_KEY_A)&& !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown()){
                 position -= right * (deltaTime * current_sensitivity.x);
-            if (our::GameActionsSystem::getSpeedUp())
+            if (app->getKeyboard().isPressed(GLFW_KEY_A) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
+            {
+                position -= right * (deltaTime * current_sensitivity.x);
+                if (our::GameActionsSystem::getSpeedUp())
                 {
-                    our::SoundSystem::play_custom_sound("RUN",false,false);
+                    our::SoundSystem::play_custom_sound("RUN", false, false);
                 }
-                else{
-                  our::SoundSystem::play_custom_sound("WALK",false,false);
-                }           
-                 }
+                else
+                {
+                    our::SoundSystem::play_custom_sound("WALK", false, false);
+                }
+            }
             collided = detectWallCollision(world, position);
+            crossedMazeBorders = detectMazeBordersCrossing(world, position);
+
             if (collided)
-                position += right * (deltaTime * current_sensitivity.x); 
+                position += right * (deltaTime * current_sensitivity.x);
         }
 
         // When the state exits, it should call this function to ensure the mouse is unlocked
@@ -191,6 +207,19 @@ namespace our
                 mouse_locked = false;
                 app->getMouse().unlockMouse(app->getWindow());
             }
+        }
+
+        bool detectMazeBordersCrossing(World *world, glm::vec3 &position)
+        {
+            std::pair<int, int> xMazeBorders = world->getXBordersOfMaze();
+            std::pair<int, int> zMazeBorders = world->getZBordersOfMaze();
+            if (position.x < xMazeBorders.first || position.x > xMazeBorders.second ||
+                position.z > zMazeBorders.first || position.z < zMazeBorders.second)
+            {
+                std::cout << "Crossed maze borders" << std::endl;
+                return true;
+            }
+            return false;
         }
 
         bool detectWallCollision(World *world, glm::vec3 &position)
@@ -206,7 +235,7 @@ namespace our
                     // if using portal powerup move through the wall
                     // Calculate world-space positions of wall's center and player's center
                     glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    
+
                     float minX = wallPosition.x - 7.0f;
                     float maxX = wallPosition.x + 7.0f;
                     float minZ = wallPosition.z - 7.0f;
@@ -218,11 +247,11 @@ namespace our
                         if (our::GameActionsSystem::getPortal())
                         {
                             our::GameActionsSystem::portalStateInc();
-                        
+
                             return false;
                         }
-                        //std::cout << "Collided!" << std::endl;
-                        //std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
+                        // std::cout << "Collided!" << std::endl;
+                        // std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
                         return true;
                     }
                 }

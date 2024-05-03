@@ -18,6 +18,7 @@ namespace our
                                                        // when deleteMarkedEntities is called
         std::unordered_map<char, std::vector<std::pair<int, int>>> mazeObjects;
         int numOfMazeRows, numOfMazeColumns;
+        int mazeCellSize;
 
     public:
         World() = default;
@@ -29,6 +30,8 @@ namespace our
         void deserializeGround(const nlohmann::json &data);
         void deserializeMaze(const nlohmann::json &data);
         void deserializeCamera(const nlohmann::json &cameraData);
+        std::pair<int,int> getXBordersOfMaze();
+        std::pair<int,int> getZBordersOfMaze();
 
 
         void loadMazeObjects();
