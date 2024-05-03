@@ -1,6 +1,6 @@
 #include "world.hpp"
 #include "../deserialize-utils.hpp"
-
+#include"../systems/game-actions.hpp"
 namespace our
 {
 
@@ -92,6 +92,23 @@ namespace our
         int r, c;
         for (const auto &symbol : objectSymbols)
         {
+            if(symbol=='p'||symbol=='r'||symbol=='s')
+            {
+                our::GameActionsSystem::setTotalPowerups(mazeObjects[symbol].size());
+
+            }
+            else if(symbol=='k')
+            {
+                our::GameActionsSystem::setTotalKeys(mazeObjects[symbol].size());
+            }
+            else if(symbol=='c')
+            {
+                our::GameActionsSystem::setTotalCoins(mazeObjects[symbol].size());
+            }
+            else if(symbol=='o')
+            {
+                our::GameActionsSystem::setTotalCoins(mazeObjects[symbol].size());
+            }
             for (int i = 0; i < mazeObjects[symbol].size(); i++)
             {
                 r = mazeObjects[symbol][i].first;

@@ -203,9 +203,10 @@ namespace our
             {
                 if (entity->getComponent<WallComponent>())
                 {
+                    // if using portal powerup move through the wall
                     // Calculate world-space positions of wall's center and player's center
                     glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-
+                    
                     float minX = wallPosition.x - 7.0f;
                     float maxX = wallPosition.x + 7.0f;
                     float minZ = wallPosition.z - 7.0f;
@@ -214,8 +215,14 @@ namespace our
 
                     if (isInsideWallCell)
                     {
-                        std::cout << "Collided!" << std::endl;
-                        std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
+                        if (our::GameActionsSystem::getPortal())
+                        {
+                            our::GameActionsSystem::portalStateInc();
+                        
+                            return false;
+                        }
+                        //std::cout << "Collided!" << std::endl;
+                        //std::cout << "minX=" << minX << " maxX=" << maxX << " minZ=" << minZ << " maxZ=" << maxZ << std::endl;
                         return true;
                     }
                 }

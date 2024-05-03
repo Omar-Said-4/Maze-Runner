@@ -6,7 +6,14 @@ namespace our
 {
       enum class powerups{
             speedUp,
-            gravityUp
+            gravityUp,
+            portal
+        };
+        // only one portal per game in a chosen position
+        enum  portalState{
+            off = 0,
+            inwall = 1,
+            outwall = 2 
         };
         struct powerupTimer{
            float speedup;
@@ -18,6 +25,9 @@ namespace our
     class GameActionsSystem {
         private:
         // the player current score
+        static unsigned short int total_coins;
+        static unsigned short int total_powerups;
+        static unsigned short int total_keys;
         static int score;
         static unsigned short int coins_collected;
         static unsigned short int powerups_collected;
@@ -27,7 +37,11 @@ namespace our
         // gravity powerup
         static bool gravityUp;
         static bool gravityDown;
+
+        // portal powerup
+        static portalState pS;
         static powerupTimer powerupTimers;
+        static bool portal;
         public:
         // get the player current score
         static int getScore();
@@ -52,5 +66,14 @@ namespace our
         static bool & getGravityDown();
         static void collectKey();
         static unsigned short int getKeysCollected();
+        static void portalStateInc();
+        static unsigned short int getPortalState();
+        static bool & getPortal();
+        static void setTotalCoins(unsigned short int coins);
+        static void setTotalPowerups(unsigned short int powerups);
+        static void setTotalKeys(unsigned short int keys);
+        static unsigned short int getTotalCoins();
+        static unsigned short int getTotalPowerups();
+        static unsigned short int getTotalKeys();
     };
 }

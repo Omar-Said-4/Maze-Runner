@@ -358,11 +358,11 @@ if (!cursor) {
             // write collectables
             std::string string1 = "COINS: ";
             std::string coins = std::to_string(our::GameActionsSystem::getCoinsCollected());
-            std::string stringLine1 = string1 + coins + "/10";
+            std::string stringLine1 = string1 + coins + "/" + std::to_string(our::GameActionsSystem::getTotalCoins());
 
             std::string string2 = "KEYS: ";
             std::string keys = std::to_string(our::GameActionsSystem::getKeysCollected());
-            std::string stringLine2 = string2 + keys + "/10";
+            std::string stringLine2 = string2 + keys + "/" + std::to_string(our::GameActionsSystem::getTotalKeys());
 
 
             std::string string3 = "EXIT KEY: ";
@@ -449,7 +449,7 @@ if (!cursor) {
             {
                 ImGui::PushFont(powerupFont);
                 ImGui::Begin("POWERUP2", &(our::GameActionsSystem::getGravityUp()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
-                ImGui::SetWindowPos("POWERUP2", ImVec2(win_config.size.x/2-250, 80));
+                ImGui::SetWindowPos("POWERUP2", ImVec2(win_config.size.x/2-250, 200));
                 ImGui::Text("GRAVITY POWERUP ACQUIRED !");
                 ImGui::PopFont();                      
                 ImGui::End();
@@ -474,6 +474,16 @@ if (!cursor) {
                     our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp); 
                 }
             }
+             const float messageDuration3 = 3.0f; // Duration of the message in seconds
+            if(our::GameActionsSystem::getPortal())
+            {
+                ImGui::PushFont(powerupFont);
+                ImGui::Begin("POWERUP3", &(our::GameActionsSystem::getPortal()), ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+                ImGui::SetWindowPos("POWERUP3", ImVec2(win_config.size.x/2-250, 80));
+                ImGui::Text("PORTAL POWERUP ACQUIRED");
+                ImGui::PopFont();                      
+                ImGui::End();
+                }
 
 
         }
@@ -517,11 +527,11 @@ if (!cursor) {
             std::string string2 = "SCORE: ";
             string2+=" " + std::to_string(our::GameActionsSystem::getScore());
             std::string string3 ="COINS COLLECTED: ";
-            string3+= std::to_string(our::GameActionsSystem::getCoinsCollected()) + "/10";
+            string3+= std::to_string(our::GameActionsSystem::getCoinsCollected()) + "/" +  std::to_string(our::GameActionsSystem::getTotalCoins());
             std::string string4 ="KEYS COLLECTED: ";
-            string4+=" "+std::to_string(our::GameActionsSystem::getKeysCollected())+"/10";
+            string4+=" "+std::to_string(our::GameActionsSystem::getKeysCollected())+"/" + std::to_string(our::GameActionsSystem::getTotalKeys());
             std::string string5 ="POWERUPS COLLECTED: ";
-            string5+=" " + std::to_string(our::GameActionsSystem::getPowerupsCollected())+"/10";
+            string5+=" " + std::to_string(our::GameActionsSystem::getPowerupsCollected())+"/" + std::to_string(our::GameActionsSystem::getTotalPowerups());
             std::string string6 ="REMAINING TIME: ";
             string6+=timer_display;
 

@@ -390,6 +390,28 @@
             "type": "key"
           }
         ]
+      },
+      {
+        "isMaze": true,
+        "objectSymbol": ["p"],
+        "position": [0, 1, 0],
+        "rotation": [0, 0, 0],
+        "scale": [4, 4, 4],
+        "cellSize": 12.9,
+        "components": [
+          {
+            "type": "Mesh Renderer",
+            "mesh": "portal",
+            "material": "portal"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, -180, 0]
+          },
+          {
+            "type": "portal"
+          }
+        ]
       }
     ]
   }

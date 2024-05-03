@@ -8,6 +8,7 @@
 #include "../components/bolt.hpp"
 #include "../components/rocket.hpp"
 #include "../components/key.hpp"
+#include "../components/portal.hpp"
 #include "../components/free-camera-controller.hpp"
 #include"../systems/sound-system.hpp"
 #include <glm/glm.hpp>
@@ -101,6 +102,19 @@ namespace our
                         std::cout << "KEY!" << std::endl;
                         our::SoundSystem::play_custom_sound("KEY1",false,false);
                         our::GameActionsSystem::collectKey();
+                        world->markForRemoval(entity);
+                    }
+                }
+                else if(entity->getComponent<PortalComponent>())
+                {
+                    // Calculate world-space positions of the portal
+                    glm::vec3 portalPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
+                    if (abs(position.x - portalPosition.x) < 0.8 && abs(position.z - portalPosition.z) < 0.8)
+                    {
+                        std::cout << "PORTAL!" << std::endl;
+                        our::SoundSystem::play_custom_sound("Powerup",false,false);
+                        our::GameActionsSystem::collectPowerup();
+                        our::GameActionsSystem::portalStateInc();
                         world->markForRemoval(entity);
                     }
                 }
