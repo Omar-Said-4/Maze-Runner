@@ -307,8 +307,18 @@ if (!cursor) {
         mouse.setEnabled(!io.WantCaptureMouse, window);
 
         if(currentState==states["play"]){
+            // Time is Up
+            if(display_time==0){
+                our::GameActionsSystem::setGameOver();
+                currentState->getApp()->changeState("score");
+            }
+            if(our::GameActionsSystem::getGameState()==endState::win){
+                currentState->getApp()->changeState("score");
+            }
             // increment the timer
+            if(!our::GameActionsSystem::getOpenDoor()){
             game_over_timer+=ImGui::GetIO().DeltaTime;
+            }
            // collectable sub window
             {
             
@@ -418,14 +428,6 @@ if (!cursor) {
 
             ImGui::PushFont(playFont);
             // write collectables
-            // Time is Up
-            if(display_time==0){
-                our::GameActionsSystem::setGameOver();
-                currentState->getApp()->changeState("score");
-            }
-            if(our::GameActionsSystem::getGameState()==endState::win){
-                currentState->getApp()->changeState("score");
-            }
            
             
             
