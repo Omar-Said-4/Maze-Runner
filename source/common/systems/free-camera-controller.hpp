@@ -47,17 +47,25 @@ namespace our
                 position += right * (deltaTime * current_sensitivity.x);
 
             // Prevent player from climbing walls and doors
-            position -= up * (deltaTime * current_sensitivity.y * 0.5);
+            position -= up * (deltaTime * (current_sensitivity.y * 0.5f));
         }
 
-        bool isPlayerInsideCollisionBox(const glm::vec3 &playerPosition, const glm::vec3 &targetPosition, CollisionComponent *collisionComponent)
+        bool checkCollision(const glm::vec3 &playerPosition, const glm::vec3 &targetPosition, CollisionComponent *collisionComponent)
         {
             float minX = targetPosition.x - collisionComponent->collisionCellX / 2;
             float maxX = targetPosition.x + collisionComponent->collisionCellX / 2;
             float minZ = targetPosition.z - collisionComponent->collisionCellZ / 2;
             float maxZ = targetPosition.z + collisionComponent->collisionCellZ / 2;
 
-            return (playerPosition.x >= minX && playerPosition.x <= maxX && playerPosition.z >= minZ && playerPosition.z <= maxZ);
+            if (playerPosition.x >= minX && playerPosition.x <= maxX && playerPosition.z >= minZ && playerPosition.z <= maxZ)
+            {
+                // Play collision sound if given one
+                our::SoundSystem::play_custom_sound(collisionComponent->soundName, false, false);
+                return true;
+            }
+
+            // No collision
+            return false;
         }
 
         bool detectMazeBordersCrossing(World *world, glm::vec3 &position)
@@ -248,7 +256,7 @@ namespace our
                         // Calculate world-space positions of wall's center
                         glm::vec3 wallPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, wallPosition, collisionComponent))
+                        if (checkCollision(position, wallPosition, collisionComponent))
                         {
                             if (our::GameActionsSystem::getPortal() && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
                             {
@@ -275,9 +283,8 @@ namespace our
                         // Calculate world-space positions of the bolt
                         glm::vec3 boltPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, boltPosition, collisionComponent))
+                        if (checkCollision(position, boltPosition, collisionComponent))
                         {
-                            our::SoundSystem::play_custom_sound("Powerup", false, false);
                             our::GameActionsSystem::setSpeedUp();
                             our::GameActionsSystem::collectPowerup();
                             our::GameActionsSystem::resetPowerupTimer(our::powerups::speedUp);
@@ -290,9 +297,8 @@ namespace our
                         // Calculate world-space positions of the rocket
                         glm::vec3 rocketPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, rocketPosition, collisionComponent))
+                        if (checkCollision(position, rocketPosition, collisionComponent))
                         {
-                            our::SoundSystem::play_custom_sound("Powerup", false, false);
                             our::GameActionsSystem::setGravityUp();
                             our::GameActionsSystem::collectPowerup();
                             our::GameActionsSystem::resetPowerupTimer(our::powerups::gravityUp);
@@ -306,9 +312,8 @@ namespace our
                         // Calculate world-space positions of the key
                         glm::vec3 keyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, keyPosition, collisionComponent))
+                        if (checkCollision(position, keyPosition, collisionComponent))
                         {
-                            our::SoundSystem::play_custom_sound("KEY1", false, false);
                             our::GameActionsSystem::collectKey();
                             world->markForRemoval(entity);
                         }
@@ -319,9 +324,8 @@ namespace our
                         // Calculate world-space positions of the portal
                         glm::vec3 portalPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, portalPosition, collisionComponent))
+                        if (checkCollision(position, portalPosition, collisionComponent))
                         {
-                            our::SoundSystem::play_custom_sound("Powerup", false, false);
                             our::GameActionsSystem::collectPowerup();
                             our::GameActionsSystem::portalStateInc();
                             world->markForRemoval(entity);
@@ -332,9 +336,8 @@ namespace our
                     {
                         glm::vec3 masterKeyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, masterKeyPosition, collisionComponent))
+                        if (checkCollision(position, masterKeyPosition, collisionComponent))
                         {
-                            // std::cout << "MASTER KEY!" << std::endl;
                             if (our::GameActionsSystem::getKeysCollected() != our::GameActionsSystem::getTotalKeys() && !our::GameActionsSystem::getCantCollectMasterKey())
                             {
                                 our::SoundSystem::play_custom_sound("NOCOLLECT", false, false);
@@ -354,10 +357,9 @@ namespace our
                         glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
                         bool isTaken = entity->localTransform.scale.x == 0.0f;
 
-                        if (isPlayerInsideCollisionBox(position, coinPosition, collisionComponent) && !isTaken)
+                        if (checkCollision(position, coinPosition, collisionComponent) && !isTaken)
                         {
                             world->markForRemoval(entity);
-                            our::SoundSystem::play_custom_sound("Collect", false, false);
                             our::GameActionsSystem::collectCoin();
                         }
                     }
@@ -369,8 +371,9 @@ namespace our
                         // Calculate world-space positions of the door
                         glm::vec3 doorPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
 
-                        if (isPlayerInsideCollisionBox(position, doorPosition, collisionComponent))
+                        if (checkCollision(position, doorPosition, collisionComponent))
                         {
+                            our::SoundSystem::play_custom_sound(collisionComponent->soundName, false, false);
                             handlePhysicalBarrierCollision(position, front, right, up, deltaTime, current_sensitivity);
 
                             if (our::GameActionsSystem::getOpenDoor())

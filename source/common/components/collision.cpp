@@ -53,5 +53,6 @@ namespace our
         collisionCellX = data.value("collisionCellX", 12.9f);
         collisionCellZ = data.value("collisionCellZ", 12.9f);
         playerHeight = data.value("playerHeight", 5.0f);
+        soundName = data.value("soundName", "");
     }
 }

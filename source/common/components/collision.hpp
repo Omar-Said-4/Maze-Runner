@@ -3,6 +3,7 @@
 #include "../ecs/component.hpp"
 
 #include <glm/mat4x4.hpp>
+#include <string>
 
 namespace our
 {
@@ -28,6 +29,7 @@ namespace our
         float collisionCellX;
         float collisionCellZ;
         float playerHeight;
+        std::string soundName;
         // The ID of this component type is "Collision"
         static std::string getID() { return "Collision"; }
 
