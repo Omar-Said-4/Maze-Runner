@@ -344,8 +344,8 @@
           {
             "type": "Collision",
             "collisionType": "WALL",
-            "collisionCellX": 12.998,
-            "collisionCellZ": 12.998
+            "collisionCellX": 13.5,
+            "collisionCellZ": 13.5
           }
         ]
       },

@@ -31,7 +31,7 @@ namespace our
             this->app = app;
         }
 
-        void handlePhysicalBarrierCollision(glm::vec3 &position, const glm::vec3 &front, const glm::vec3 &right, float deltaTime, glm::vec3 current_sensitivity)
+        void handlePhysicalBarrierCollision(glm::vec3 &position, const glm::vec3 &front, const glm::vec3 &right, const glm::vec3 &up, float deltaTime, glm::vec3 current_sensitivity)
         {
             if (app->getKeyboard().isPressed(GLFW_KEY_W))
                 position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * (current_sensitivity.z));
@@ -45,6 +45,9 @@ namespace our
 
             if (app->getKeyboard().isPressed(GLFW_KEY_A))
                 position += right * (deltaTime * current_sensitivity.x);
+
+            // Prevent player from climbing walls and doors
+            position -= up * (deltaTime * current_sensitivity.y * 0.5);
         }
 
         bool isPlayerInsideCollisionBox(const glm::vec3 &playerPosition, const glm::vec3 &targetPosition, CollisionComponent *collisionComponent)
@@ -253,7 +256,7 @@ namespace our
                             }
                             else
                             {
-                                handlePhysicalBarrierCollision(position, front, right, deltaTime, current_sensitivity);
+                                handlePhysicalBarrierCollision(position, front, right, up, deltaTime, current_sensitivity);
                             }
                         }
                     }
@@ -368,7 +371,7 @@ namespace our
 
                         if (isPlayerInsideCollisionBox(position, doorPosition, collisionComponent))
                         {
-                            handlePhysicalBarrierCollision(position, front, right, deltaTime, current_sensitivity);
+                            handlePhysicalBarrierCollision(position, front, right, up, deltaTime, current_sensitivity);
 
                             if (our::GameActionsSystem::getOpenDoor())
                             {
