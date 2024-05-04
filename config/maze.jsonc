@@ -418,9 +418,7 @@
           },
           {
             "type": "Collision",
-            "collisionType": "ROCKET",
-            "collisionCellX": 3,
-            "collisionCellZ": 3
+            "collisionType": "ROCKET"
           }
         ]
       },
@@ -442,7 +440,8 @@
             "angularVelocity": [0, -180, 0]
           },
           {
-            "type": "key"
+            "type": "Collision",
+            "collisionType": "KEY"
           }
         ]
       },
