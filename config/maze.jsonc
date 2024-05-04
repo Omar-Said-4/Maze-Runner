@@ -486,7 +486,8 @@
             "angularVelocity": [0, -180, 0]
           },
           {
-            "type": "master-key"
+            "type": "Collision",
+            "collisionType": "MASTER_KEY"
           }
         ]
       },
