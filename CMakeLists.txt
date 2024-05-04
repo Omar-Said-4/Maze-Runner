@@ -84,22 +84,6 @@ set(COMMON_SOURCES
         source/common/components/movement.hpp
         source/common/components/movement.cpp
         source/common/components/component-deserializer.hpp
-        source/common/components/wall.hpp
-        source/common/components/wall.cpp
-        source/common/components/coin.hpp
-        source/common/components/coin.cpp
-        source/common/components/bolt.hpp
-        source/common/components/bolt.cpp
-        source/common/components/rocket.hpp
-        source/common/components/rocket.cpp
-        source/common/components/portal.hpp
-        source/common/components/portal.cpp
-        source/common/components/key.hpp
-        source/common/components/key.cpp
-        source/common/components/master-key.hpp
-        source/common/components/master-key.cpp
-        source/common/components/door.hpp
-        source/common/components/door.cpp
 
         source/common/systems/forward-renderer.hpp
         source/common/systems/forward-renderer.cpp

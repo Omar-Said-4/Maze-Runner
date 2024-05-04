@@ -20,10 +20,10 @@
         "POWERUP": "assets/audio/powerup.mp3",
         "WALK": "assets/audio/footsteps.flac",
         "RUN": "assets/audio/running.mp3",
-        "KEY1": "assets/audio/key1.wav",
-        "KEY2": "assets/audio/master-key.wav",
+        "NORMAL_KEY": "assets/audio/key1.wav",
+        "MASTER_KEY": "assets/audio/master-key.wav",
         "NOCOLLECT": "assets/audio/nocollect.mp3",
-        "DOOR": "assets/audio/door.mp3",
+        "OPEN_DOOR": "assets/audio/door.mp3",
         "WALL_COLLISION": "assets/audio/wallCollision.flac",
         "DOOR_COLLISION": "assets/audio/doorCollision.flac"
       },
@@ -452,7 +452,7 @@
             "collisionType": "KEY",
             "collisionCellX": 3,
             "collisionCellZ": 3,
-            "soundName": "KEY1"
+            "soundName": "NORMAL_KEY"
           }
         ]
       },
@@ -524,8 +524,7 @@
             "type": "Collision",
             "collisionType": "DOOR",
             "collisionCellX": 4.0,
-            "collisionCellZ": 28.0,
-            "soundName": "DOOR_COLLISION"
+            "collisionCellZ": 28.0
           }
         ]
       },

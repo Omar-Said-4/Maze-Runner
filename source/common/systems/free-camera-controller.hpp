@@ -34,10 +34,10 @@ namespace our
         void handlePhysicalBarrierCollision(glm::vec3 &position, const glm::vec3 &front, const glm::vec3 &right, const glm::vec3 &up, float deltaTime, glm::vec3 current_sensitivity)
         {
             if (app->getKeyboard().isPressed(GLFW_KEY_W))
-                position -= glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * (current_sensitivity.z));
+                position -= glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * (current_sensitivity.z));
 
             if (app->getKeyboard().isPressed(GLFW_KEY_S))
-                position += glm::vec3(0.2, 0.2, 0.2) * front * (deltaTime * current_sensitivity.z);
+                position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z);
 
             // A & D moves the player left or right
             if (app->getKeyboard().isPressed(GLFW_KEY_D))
@@ -45,9 +45,6 @@ namespace our
 
             if (app->getKeyboard().isPressed(GLFW_KEY_A))
                 position += right * (deltaTime * current_sensitivity.x);
-
-            // Prevent player from climbing walls and doors
-            position -= up * (deltaTime * (current_sensitivity.y * 0.5f));
         }
 
         bool checkCollision(const glm::vec3 &playerPosition, const glm::vec3 &targetPosition, CollisionComponent *collisionComponent)
@@ -272,7 +269,7 @@ namespace our
                     case CollisionType::GROUND:
                     {
                         glm::vec3 groundPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                        if (position.y < (groundPosition.y + collisionComponent->playerHeight))
+                        if (position.y != (groundPosition.y + collisionComponent->playerHeight) && !our::GameActionsSystem::getGravityUp() && !our::GameActionsSystem::getGravityDown())
                         {
                             position.y = (groundPosition.y + collisionComponent->playerHeight);
                         }
@@ -345,7 +342,7 @@ namespace our
                             }
                             else if (our::GameActionsSystem::getKeysCollected() == our::GameActionsSystem::getTotalKeys())
                             {
-                                our::SoundSystem::play_custom_sound("KEY2", false, false);
+                                our::SoundSystem::play_custom_sound("MASTER_KEY", false, false);
                                 our::GameActionsSystem::collectExitKey();
                                 world->markForRemoval(entity);
                             }
@@ -373,7 +370,6 @@ namespace our
 
                         if (checkCollision(position, doorPosition, collisionComponent))
                         {
-                            our::SoundSystem::play_custom_sound(collisionComponent->soundName, false, false);
                             handlePhysicalBarrierCollision(position, front, right, up, deltaTime, current_sensitivity);
 
                             if (our::GameActionsSystem::getOpenDoor())
@@ -390,7 +386,7 @@ namespace our
                                 }
                                 else if (our::GameActionsSystem::getExitKey())
                                 {
-                                    our::SoundSystem::play_custom_sound("DOOR", false, false);
+                                    our::SoundSystem::play_custom_sound("OPEN_DOOR", false, false);
                                     our::GameActionsSystem::setOpenDoor();
                                 }
                             }
