@@ -14,10 +14,10 @@
       "postprocess": "assets/shaders/postprocess/vignette-fog-saturation.frag"
     },
     "assets": {
-      "audio":{
-        "Game":"assets/audio/game.mp3",
-        "Collect":"assets/audio/collect.mp3",
-        "Powerup":"assets/audio/powerup.mp3",
+      "audio": {
+        "Game": "assets/audio/game.mp3",
+        "Collect": "assets/audio/collect.mp3",
+        "Powerup": "assets/audio/powerup.mp3",
         "WALK": "assets/audio/footsteps.flac",
         "RUN": "assets/audio/running.mp3",
         "KEY1": "assets/audio/key1.wav",
@@ -44,7 +44,7 @@
         "wall": "assets/textures/wall.jpg",
         "coin": "assets/textures/coin.png",
         "bolt": "assets/textures/speed-powerup2.jpg",
-        "rocket":"assets/textures/rocket.jpg",
+        "rocket": "assets/textures/rocket.jpg",
         "key": "assets/textures/key.jpg",
         "portal": "assets/textures/portal.png",
         "master-key": "assets/textures/master-key.jpg",
@@ -63,7 +63,7 @@
         "rocket": "assets/models/rocket.obj",
         "portal": "assets/models/portal.obj",
         "master-key": "assets/models/master_key.obj",
-        "door":"assets/models/Grid_door.obj"
+        "door": "assets/models/Grid_door.obj"
       },
       "samplers": {
         "default": {},
@@ -201,7 +201,7 @@
           "texture": "moon",
           "sampler": "default"
         },
-        "bolt":{
+        "bolt": {
           "type": "textured",
           "shader": "textured",
           "pipelineState": {
@@ -216,7 +216,7 @@
           "texture": "bolt",
           "sampler": "default"
         },
-        "rocket":{
+        "rocket": {
           "type": "textured",
           "shader": "textured",
           "pipelineState": {
@@ -296,7 +296,7 @@
     "world": [
       {
         "isCamera": true,
-        "cellSize":12.998,
+        "cellSize": 12.998,
         "components": [
           {
             "type": "Camera"
@@ -320,6 +320,11 @@
             "type": "Mesh Renderer",
             "mesh": "plane",
             "material": "grass"
+          },
+          {
+            "type": "Collision",
+            "collisionType": "GROUND",
+            "playerHeight": 5
           }
         ]
       },
@@ -337,7 +342,10 @@
             "material": "wall"
           },
           {
-            "type": "wall"
+            "type": "Collision",
+            "collisionType": "WALL",
+            "collisionCellX": 12.998,
+            "collisionCellZ": 12.998
           }
         ]
       },
@@ -359,7 +367,10 @@
             "angularVelocity": [90, 0, 0]
           },
           {
-            "type": "coin"
+            "type": "Collision",
+            "collisionType": "COIN",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
@@ -492,22 +503,22 @@
         ]
       },
       {
-        "name":"moon",
+        "name": "moon",
         "position": [40, 30, -50],
         "rotation": [45, 45, 0],
         "scale": [5, 5, 5],
         "components": [
-            {
-                "type": "Mesh Renderer",
-                "mesh": "sphere",
-                "material": "moon"
-            },
-            {
-                "type": "Movement",
-                "angularVelocity": [0, 10, 0]
-            }
+          {
+            "type": "Mesh Renderer",
+            "mesh": "sphere",
+            "material": "moon"
+          },
+          {
+            "type": "Movement",
+            "angularVelocity": [0, 10, 0]
+          }
         ]
-    }
+      }
     ]
   }
 }

@@ -8,13 +8,14 @@
 #include "light.hpp"
 #include "wall.hpp"
 #include "coin.hpp"
-#include"bolt.hpp"
-#include"rocket.hpp"
-#include"portal.hpp"
-#include"key.hpp"
-#include"master-key.hpp"
-#include"door.hpp"
-#include"../systems/game-actions.hpp"
+#include "bolt.hpp"
+#include "rocket.hpp"
+#include "portal.hpp"
+#include "key.hpp"
+#include "master-key.hpp"
+#include "door.hpp"
+#include "collision.hpp"
+#include "../systems/game-actions.hpp"
 namespace our
 {
 
@@ -45,40 +46,9 @@ namespace our
         {
             component = entity->addComponent<LightComponent>();
         }
-        else if (type == WallComponent::getID())
+        else if (type == CollisionComponent::getID())
         {
-            component = entity->addComponent<WallComponent>();
-        }
-        else if (type == CoinComponent::getID())
-        {
-            component = entity->addComponent<CoinComponent>();
-        }
-        else if(type == BoltComponent::getID())
-        {
-            component = entity->addComponent<BoltComponent>();
-        }
-        else if(type==RocketComponent::getID())
-        {
-            component = entity->addComponent<RocketComponent>();
-        }
-        else if(type==PortalComponent::getID())
-        {
-            component = entity->addComponent<PortalComponent>();
-        }
-        else if(type==KeyComponent::getID())
-        {
-            component = entity->addComponent<KeyComponent>();
-        }
-        else if(type==MasterKeyComponent::getID())
-        {
-            component = entity->addComponent<MasterKeyComponent>();
-        }
-        else if(type==DoorComponent::getID())
-        {
-            component = entity->addComponent<DoorComponent>();
-            // initial door angle
-            our::GameActionsSystem::doorStartAngle=entity->localTransform.rotation.y;
-            
+            component = entity->addComponent<CollisionComponent>();
         }
         if (component)
             component->deserialize(data);
