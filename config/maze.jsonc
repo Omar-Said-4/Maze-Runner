@@ -463,7 +463,8 @@
             "angularVelocity": [0, -180, 0]
           },
           {
-            "type": "portal"
+            "type": "Collision",
+            "collisionType": "PORTAL"
           }
         ]
       },
