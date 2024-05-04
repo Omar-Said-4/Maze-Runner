@@ -393,7 +393,9 @@
           },
           {
             "type": "Collision",
-            "collisionType": "BOLT"
+            "collisionType": "BOLT",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
@@ -416,7 +418,9 @@
           },
           {
             "type": "Collision",
-            "collisionType": "ROCKET"
+            "collisionType": "ROCKET",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
@@ -439,7 +443,9 @@
           },
           {
             "type": "Collision",
-            "collisionType": "KEY"
+            "collisionType": "KEY",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
@@ -462,7 +468,9 @@
           },
           {
             "type": "Collision",
-            "collisionType": "PORTAL"
+            "collisionType": "PORTAL",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
@@ -485,7 +493,9 @@
           },
           {
             "type": "Collision",
-            "collisionType": "MASTER_KEY"
+            "collisionType": "MASTER_KEY",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
