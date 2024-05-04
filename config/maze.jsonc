@@ -393,9 +393,7 @@
           },
           {
             "type": "Collision",
-            "collisionType": "BOLT",
-            "collisionCellX": 3,
-            "collisionCellZ": 3
+            "collisionType": "BOLT"
           }
         ]
       },
@@ -505,7 +503,10 @@
             "material": "door"
           },
           {
-            "type": "door"
+            "type": "Collision",
+            "collisionType": "DOOR",
+            "collisionCellX": 4.0,
+            "collisionCellZ": 28.0
           }
         ]
       },
