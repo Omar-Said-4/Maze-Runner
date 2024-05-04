@@ -392,7 +392,10 @@
             "angularVelocity": [0, -180, 0]
           },
           {
-            "type": "bolt"
+            "type": "Collision",
+            "collisionType": "BOLT",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
