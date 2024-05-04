@@ -417,7 +417,10 @@
             "angularVelocity": [0, 180, 0]
           },
           {
-            "type": "rocket"
+            "type": "Collision",
+            "collisionType": "ROCKET",
+            "collisionCellX": 3,
+            "collisionCellZ": 3
           }
         ]
       },
