@@ -156,7 +156,7 @@ namespace our
                 position += glm::vec3(0.2, 0.0, 0.2) * front * (deltaTime * current_sensitivity.z); // was (0.2,0.2,0.2)
             // Q & E moves the player up and down
             if (app->getKeyboard().isPressed(GLFW_KEY_Q))
-                position += 0 * (deltaTime * current_sensitivity.y); // was up became 0
+                position += up * (deltaTime * current_sensitivity.y); // was up became 0
             if (our::GameActionsSystem::getGravityUp()){
                 position += up * (deltaTime * 10);
                 position.x = our::GameActionsSystem::getGravityX();
@@ -171,7 +171,7 @@ namespace our
             if (collided)
                 position -= 0 * (deltaTime * current_sensitivity.y); // was up became 0
             if (app->getKeyboard().isPressed(GLFW_KEY_E))
-                position -= 0 * (deltaTime * current_sensitivity.y); // was up became
+                position -= up * (deltaTime * current_sensitivity.y); // was up became
             collided = detectWallCollision(world, position)||detectDoorCollision(world, position);
             if (collided)
                 position += 0 * (deltaTime * current_sensitivity.y); // was up became 0

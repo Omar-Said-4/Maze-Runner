@@ -3,6 +3,8 @@
 #include "../texture/texture-utils.hpp"
 
 #include <iostream>
+#define MAX_LIGHTS 64
+
 using namespace std;
 namespace our {
 
@@ -143,6 +145,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
         CameraComponent* camera = nullptr;
         opaqueCommands.clear();
         transparentCommands.clear();
+        lights.clear();
         for(auto entity : world->getEntities()){
             // If we hadn't found a camera yet, we look for a camera in this entity
             if(!camera) camera = entity->getComponent<CameraComponent>();
@@ -221,11 +224,11 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 lightMaterial->shader->set("M", opaqueCommand.localToWorld);
                 lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(opaqueCommand.localToWorld)));
                 lightMaterial->shader->set("light_count", (int)lights.size());
-                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.2f, 0.5f));
-                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.1f, 0.1f));
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.2f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.05f, 0.05f, 0.05f));
                 lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
                 lightMaterial->shader->set("cameraPosition", eye);
-                for (int i = 0; i < lights.size(); i++)
+                for (int i = 0; i < min(int(lights.size()),MAX_LIGHTS); i++)
                 {
                   // light source is at the origin in the local space can be added to light component later
                   glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(lights[i]->position,1);
@@ -294,10 +297,10 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 lightMaterial->shader->set("M", transparentCommand.localToWorld);
                 lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(transparentCommand.localToWorld)));
                 lightMaterial->shader->set("light_count", (int)lights.size());
-                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.0f, 0.0f));
-                lightMaterial->shader->set("sky.bottom", glm::vec3(0.0f, 0.0f, 0.0f));
-                lightMaterial->shader->set("sky.horizon",glm::vec3(0.0f, 0.0f, 0.0f));
-                for (int i = 0; i < lights.size(); i++)
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.2f));
+                lightMaterial->shader->set("sky.bottom", glm::vec3(0.05f, 0.05f, 0.05f));
+                lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
+                for (int i = 0; i < min(int(lights.size()),MAX_LIGHTS); i++)
                 {
                   // light source is at the origin in the local space can be added to light component later
                   glm::vec3 lightPosition=lights[i]->getOwner()->getLocalToWorldMatrix()*glm::vec4(0,0,0,1);

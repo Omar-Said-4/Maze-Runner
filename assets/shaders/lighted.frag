@@ -3,7 +3,7 @@
 #define DIRECTIONAL 0
 #define POINT       1
 #define SPOT        2
-#define MAX_LIGHTS 8
+#define MAX_LIGHTS 64
 in Varyings {
     vec4 color;
     vec2 tex_coord;

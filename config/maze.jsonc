@@ -33,22 +33,36 @@
         "textured": {
           "vs": "assets/shaders/textured.vert",
           "fs": "assets/shaders/textured.frag"
-        }
+        },
+        "lighting":{
+          "vs":"assets/shaders/lighted.vert",
+          "fs":"assets/shaders/lighted.frag"
+      }
       },
       "textures": {
         "moon": "assets/textures/moon.jpg",
-        "grass": "assets/textures/grass_ground_d.jpg",
+        "grass": "assets/textures/grass.jpg",
         "wood": "assets/textures/wood.jpg",
         "glass": "assets/textures/glass-panels.png",
         "monkey": "assets/textures/monkey.png",
-        "wall": "assets/textures/wall.jpg",
+        "wall": "assets/textures/wall4.png",
         "coin": "assets/textures/coin.png",
         "bolt": "assets/textures/speed-powerup2.jpg",
         "rocket":"assets/textures/rocket.jpg",
         "key": "assets/textures/key.jpg",
-        "portal": "assets/textures/portal.png",
-        "master-key": "assets/textures/master-key.jpg",
-        "door": "assets/textures/door.jpg"
+        "portal": "assets/textures/portal2.jpg",
+        "master-key": "assets/textures/master-key2.png",
+        "door": "assets/textures/door2.jpg",
+        "no-emission": "assets/textures/no-emission.png",
+        "moon-roughness": "assets/textures/moon-roughness.jpg",
+        "no-occlusion":"assets/textures/no-occlusion.png",
+        "grass-specular":"assets/textures/grass-specular.jpg",
+        "grass-roughness":"assets/textures/grass-roughness.jpg",
+        "grass-emission": "assets/textures/grass-emission.jpg",
+        "wall-roughness": "assets/textures/wall-roughness.png",
+        "wall-occlusion":"assets/textures/wall-occlusion.png",
+        "wall-specular":"assets/textures/wall-specular.png",
+        "wall-emission": "assets/textures/wall-emissive.png"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -88,31 +102,9 @@
           },
           "tint": [0.45, 0.4, 0.5, 1]
         },
-        "glass": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            },
-            "blending": {
-              "enabled": true,
-              "sourceFactor": "GL_SRC_ALPHA",
-              "destinationFactor": "GL_ONE_MINUS_SRC_ALPHA"
-            },
-            "depthMask": false
-          },
-          "transparent": true,
-          "tint": [1, 1, 1, 1],
-          "texture": "glass",
-          "sampler": "pixelated"
-        },
         "wall": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -121,13 +113,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "wall",
-          "sampler": "default"
+          "albedo": "wall",
+          "occlusion": "wall-occlusion",
+          "roughness": "wall-roughness",
+          "specular": "wall-specular",
+          "emissive": "wall-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "Lwall": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -136,13 +135,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "wall",
-          "sampler": "default"
+          "albedo": "wall",
+          "occlusion": "wall-occlusion",
+          "roughness": "wall-roughness",
+          "specular": "wall-specular",
+          "emissive": "wall-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "coin": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -151,14 +157,21 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "coin",
-          "sampler": "default"
+          "albedo": "coin",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
 
         "grass": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -167,43 +180,34 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "grass",
-          "sampler": "default"
+          "albedo": "grass",
+          "occlusion": "no-occlusion",
+          "roughness": "grass-roughness",
+          "specular": "grass-specular",
+          "emissive": "grass-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
-        "monkey": {
+        "moon":{
           "type": "textured",
           "shader": "textured",
           "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
+              "faceCulling":{
+                  "enabled": false
+              },
+              "depthTesting":{
+                  "enabled": true
+              }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "monkey",
-          "sampler": "default"
-        },
-        "moon": {
-          "type": "textured",
-          "shader": "textured",
-          "pipelineState": {
-            "faceCulling": {
-              "enabled": false
-            },
-            "depthTesting": {
-              "enabled": true
-            }
-          },
-          "tint": [1, 1, 1, 1],
           "texture": "moon",
           "sampler": "default"
-        },
+      },
         "bolt":{
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -212,13 +216,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "bolt",
-          "sampler": "default"
+          "albedo": "bolt",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "rocket":{
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -227,13 +238,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "rocket",
-          "sampler": "default"
+          "albedo": "rocket",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "key": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -242,13 +260,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "key",
-          "sampler": "default"
+          "albedo": "key",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "portal": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -257,13 +282,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "portal",
-          "sampler": "default"
+          "albedo": "portal",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "master-key": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -272,13 +304,20 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "master-key",
-          "sampler": "default"
+          "albedo": "master-key",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         },
         "door": {
-          "type": "textured",
-          "shader": "textured",
+          "type": "lit",
+          "shader": "lighting",
           "pipelineState": {
             "faceCulling": {
               "enabled": false
@@ -287,23 +326,40 @@
               "enabled": true
             }
           },
-          "tint": [1, 1, 1, 1],
-          "texture": "door",
-          "sampler": "default"
+          "albedo": "door",
+          "occlusion": "no-occlusion",
+          "roughness": "no-emission",
+          "specular": "no-occlusion",
+          "emissive": "no-emission",
+          "samplerAlbedo": "default",
+          "samplerOcclusion": "default",
+          "samplerRoughness": "default",
+          "samplerSpecular": "default",
+          "samplerEmissive": "default"
         }
       }
     },
     "world": [
       {
         "isCamera": true,
-        "cellSize":12.998,
+        "cellSize":13,
         "components": [
           {
             "type": "Camera"
           },
           {
             "type": "Free Camera Controller"
-          }
+          },
+          
+          {
+            "type": "Light",
+            "lightType": "SPOT",
+             "color": [200,200,200],
+             "direction":[1,0,0],
+             "position":[-10,5,0],
+             "attenuation": [1, 0, 0],
+             "coneAngles":[0.6,1]
+        }
         ]
       },
 
@@ -328,8 +384,8 @@
         "objectSymbol": ["|", "-"],
         "position": [0, 5.5, 0],
         "rotation": [0, 0, 0],
-        "scale": [0.05, 0.05, 0.05],
-        "cellSize": 12.998,
+        "scale": [0.051, 0.05, 0.05],
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -347,7 +403,7 @@
         "position": [0, 1, 0],
         "rotation": [45, 45, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -369,7 +425,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -391,7 +447,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -413,7 +469,7 @@
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -435,7 +491,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -454,10 +510,10 @@
       {
         "isMaze": true,
         "objectSymbol": ["m"],
-        "position": [0, -2, 0],
+        "position": [0, -1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -470,6 +526,13 @@
           },
           {
             "type": "master-key"
+          },
+          {
+            "type": "Light",
+            "lightType": "SPOT",
+             "color": [30,0,30],
+             "direction":[1,0,0],
+             "attenuation": [1, 0, 0]
           }
         ]
       },
@@ -479,7 +542,7 @@
         "position": [0, 4, -5],
         "rotation": [0, 90, 0],
         "scale": [10, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 13,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -494,7 +557,7 @@
       {
         "name":"moon",
         "position": [40, 30, -50],
-        "rotation": [45, 45, 0],
+        "rotation": [0, 0, 0],
         "scale": [5, 5, 5],
         "components": [
             {
@@ -504,7 +567,14 @@
             },
             {
                 "type": "Movement",
-                "angularVelocity": [0, 10, 0]
+                "angularVelocity": [0, 10, 1]
+            },
+            {
+                "type": "Light",
+                "lightType": "POINT",
+                 "color": [20,15,10],
+                 "direction":[0,-1,0],
+                 "attenuation": [0, 1, 0]     
             }
         ]
     }
