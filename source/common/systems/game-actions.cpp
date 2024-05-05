@@ -19,6 +19,7 @@ namespace our
     bool GameActionsSystem::exitKey = false;
     bool GameActionsSystem::touchDoor = false;
     bool GameActionsSystem::openDoor=false;
+    bool GameActionsSystem::flash=false; 
     float GameActionsSystem::gravityx = 0;
     float GameActionsSystem::gravityz = 0;
     float GameActionsSystem::doorStartAngle=90.0f;
@@ -55,6 +56,7 @@ namespace our
         exitKey = false;
         doorStartAngle=90.0f;
         openDoor=false;
+        flash=false;
     }
     unsigned short int  GameActionsSystem::getCoinsCollected()
     {
@@ -271,6 +273,15 @@ namespace our
     float &GameActionsSystem::getGravityZ()
     {
         return gravityz;
+    }
+
+    bool &GameActionsSystem::getFlash()
+    {
+        return flash;
+    }
+    void GameActionsSystem::toggleFlash()
+    {
+        flash = !flash;
     }
     void GameActionsSystem::setGameOver()
     {

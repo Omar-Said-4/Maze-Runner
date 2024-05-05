@@ -106,7 +106,7 @@ void SoundSystem::initMap(){
      SoundSystem::Audios["Hover"] = nullptr;
  }
     void SoundSystem::play_custom_sound(std::string sound_name, bool wait_tell_finish,bool loop){
-        if (ma_sound_is_playing(SoundSystem::Audios[sound_name])&& !wait_tell_finish && ! sound_name.compare("Hover")==0) {
+        if (ma_sound_is_playing(SoundSystem::Audios[sound_name])&& !wait_tell_finish &&  (sound_name.compare("WALK")==0||sound_name.compare("RUN")==0)) {
         return; // Exit the function if the sound is already playing
     }
         ma_sound_seek_to_pcm_frame(SoundSystem::Audios[sound_name], 0);

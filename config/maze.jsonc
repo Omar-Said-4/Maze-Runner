@@ -23,7 +23,8 @@
         "KEY1": "assets/audio/key1.wav",
         "KEY2": "assets/audio/master-key.wav",
         "NOCOLLECT": "assets/audio/nocollect.mp3",
-        "DOOR": "assets/audio/door.mp3"
+        "DOOR": "assets/audio/door.mp3",
+        "FLASHLIGHT": "assets/audio/flashlight.mp3"
       },
       "shaders": {
         "tinted": {
@@ -369,6 +370,7 @@
         ],
         "children": [
           {
+              "name":"flashlight",
               "position": [0.5, -1, -0.32],
               "rotation": [0, -90, 0],
               "scale": [1, 1, 1],

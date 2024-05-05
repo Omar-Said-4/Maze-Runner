@@ -83,6 +83,11 @@ class Playstate : public our::State
                 our::SoundSystem::global_music_state = true;
             }
         }
+        else if(keyboard.justPressed(GLFW_KEY_F))
+        {
+            our::GameActionsSystem::toggleFlash();
+            our::SoundSystem::play_custom_sound("FLASHLIGHT",false,false);
+        }
     }
 
     void onDestroy() override

@@ -1,7 +1,7 @@
 #include "forward-renderer.hpp"
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
-
+#include"../systems/game-actions.hpp"
 #include <iostream>
 #define MAX_LIGHTS 64
 
@@ -167,6 +167,10 @@ while ((err = glGetError()) != GL_NO_ERROR)
             }
             if (auto lightComponent = entity->getComponent<LightComponent>(); lightComponent)
             {
+                if(entity->name=="flashlight" && !our::GameActionsSystem::getFlash())
+                {
+                    continue;
+                }
                 lights.push_back(lightComponent);
             }
         }

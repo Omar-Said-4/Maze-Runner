@@ -55,6 +55,10 @@ namespace our
         static portalState pS;
         static powerupTimer powerupTimers;
         static bool portal;
+         
+        // flashlight control
+        static bool flash;
+
 
         static endState end;
         public:
@@ -109,6 +113,8 @@ namespace our
         static void setOpenDoor();
         static void resetOpenDoor();
         static bool & getOpenDoor();
+        static bool &getFlash();
+        static void toggleFlash();
 
         static void setGameOver();
         static void setGameWin();
