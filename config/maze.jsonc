@@ -62,7 +62,8 @@
         "wall-roughness": "assets/textures/wall-roughness.png",
         "wall-occlusion":"assets/textures/wall-occlusion.png",
         "wall-specular":"assets/textures/wall-specular.png",
-        "wall-emission": "assets/textures/wall-emissive.png"
+        "wall-emission": "assets/textures/wall-emissive.png",
+        "flashlight": "assets/textures/flashlight.jpg"
       },
       "meshes": {
         "cube": "assets/models/cube.obj",
@@ -77,7 +78,8 @@
         "rocket": "assets/models/rocket.obj",
         "portal": "assets/models/portal.obj",
         "master-key": "assets/models/master_key.obj",
-        "door":"assets/models/Grid_door.obj"
+        "door":"assets/models/Grid_door.obj",
+        "flashlight": "assets/models/flashlight.obj"
       },
       "samplers": {
         "default": {},
@@ -167,6 +169,20 @@
           "samplerRoughness": "default",
           "samplerSpecular": "default",
           "samplerEmissive": "default"
+        },
+        "flashlight": {
+          "type": "textured",
+          "shader": "textured",
+          "pipelineState": {
+            "faceCulling": {
+              "enabled": false
+            },
+            "depthTesting": { 
+              "enabled": true
+            }
+          },
+          "texture": "flashlight",
+          "sampler":"default"
         },
 
         "grass": {
@@ -349,18 +365,30 @@
           },
           {
             "type": "Free Camera Controller"
-          },
-          
+          }
+        ],
+        "children": [
           {
-            "type": "Light",
-            "lightType": "SPOT",
-             "color": [200,200,200],
-             "direction":[1,0,0],
-             "position":[-10,5,0],
-             "attenuation": [1, 0, 0],
-             "coneAngles":[0.6,1]
-        }
-        ]
+              "position": [0.5, -1, -0.35],
+              "rotation": [0, -90, 0],
+              "scale": [1, 1, 1],
+              "components": [
+                  {
+                      "type": "Mesh Renderer",
+                      "mesh": "flashlight",
+                      "material": "flashlight"
+                  },
+                  {
+                    "type": "Light",
+                    "lightType": "SPOT",
+                     "color": [20,20,20],
+                     "direction":[0,1,1],
+                     "attenuation": [1, 0, 0],
+                     "coneAngles": [45,180]
+                }
+              ]
+          }
+      ]
       },
 
       {
@@ -530,7 +558,7 @@
           {
             "type": "Light",
             "lightType": "SPOT",
-             "color": [30,0,30],
+             "color": [20,0,20],
              "direction":[1,0,0],
              "attenuation": [1, 0, 0]
           }

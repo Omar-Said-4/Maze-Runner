@@ -1,0 +1,44 @@
+# Blender 4.1.1 MTL File: 'None'
+# www.blender.org
+
+newmtl Dark_iron
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.450000
+d 1.000000
+illum 2
+map_Kd flashlight/source/source/tiled_plane_DefaultMaterial_BaseColor.jpg
+map_Bump -bm 0.400000 flashlight/source/source/tiled_plane_DefaultMaterial_Normal.jpg
+
+newmtl Glass.001
+Ns 0.000000
+Ka 1.000000 1.000000 1.000000
+Kd 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 3
+
+newmtl Metal
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd flashlight/source/source/DefaultMaterial_BaseColor.jpg
+
+newmtl Old_red_plastic
+Ns 250.000000
+Ka 1.000000 1.000000 1.000000
+Ks 0.500000 0.500000 0.500000
+Ke 0.000000 0.000000 0.000000
+Ni 1.500000
+d 1.000000
+illum 2
+map_Kd -s 3 3 1 flashlight/source/source/Old red plastic_BaseColor.jpg
+map_Bump -s 3 3 1 -bm 1.000000 flashlight/source/source/Old red plastic_Normal.jpg

@@ -26,7 +26,14 @@ namespace our
             }
             if (entityData.contains("isCamera") && entityData["isCamera"] == true)
             {
-                deserializeCamera(entityData);
+
+                // only camera entity can have children 
+              Entity *entity = deserializeCamera(entityData);
+              if (entityData.contains("children"))
+                {
+                // TODO: (Req 8) Recursively call this world's "deserialize" using the children data
+                deserialize(entityData["children"], entity);
+                }
                 continue;
             }
             // TODO: (Req 8) Create an entity, make its parent "parent" and call its deserialize with "entityData".
@@ -41,7 +48,7 @@ namespace our
             }
         }
     }
-    void World::deserializeCamera(const nlohmann::json &cameraData)
+    Entity* World::deserializeCamera(const nlohmann::json &cameraData)
     {
         mazeCellSize = cameraData.value("cellSize", mazeCellSize);
         if (mazeObjects.size() == 0)
@@ -59,6 +66,7 @@ namespace our
         our::GameActionsSystem::cameraPosition = position;
         our::GameActionsSystem::cameraRotation = rotation;
         our::GameActionsSystem::cameraScale = scale;
+        return entity;
     }
 
     void World::deserializeGround(const nlohmann::json &groundData)

@@ -39,7 +39,9 @@ namespace our
         if (lightType == LightType::SPOT)
         {
             // Read the cone angles of the light
-            coneAngles = new glm::vec2(data.value("coneAngles", glm::vec2(glm::quarter_pi<float>(), glm::half_pi<float>())));
+            glm::vec2 coneAnglesDegrees = data.value("coneAngles", glm::vec2(45, 90));
+            coneAngles = new glm::vec2(glm::radians(coneAnglesDegrees.x), glm::radians(coneAnglesDegrees.y));
+            //coneAngles = new glm::vec2(data.value("coneAngles", glm::vec2(glm::quarter_pi<float>(), glm::half_pi<float>())));
 
         }
    }

@@ -29,7 +29,7 @@ namespace our
         void deserialize(const nlohmann::json &data, Entity *parent = nullptr);
         void deserializeGround(const nlohmann::json &data);
         void deserializeMaze(const nlohmann::json &data);
-        void deserializeCamera(const nlohmann::json &cameraData);
+        Entity* deserializeCamera(const nlohmann::json &cameraData);
         std::pair<int,int> getXBordersOfMaze();
         std::pair<int,int> getZBordersOfMaze();
 
