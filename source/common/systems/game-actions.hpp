@@ -9,7 +9,8 @@ namespace our
             speedUp,
             gravityUp,
             portal,
-            door
+            door,
+            flash
         };
         // only one portal per game in a chosen position
         enum  portalState{
@@ -26,6 +27,7 @@ namespace our
            float speedup;
            float gravity;
            float door;
+           float flash;
         };
 
     // The sound system is responsible for sound accross the whole game.
@@ -58,10 +60,13 @@ namespace our
          
         // flashlight control
         static bool flash;
-
+        // flashlight progress
+        static float flashProgress;
+        
 
         static endState end;
         public:
+        const static float flashLightTimeOut;
         // camera parameters
         static glm::vec3 cameraPosition;
         static glm::vec3 cameraRotation;
@@ -115,6 +120,9 @@ namespace our
         static bool & getOpenDoor();
         static bool &getFlash();
         static void toggleFlash();
+        static void resetFlash();
+        static float & getFlashProgress();
+        static void setFlashProgress(float fprogress);
 
         static void setGameOver();
         static void setGameWin();

@@ -12,7 +12,7 @@ namespace our
     bool GameActionsSystem::speedUp = false;
     bool GameActionsSystem::gravityUp = false;
     bool GameActionsSystem::gravityDown = false;
-    powerupTimer GameActionsSystem::powerupTimers={0,0,0};
+    powerupTimer GameActionsSystem::powerupTimers={0,0,0,0};
     portalState GameActionsSystem::pS = portalState::off;
     bool GameActionsSystem::portal = false;
     bool GameActionsSystem::cantCollectMasterKey = false;
@@ -20,9 +20,11 @@ namespace our
     bool GameActionsSystem::touchDoor = false;
     bool GameActionsSystem::openDoor=false;
     bool GameActionsSystem::flash=false; 
+    float GameActionsSystem::flashProgress=1.0f;
     float GameActionsSystem::gravityx = 0;
     float GameActionsSystem::gravityz = 0;
     float GameActionsSystem::doorStartAngle=90.0f;
+    const float GameActionsSystem::flashLightTimeOut=40.0f;
     endState GameActionsSystem::end = endState::play;
     glm::vec3 GameActionsSystem::cameraPosition = glm::vec3(0,0,0);
     glm::vec3 GameActionsSystem::cameraRotation = glm::vec3(0,0,0);
@@ -47,7 +49,7 @@ namespace our
         gravityDown = false;
         pS = portalState::off;
         portal = false;
-        powerupTimers = {0,0,0};
+        powerupTimers = {0,0,0,0};
         total_coins = 0;
         total_powerups = 0;
         total_keys = 0;
@@ -57,6 +59,7 @@ namespace our
         doorStartAngle=90.0f;
         openDoor=false;
         flash=false;
+        flashProgress=1.0f;
     }
     unsigned short int  GameActionsSystem::getCoinsCollected()
     {
@@ -98,6 +101,9 @@ namespace our
         case powerups::door:
             return powerupTimers.door;
             break;
+        case powerups::flash:
+            return powerupTimers.flash;
+            break;
         default:
             break;
         }
@@ -116,6 +122,9 @@ namespace our
             break;
         case powerups::door:
             powerupTimers.door=0;
+            break;
+        case powerups::flash:
+            powerupTimers.flash=0;
             break;
         default:
             break;
@@ -139,6 +148,9 @@ namespace our
             break;
         case powerups::door:
            powerupTimers.door+=increase;
+            break;
+        case powerups::flash:
+            powerupTimers.flash+=increase;
             break;
         default:
             break;
@@ -274,7 +286,15 @@ namespace our
     {
         return gravityz;
     }
-
+    float &GameActionsSystem::getFlashProgress()
+    {
+        return flashProgress;
+    }
+    void GameActionsSystem::setFlashProgress(float fprogress)
+    {
+        flashProgress = fprogress;
+    }
+     
     bool &GameActionsSystem::getFlash()
     {
         return flash;
@@ -282,6 +302,10 @@ namespace our
     void GameActionsSystem::toggleFlash()
     {
         flash = !flash;
+    }
+    void GameActionsSystem::resetFlash()
+    {
+        flash = false;
     }
     void GameActionsSystem::setGameOver()
     {

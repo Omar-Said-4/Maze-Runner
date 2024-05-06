@@ -167,7 +167,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
             }
             if (auto lightComponent = entity->getComponent<LightComponent>(); lightComponent)
             {
-                if(entity->name=="flashlight" && !our::GameActionsSystem::getFlash())
+                if(entity->name=="flashlight" && (!our::GameActionsSystem::getFlash()||our::GameActionsSystem::getPowerupTimer(our::powerups::flash)>=our::GameActionsSystem::flashLightTimeOut))
                 {
                     continue;
                 }

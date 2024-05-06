@@ -140,16 +140,16 @@ namespace our
         for (const auto &symbol : objectSymbols)
         {
             // only one portal powerup per maze
-            if(symbol=='p')
-            {
-               int size = mazeObjects[symbol].size();
-               if(size > 1)
-               {
+            // if(symbol=='p')
+            // {
+            //    int size = mazeObjects[symbol].size();
+            //    if(size > 1)
+            //    {
                  
-                  mazeObjects['.'].insert(mazeObjects['.'].end(), mazeObjects[symbol].begin() + 1, mazeObjects[symbol].end());
-                  mazeObjects[symbol].erase(mazeObjects[symbol].begin()+1,mazeObjects[symbol].end());
-               }
-            }
+            //       mazeObjects['.'].insert(mazeObjects['.'].end(), mazeObjects[symbol].begin() + 1, mazeObjects[symbol].end());
+            //       mazeObjects[symbol].erase(mazeObjects[symbol].begin()+1,mazeObjects[symbol].end());
+            //    }
+            // }
             if (symbol == 'p' || symbol == 'r' || symbol == 's')
             {
                 our::GameActionsSystem::setTotalPowerups(mazeObjects[symbol].size());

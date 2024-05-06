@@ -540,6 +540,26 @@ if (!cursor) {
                 }
 
             }
+            {
+                if(our::GameActionsSystem::getFlash())
+                {
+                    our::GameActionsSystem::increasePowerupTimer(powerups::flash,ImGui::GetIO().DeltaTime);
+                    float progress=1.0f-our::GameActionsSystem::getPowerupTimer(powerups::flash)/our::GameActionsSystem::flashLightTimeOut;
+                    our::GameActionsSystem::setFlashProgress(progress);
+                    if(our::GameActionsSystem::getFlashProgress()<=0)
+                    {
+                        our::GameActionsSystem::resetFlash();
+                    }
+                }
+                ImGui::Begin("FLASH CHARGE", nullptr, ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoMove);
+                ImGui::PushStyleColor(ImGuiCol_PlotHistogram, ImVec4(0.4f, 0.8f, 1.0f, 1.0f)); // Progress bar fill color (light blue)
+                ImGui::SetWindowPos("FLASH CHARGE", ImVec2(50, 600));    
+                ImGui::Text("BATTERY");            
+                ImGui::ProgressBar(our::GameActionsSystem::getFlashProgress(), ImVec2(100.0f, 30.0f));
+                ImGui::PopStyleColor(1);
+                ImGui::End();
+
+            }
 
 
 

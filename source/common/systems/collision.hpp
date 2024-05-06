@@ -108,7 +108,7 @@ namespace our
                         world->markForRemoval(entity);
                     }
                 }
-                else if(entity->getComponent<PortalComponent>())
+                else if(entity->getComponent<PortalComponent>()&&our::GameActionsSystem::getPortalState()==portalState::off)
                 {
                     // Calculate world-space positions of the portal
                     glm::vec3 portalPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
