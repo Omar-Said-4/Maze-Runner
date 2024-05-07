@@ -10,7 +10,7 @@
   },
   "scene": {
     "renderer": {
-      "sky": "assets/textures/sky.jpg",
+      "sky": "assets/textures/pexels-kaip-1341279.jpg",
       "postprocess": "assets/shaders/postprocess/vignette-fog-saturation.frag"
     },
     "assets": {
@@ -53,7 +53,7 @@
         "key": "assets/textures/key.jpg",
         "portal": "assets/textures/portal2.jpg",
         "master-key": "assets/textures/master-key2.png",
-        "door": "assets/textures/door2.jpg",
+        "door": "assets/textures/MetalSteelBrushed001_COL_2K_METALNESS.png",
         "no-emission": "assets/textures/no-emission.png",
         "moon-roughness": "assets/textures/moon-roughness.jpg",
         "no-occlusion":"assets/textures/no-occlusion.png",
@@ -345,7 +345,7 @@
           },
           "albedo": "door",
           "occlusion": "no-occlusion",
-          "roughness": "no-emission",
+          "roughness": "assets/textures/MetalSteelBrushed001_ROUGHNESS_2K_METALNESS.png",
           "specular": "no-occlusion",
           "emissive": "no-emission",
           "samplerAlbedo": "default",
