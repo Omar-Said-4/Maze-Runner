@@ -758,7 +758,8 @@ int our::Application::run(int run_for_frames)
             // reset the gameover timer
             if (currentState == states["play"])
             {
-                mazeTimeInSec = our::AssetLoader<our::Maze>::get("maze") ->getMazeTime();
+                mazeTimeInSec = our::AssetLoader<our::Maze>::get("maze")->getMazeTime();
+                GameActionsSystem::loadFlashLightTimeOut();
                 game_over_timer = 0;
             }
             nextState = nullptr;

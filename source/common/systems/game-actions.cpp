@@ -1,5 +1,7 @@
-#include"game-actions.hpp"
-#include<iostream>
+#include "game-actions.hpp"
+#include "../asset-loader.hpp"
+#include "../maze/maze.hpp"
+#include <iostream>
 namespace our
 {
     int GameActionsSystem::score = 0;
@@ -12,30 +14,34 @@ namespace our
     bool GameActionsSystem::speedUp = false;
     bool GameActionsSystem::gravityUp = false;
     bool GameActionsSystem::gravityDown = false;
-    powerupTimer GameActionsSystem::powerupTimers={0,0,0,0};
+    powerupTimer GameActionsSystem::powerupTimers = {0, 0, 0, 0};
     portalState GameActionsSystem::pS = portalState::off;
     bool GameActionsSystem::portal = false;
     bool GameActionsSystem::cantCollectMasterKey = false;
     bool GameActionsSystem::exitKey = false;
     bool GameActionsSystem::touchDoor = false;
-    bool GameActionsSystem::openDoor=false;
-    bool GameActionsSystem::flash=false; 
-    float GameActionsSystem::flashProgress=1.0f;
+    bool GameActionsSystem::openDoor = false;
+    bool GameActionsSystem::flash = false;
+    float GameActionsSystem::flashProgress = 1.0f;
     float GameActionsSystem::gravityx = 0;
     float GameActionsSystem::gravityz = 0;
-    float GameActionsSystem::doorStartAngle=90.0f;
-    const float GameActionsSystem::flashLightTimeOut=40.0f;
+    float GameActionsSystem::doorStartAngle = 90.0f;
+    float GameActionsSystem::flashLightTimeOut;
     endState GameActionsSystem::end = endState::play;
-    glm::vec3 GameActionsSystem::cameraPosition = glm::vec3(0,0,0);
-    glm::vec3 GameActionsSystem::cameraRotation = glm::vec3(0,0,0);
-    glm::vec3 GameActionsSystem::cameraScale = glm::vec3(1,1,1);
+    glm::vec3 GameActionsSystem::cameraPosition = glm::vec3(0, 0, 0);
+    glm::vec3 GameActionsSystem::cameraRotation = glm::vec3(0, 0, 0);
+    glm::vec3 GameActionsSystem::cameraScale = glm::vec3(1, 1, 1);
+    void GameActionsSystem::loadFlashLightTimeOut()
+    {
+        flashLightTimeOut = our::AssetLoader<our::Maze>::get("maze")->getFlashLightTimeOut();
+    }
     int GameActionsSystem::getScore()
     {
         return score;
     }
     void GameActionsSystem::collectCoin()
     {
-        score+=100;
+        score += 100;
         coins_collected++;
     }
     void GameActionsSystem::resetScore()
@@ -49,19 +55,19 @@ namespace our
         gravityDown = false;
         pS = portalState::off;
         portal = false;
-        powerupTimers = {0,0,0,0};
+        powerupTimers = {0, 0, 0, 0};
         total_coins = 0;
         total_powerups = 0;
         total_keys = 0;
         cantCollectMasterKey = false;
         end = endState::play;
         exitKey = false;
-        doorStartAngle=90.0f;
-        openDoor=false;
-        flash=false;
-        flashProgress=1.0f;
+        doorStartAngle = 90.0f;
+        openDoor = false;
+        flash = false;
+        flashProgress = 1.0f;
     }
-    unsigned short int  GameActionsSystem::getCoinsCollected()
+    unsigned short int GameActionsSystem::getCoinsCollected()
     {
         return coins_collected;
     }
@@ -71,9 +77,9 @@ namespace our
     }
     void GameActionsSystem::resetSpeedUp()
     {
-        speedUp=false;
+        speedUp = false;
     }
-    bool & GameActionsSystem::getSpeedUp()
+    bool &GameActionsSystem::getSpeedUp()
     {
         return speedUp;
     }
@@ -83,7 +89,7 @@ namespace our
     }
     void GameActionsSystem::collectPowerup()
     {
-        score+=500;
+        score += 500;
         powerups_collected++;
     }
     float &GameActionsSystem::getPowerupTimer(powerups powerup)
@@ -121,16 +127,16 @@ namespace our
         case powerups::portal:
             break;
         case powerups::door:
-            powerupTimers.door=0;
+            powerupTimers.door = 0;
             break;
         case powerups::flash:
-            powerupTimers.flash=0;
+            powerupTimers.flash = 0;
             break;
         default:
             break;
         }
     }
-    void GameActionsSystem::increasePowerupTimer(powerups powerup,float increase)
+    void GameActionsSystem::increasePowerupTimer(powerups powerup, float increase)
     {
         if (!increase)
         {
@@ -139,18 +145,18 @@ namespace our
         switch (powerup)
         {
         case powerups::speedUp:
-            powerupTimers.speedup+=increase;
+            powerupTimers.speedup += increase;
             break;
         case powerups::gravityUp:
-            powerupTimers.gravity+=increase;
+            powerupTimers.gravity += increase;
             break;
         case powerups::portal:
             break;
         case powerups::door:
-           powerupTimers.door+=increase;
+            powerupTimers.door += increase;
             break;
         case powerups::flash:
-            powerupTimers.flash+=increase;
+            powerupTimers.flash += increase;
             break;
         default:
             break;
@@ -162,9 +168,9 @@ namespace our
     }
     void GameActionsSystem::resetGravityUp()
     {
-        gravityUp=false;
+        gravityUp = false;
     }
-    bool & GameActionsSystem::getGravityUp()
+    bool &GameActionsSystem::getGravityUp()
     {
         return gravityUp;
     }
@@ -174,15 +180,15 @@ namespace our
     }
     void GameActionsSystem::resetGravityDown()
     {
-        gravityDown=false;
+        gravityDown = false;
     }
-    bool & GameActionsSystem::getGravityDown()
+    bool &GameActionsSystem::getGravityDown()
     {
         return gravityDown;
     }
     void GameActionsSystem::collectKey()
     {
-        score+=200;
+        score += 200;
         keys_collected++;
     }
     unsigned short int GameActionsSystem::getKeysCollected()
@@ -190,10 +196,11 @@ namespace our
         return keys_collected;
     }
     void GameActionsSystem::portalStateInc()
-    {       std::cout<<pS<<std::endl;
+    {
+        std::cout << pS << std::endl;
 
-       pS = static_cast<portalState>((pS + 1) % 3);
-       std::cout<<pS<<std::endl;
+        pS = static_cast<portalState>((pS + 1) % 3);
+        std::cout << pS << std::endl;
     }
     unsigned short int GameActionsSystem::getPortalState()
     {
@@ -201,7 +208,7 @@ namespace our
     }
     bool &GameActionsSystem::getPortal()
     {
-        portal = (pS>0);
+        portal = (pS > 0);
         return portal;
     }
     void GameActionsSystem::setTotalCoins(unsigned short int coins)
@@ -242,8 +249,8 @@ namespace our
     }
     void GameActionsSystem::collectExitKey()
     {
-        score+=1000;
-        exitKey=true;
+        score += 1000;
+        exitKey = true;
     }
     bool &GameActionsSystem::getExitKey()
     {
@@ -273,7 +280,7 @@ namespace our
     {
         openDoor = false;
     }
-    void GameActionsSystem::setGravity(float x,float z)
+    void GameActionsSystem::setGravity(float x, float z)
     {
         gravityx = x;
         gravityz = z;
@@ -294,7 +301,7 @@ namespace our
     {
         flashProgress = fprogress;
     }
-     
+
     bool &GameActionsSystem::getFlash()
     {
         return flash;
@@ -309,13 +316,12 @@ namespace our
     }
     void GameActionsSystem::setGameOver()
     {
-      end=endState::lose;
+        end = endState::lose;
     }
     void GameActionsSystem::setGameWin()
     {
-        end=endState::win;
-        score+=2000;
-        
+        end = endState::win;
+        score += 2000;
     }
     endState GameActionsSystem::getGameState()
     {

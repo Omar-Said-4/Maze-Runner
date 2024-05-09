@@ -8,7 +8,8 @@ namespace our
     class Maze
     {
         int rows, columns;                         // The no of rows and columns of the maze matrix
-        int timeInSec;
+        int mazeTimeInSec;
+        float flashLightTimeOut;
         std::vector<std::vector<char>> mazeMatrix; // The matrix that contains each wall in the maze
     public:
         void deserialize(const nlohmann::json &data);
@@ -17,7 +18,10 @@ namespace our
             return mazeMatrix;
         }
         int getMazeTime(){
-            return timeInSec;
+            return mazeTimeInSec;
+        }
+        float getFlashLightTimeOut(){
+            return flashLightTimeOut;
         }
     };
 

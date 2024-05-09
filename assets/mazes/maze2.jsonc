@@ -1,5 +1,6 @@
 {
-  "timeInSec":180,
+  "flashLightTimeOut":20,
+  "mazeTimeInSec":180,
   "rows": 8,
   "columns": 7,
   "matrix": [

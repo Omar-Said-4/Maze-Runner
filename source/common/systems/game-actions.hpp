@@ -66,7 +66,7 @@ namespace our
 
         static endState end;
         public:
-        const static float flashLightTimeOut;
+        static float flashLightTimeOut;
         // camera parameters
         static glm::vec3 cameraPosition;
         static glm::vec3 cameraRotation;
@@ -123,6 +123,7 @@ namespace our
         static void resetFlash();
         static float & getFlashProgress();
         static void setFlashProgress(float fprogress);
+        static void loadFlashLightTimeOut();
 
         static void setGameOver();
         static void setGameWin();
