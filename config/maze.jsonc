@@ -359,7 +359,7 @@
     "world": [
       {
         "isCamera": true,
-        "cellSize":12.998,
+        "cellSize":12.9999999999999998,
         "components": [
           {
             "type": "Camera"
@@ -395,8 +395,8 @@
 
       {
         "isGround": true,
-        "rows": 7,
-        "columns": 7,
+        "rows": 10,
+        "columns": 10,
         "cellSize": 20,
         "position": [-10, -1, 10],
         "rotation": [-90, 0, 0],
@@ -415,7 +415,7 @@
         "position": [0, 5.5, 0],
         "rotation": [0, 0, 0],
         "scale": [0.051, 0.05, 0.05],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -433,7 +433,7 @@
         "position": [0, 1, 0],
         "rotation": [45, 45, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -455,7 +455,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -477,7 +477,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -499,7 +499,7 @@
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -521,7 +521,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -543,7 +543,7 @@
         "position": [0, -1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -572,7 +572,7 @@
         "position": [0, 4, -5],
         "rotation": [0, 90, 0],
         "scale": [10, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
