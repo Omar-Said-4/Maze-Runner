@@ -10,7 +10,7 @@
   },
   "scene": {
     "renderer": {
-      "sky": "assets/textures/sky.jpg",
+      "sky": "assets/textures/pexels-kaip-1341279.jpg",
       "postprocess": "assets/shaders/postprocess/vignette-fog-saturation.frag"
     },
     "assets": {
@@ -55,7 +55,7 @@
         "key": "assets/textures/key.jpg",
         "portal": "assets/textures/portal2.jpg",
         "master-key": "assets/textures/master-key2.png",
-        "door": "assets/textures/door2.jpg",
+        "door": "assets/textures/MetalSteelBrushed001_COL_2K_METALNESS.png",
         "no-emission": "assets/textures/no-emission.png",
         "moon-roughness": "assets/textures/moon-roughness.jpg",
         "no-occlusion":"assets/textures/no-occlusion.png",
@@ -347,7 +347,7 @@
           },
           "albedo": "door",
           "occlusion": "no-occlusion",
-          "roughness": "no-emission",
+          "roughness": "assets/textures/MetalSteelBrushed001_ROUGHNESS_2K_METALNESS.png",
           "specular": "no-occlusion",
           "emissive": "no-emission",
           "samplerAlbedo": "default",
@@ -361,7 +361,7 @@
     "world": [
       {
         "isCamera": true,
-        "cellSize":12.998,
+        "cellSize":12.9999999999999998,
         "components": [
           {
             "type": "Camera"
@@ -417,7 +417,7 @@
         "position": [0, 5.5, 0],
         "rotation": [0, 0, 0],
         "scale": [0.051, 0.05, 0.05],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -437,7 +437,7 @@
         "position": [0, 1, 0],
         "rotation": [45, 45, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -462,7 +462,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -487,7 +487,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -512,7 +512,7 @@
         "position": [0, 0, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -537,7 +537,7 @@
         "position": [0, 1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -562,7 +562,7 @@
         "position": [0, -1, 0],
         "rotation": [0, 0, 0],
         "scale": [4, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
@@ -593,7 +593,7 @@
         "position": [0, 4, -5],
         "rotation": [0, 90, 0],
         "scale": [10, 4, 4],
-        "cellSize": 12.998,
+        "cellSize": 12.9999999999999998,
         "components": [
           {
             "type": "Mesh Renderer",
