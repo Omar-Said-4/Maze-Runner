@@ -1,12 +1,12 @@
 #pragma once
-#include "../ecs/component.hpp"
+#include "./physical-component.hpp"
 
 #include <glm/glm.hpp>
 
 namespace our
 {
 
-    class WallComponent : public Component
+    class WallComponent : public PhysicalComponent
     {
     public:
         static std::string getID() { return "wall"; }

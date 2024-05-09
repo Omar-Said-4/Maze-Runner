@@ -27,6 +27,24 @@ namespace our
         Application *app;
 
     public:
+    static bool checkCollision(const glm::vec3 &playerPosition, const glm::vec3 &targetPosition, PhysicalComponent *physicalComponent)
+        {
+            float minX = targetPosition.x - physicalComponent->collisionCellX / 2;
+            float maxX = targetPosition.x + physicalComponent->collisionCellX / 2;
+            float minZ = targetPosition.z - physicalComponent->collisionCellZ / 2;
+            float maxZ = targetPosition.z + physicalComponent->collisionCellZ / 2;
+
+            if (playerPosition.x >= minX && playerPosition.x <= maxX && playerPosition.z >= minZ && playerPosition.z <= maxZ)
+            {
+                // Play collision sound if given one
+                our::SoundSystem::play_custom_sound(physicalComponent->soundName, false, false);
+                return true;
+            }
+
+            // No collision
+            return false;
+        }
+
         void enter(Application *app)
         {
             this->app = app;
@@ -59,7 +77,7 @@ namespace our
                 {
                     // Calculate world-space positions of the coin
                     glm::vec3 coinPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - coinPosition.x) < 0.8 && abs(position.z - coinPosition.z) < 0.8)
+                    if (checkCollision(position, coinPosition, entity->getComponent<CoinComponent>()))
                     {
                         //std::cout << "COIN!" << std::endl;
                         world->markForRemoval(entity);
@@ -71,7 +89,7 @@ namespace our
                 {
                     // Calculate world-space positions of the bolt
                     glm::vec3 boltPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - boltPosition.x) < 0.8 && abs(position.z - boltPosition.z) < 0.8)
+                    if (checkCollision(position, boltPosition, entity->getComponent<BoltComponent>()))
                     {
                        // std::cout << "BOLT!" << std::endl;
                         our::SoundSystem::play_custom_sound("Powerup",false,false);
@@ -85,7 +103,7 @@ namespace our
                 {
                     // Calculate world-space positions of the rocket
                     glm::vec3 rocketPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - rocketPosition.x) < 0.8 && abs(position.z - rocketPosition.z) < 0.8)
+                    if (checkCollision(position, rocketPosition, entity->getComponent<RocketComponent>()))
                     {
                         //std::cout << "ROCKET!" << std::endl;
                         our::SoundSystem::play_custom_sound("Powerup",false,false);
@@ -100,7 +118,7 @@ namespace our
                 {
                     // Calculate world-space positions of the key
                     glm::vec3 keyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - keyPosition.x) < 0.8 && abs(position.z - keyPosition.z) < 0.8)
+                    if (checkCollision(position, keyPosition, entity->getComponent<KeyComponent>()))
                     {
                        // std::cout << "KEY!" << std::endl;
                         our::SoundSystem::play_custom_sound("KEY1",false,false);
@@ -112,7 +130,7 @@ namespace our
                 {
                     // Calculate world-space positions of the portal
                     glm::vec3 portalPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - portalPosition.x) < 0.8 && abs(position.z - portalPosition.z) < 0.8)
+                    if (checkCollision(position, portalPosition, entity->getComponent<PortalComponent>()))
                     {
                        // std::cout << "PORTAL!" << std::endl;
                         our::SoundSystem::play_custom_sound("Powerup",false,false);
@@ -125,7 +143,7 @@ namespace our
                 {
                     // Calculate world-space positions of the master key
                     glm::vec3 masterKeyPosition = glm::vec3(entity->getLocalToWorldMatrix()[3]);
-                    if (abs(position.x - masterKeyPosition.x) < 0.8 && abs(position.z - masterKeyPosition.z) < 0.8)
+                    if (checkCollision(position, masterKeyPosition, entity->getComponent<MasterKeyComponent>()))
                     {
                        // std::cout << "MASTER KEY!" << std::endl;
                         if(our::GameActionsSystem::getKeysCollected() != our::GameActionsSystem::getTotalKeys() && !our::GameActionsSystem::getCantCollectMasterKey())                        {
@@ -134,7 +152,7 @@ namespace our
                         }
                         else if (our::GameActionsSystem::getKeysCollected() == our::GameActionsSystem::getTotalKeys() )
                         {
-                          our::SoundSystem::play_custom_sound("KEY2",false,false);
+                          our::SoundSystem::play_custom_sound("MASTER_KEY",false,false);
                           our::GameActionsSystem::collectExitKey();
                           world->markForRemoval(entity);
                             
@@ -161,7 +179,7 @@ namespace our
                         }
                         else if (our::GameActionsSystem::getExitKey())
                         {
-                            our::SoundSystem::play_custom_sound("DOOR",false,false);
+                            our::SoundSystem::play_custom_sound("OPEN_DOOR",false,false);
                             our::GameActionsSystem::setOpenDoor();
                         }
                     }
