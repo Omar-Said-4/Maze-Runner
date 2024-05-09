@@ -6,6 +6,7 @@ void our::Maze::deserialize(const nlohmann::json &data)
         return;
     rows = data.value("rows", rows);
     columns = data.value("columns", columns);
+    timeInSec = data.value("timeInSec", 120);
     if (data.find("matrix") != data.end())
     {
         std::vector<std::vector<char>> tmpMazeMatrix;

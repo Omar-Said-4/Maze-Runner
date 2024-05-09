@@ -12,6 +12,8 @@
 
 #include "input/keyboard.hpp"
 #include "input/mouse.hpp"
+#include "asset-loader.hpp"
+#include "maze/maze.hpp"
 
 namespace our {
 
