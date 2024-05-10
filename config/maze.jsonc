@@ -91,7 +91,7 @@
         }
       },
       "maze": {
-        "path": "assets/mazes/maze1.jsonc"
+        "path": "assets/mazes/maze3.jsonc"
       },
       "materials": {
         "metal": {
@@ -404,10 +404,10 @@
         "isGround": true,
         "rows": 7,
         "columns": 7,
-        "cellSize": 1000,
+        "cellSize": 5000,
         "position": [-10, -1, 10],
         "rotation": [-90, 0, 0],
-        "scale": [500, 500, 1],
+        "scale": [2500, 2500, 1],
         "components": [
           {
             "type": "Mesh Renderer",
