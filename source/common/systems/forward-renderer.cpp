@@ -2,7 +2,8 @@
 #include "../mesh/mesh-utils.hpp"
 #include "../texture/texture-utils.hpp"
 #include"../systems/game-actions.hpp"
-#include <iostream>
+#include <GLFW/glfw3.h>
+
 #define MAX_LIGHTS 64
 
 using namespace std;
@@ -11,7 +12,7 @@ namespace our {
     void ForwardRenderer::initialize(glm::ivec2 windowSize, const nlohmann::json& config){
         // First, we store the window size for later use
         this->windowSize = windowSize;
-
+     
         // Then we check if there is a sky texture in the configuration
         if(config.contains("sky")){
             // First, we create a sphere which will be used to draw the sky
@@ -173,6 +174,16 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 }
                 lights.push_back(lightComponent);
             }
+            // moving the moon in an orbit
+            if(entity->name=="moon")
+            {
+                float centerx=(world->getXBordersOfMaze().first+world->getXBordersOfMaze().second)/2.0f;
+                float centerz=(world->getZBordersOfMaze().first+world->getZBordersOfMaze().second)/2.0f;
+                float mazeRadiusx=abs(world->getXBordersOfMaze().first-world->getXBordersOfMaze().second);
+                float mazeRadiusz=abs(world->getZBordersOfMaze().first-world->getZBordersOfMaze().second);
+                entity->localTransform.position.x=centerx+sin(glfwGetTime()*0.2)*mazeRadiusx/2.5f;
+                entity->localTransform.position.z=centerz+cos(glfwGetTime()*0.2)*mazeRadiusz/2.5f;
+            }
         }
 
         // If there is no camera, we return (we cannot render without a camera)
@@ -228,7 +239,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 lightMaterial->shader->set("M", opaqueCommand.localToWorld);
                 lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(opaqueCommand.localToWorld)));
                 lightMaterial->shader->set("light_count", (int)lights.size());
-                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.2f));
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.05f, 0.1f));
                 lightMaterial->shader->set("sky.bottom", glm::vec3(0.05f, 0.05f, 0.05f));
                 lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
                 lightMaterial->shader->set("cameraPosition", eye);
@@ -301,7 +312,7 @@ while ((err = glGetError()) != GL_NO_ERROR)
                 lightMaterial->shader->set("M", transparentCommand.localToWorld);
                 lightMaterial->shader->set("M_IT", glm::transpose(glm::inverse(transparentCommand.localToWorld)));
                 lightMaterial->shader->set("light_count", (int)lights.size());
-                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.1f, 0.2f));
+                lightMaterial->shader->set("sky.top", glm::vec3(0.0f, 0.05f, 0.1f));
                 lightMaterial->shader->set("sky.bottom", glm::vec3(0.05f, 0.05f, 0.05f));
                 lightMaterial->shader->set("sky.horizon",glm::vec3(0.1f, 0.1f, 0.1f));
                 for (int i = 0; i < min(int(lights.size()),MAX_LIGHTS); i++)
