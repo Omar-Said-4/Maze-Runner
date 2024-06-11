@@ -15,6 +15,7 @@
   - [Create Custom Mazes](#create-custom-mazes)
   - [Powerups](#powerups)
 - [Game Video](#game-video)
+- [Technologies Used](#tech-used)
 - [Contributors](#contributors)
 
 ---
@@ -98,9 +99,20 @@ Go to `assets/mazes` and create a maze of your choice using the following symbol
 2. **Portal Powerup**: Enables passage through walls.
 3. **Gravity Powerup**: Provides a higher view of the maze.
 
-# Game Video <a name="game-video"></a> 🎥
+## Game Video <a name="game-video"></a> 🎥
 
 [Watch the Game Video](https://youtu.be/TalnwDtRQGA)
+
+# Technologies Used 🛠️   <a name="tech-used"></a>
+
+- <img src="https://icon.icepanel.io/Technology/svg/GCC.svg" alt="GCC" width="20" height="20"> GCC: GNU Compiler Collection for compiling C++ code.
+- <img src="https://icon.icepanel.io/Technology/svg/OpenGL.svg" alt="OpenGL" width="20" height="20"> OpenGL: Graphics library used for rendering 2D and 3D vector graphics.
+- <img src="https://upload.wikimedia.org/wikipedia/commons/1/18/ISO_C%2B%2B_Logo.svg" alt="C++" width="20" height="20"> C++: Programming language used for game engine development.
+- <img src="https://upload.wikimedia.org/wikipedia/commons/1/13/Cmake.svg" alt="CMake" width="20" height="20"> CMake: Cross-platform build system used to manage the build process.
+- `Dear ImGui`: GUI library used for text rendering and UI elements.
+- <img src="https://products.fileformat.com/audio/cpp/miniaudio/header-image.png" alt="miniaudio" width="20" height="20"> miniaudio: Header-only library used for sound playback and management.
+
+
 
 ## ✍️Contributors <a name = "contributors"></a>
 
